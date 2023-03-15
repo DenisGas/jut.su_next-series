@@ -1,0 +1,25 @@
+{
+    "name": "jut.su - Next series",
+    "description": "Extension for the site 'jut.su' which makes auto-transition to the next series after the end of the current one",
+    "version": "1.0",
+    "manifest_version": 3,
+    "icons": {
+
+      "16":"./icons/16.png",
+      "32":"./icons/32.png",
+      "48":"./icons/48.png",
+      "128":"./icons/128.png"
+    },
+    "action": {},
+    "permissions": ["scripting", "activeTab"],
+    "content_scripts": [
+        {
+          "js": ["./main.js"],
+          "matches": [
+            "https://jut.su/*"
+          ]
+        }
+      ],
+    "background":{
+    }
+}

@@ -28,15 +28,23 @@ function main(){
 
   if (refactoredEpisodeString.length != 1){ //Verification is weird but works
     let video = document.querySelector("#my-player_html5_api");
+    let nextSerBtn = document.querySelector(".vjs-overlay-bottom-right");
 
     video.play();
     video.mute = false;
     
     let checkVideoEnded = setInterval(function() {
-      if(video.ended == true){
+      if(nextSerBtn.classList.contains('vjs-hidden') != true){
         nextSeries(refactoredEpisodeString,checkVideoEnded);
       }
-    }, 1000);//checks every second if the video is ended
+    }, 3000);//checks every 3 second if the nextSerBtn is visible
+
+    // let checkVideoEnded = setInterval(function() {
+    //   if(video.ended == true){
+    //     nextSeries(refactoredEpisodeString,checkVideoEnded);
+    //   }
+    // }, 1000);//checks every second if the video is ended
+
   }
 }
 

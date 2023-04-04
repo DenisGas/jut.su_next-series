@@ -1,0 +1,143 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@500;700&display=swap');
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  -moz-user-select: none;
+  user-select: none;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 500;
+  text-align: center;
+  min-width: 400px;
+  width: auto;
+  font-size: medium;
+  background-color: #363a37;
+  color:#9aa777;
+}
+
+header{
+  background: #272827;
+  padding: 10px;
+  font-weight: 700;
+}
+
+main{
+  margin: 10px;
+}
+
+button {
+  transition: all 0.1s;
+  height: 40px;
+  width: 100%;
+  color: #000000;
+  font-size: medium;
+  background: #9aa777;
+  border-width: 0px;
+  padding: 5px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #7f8865;
+}
+
+button:active {
+  background: #9aa777;
+}
+
+section{
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 15px;
+}
+
+
+label{
+  margin:0 10px;
+  cursor: pointer;
+  /* padding-left: 32px; */
+  text-align: left;
+  gap: 15px;
+  display: flex;
+}
+
+
+.checkbox{
+  appearance: none;
+  -webkit-appearance: none;
+  width: 22px;
+  height: 22px;
+  border: 2px solid #272827;
+  background:#272827;
+  border-radius: 25%;
+  transition: all 0.3s ease-in-out;
+}
+
+
+.checkbox:checked::before {
+  display: block;
+  border-radius: 25%;
+  cursor: pointer;
+  margin-left: 2px;
+  margin-top: -3px;
+  content: "✔";
+  color:rgb(255, 255, 255);
+  font-size: 18px;
+  z-index: 1;
+  animation-name: change-opacity;
+  animation-duration: 1s;
+
+}
+
+
+.radio {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 22px;
+  height: 22px;
+  border: 2px solid #272827;
+  background: #272827;
+  border-radius: 50%;
+  transition: all 0.3s ease-in-out;
+}
+
+
+.radio:checked::before {
+  display: block;
+  border-radius: 50%;
+  cursor: pointer;
+  margin: 4px auto 5px auto;
+  content: "";
+  z-index: 1;
+  width: 10px;
+  height: 10px;
+  background: white;
+  animation-name: change-opacity;
+  animation-duration: 1s;
+
+}
+
+
+.checkbox:checked,
+.radio:checked {
+  border-color: #9aa777;
+  background-color: #9aa777;
+}
+
+
+@keyframes change-opacity {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}

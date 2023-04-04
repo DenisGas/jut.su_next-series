@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Jutsu NextSeries</title>
+
+  <link rel="stylesheet" type="text/css" href="popup.css" />
+</head>
+
+<body>
+  <header>
+    <h1>Jutsu NextSeries</h1>
+  </header>
+
+  <main>
+    <section class="nextSeries">
+      <label id='nextSeriesBeforeEndLabel'>
+        <input class="radio" type="radio" id="nextSeriesBeforeEnd" name="nextSeries">
+        Следующая серия до титров
+      </label>
+      <label id='nextSeriesAfterEndLabel'>
+        <input class="radio" type="radio" id="nextSeriesAfterEnd" name="nextSeries">
+        Следующая серия после конца серии
+      </label>
+
+    </section>
+    <section class="skipIntro">
+      <label id="skipIntroLabel">
+        <input class="checkbox" id="skipIntro" type="checkbox">
+        Пропускать заставку
+      </label>
+    </section>
+  </main>
+
+  <script src="popup.js"></script>
+</body>
+
+</html>

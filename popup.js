@@ -1,6 +1,7 @@
 const nextSeriesBeforeEnd = document.getElementById("nextSeriesBeforeEnd");
 const nextSeriesAfterEnd = document.getElementById("nextSeriesAfterEnd");
 const skipIntro = document.getElementById("skipIntro");
+const clickToFullScreen = document.getElementById("clickToFullScreen");
 const nextSeriesBeforeEndLabel = document.getElementById(
   "nextSeriesBeforeEndLabel"
 );
@@ -8,56 +9,106 @@ const nextSeriesAfterEndLabel = document.getElementById(
   "nextSeriesAfterEndLabel"
 );
 const skipIntroLabel = document.getElementById("skipIntroLabel");
+const clickToFullScreenLabel = document.getElementById(
+  "clickToFullScreenLabel"
+);
 
 function storage() {
-  chrome.storage.local.get(
-    ["nextSeriesBeforeEndBool", "nextSeriesAfterEndBool", "skipIntroBool"],
-    (result) => {
-      let nextSeriesBeforeEndBool = result.nextSeriesBeforeEndBool;
-      let nextSeriesAfterEndBool = result.nextSeriesAfterEndBool;
-      let skipIntroBool = result.skipIntroBool;
+  const jutsuExtensionDefaultConfig = {
+    nextSeriesBeforeEndBool: true,
+    nextSeriesAfterEndBool: false,
+    skipIntroBool: true,
+    clickToFullScreenBool: false,
+  };
 
-      if (
-        nextSeriesBeforeEndBool == undefined ||
-        nextSeriesAfterEndBool == undefined ||
-        skipIntroBool == undefined
-      ) {
-        chrome.storage.local.set({ nextSeriesBeforeEndBool: true });
-        chrome.storage.local.set({ nextSeriesAfterEndBool: false });
-        chrome.storage.local.set({ skipIntroBool: true });
-        return storage();
-      }
-      if (nextSeriesBeforeEndBool == true) {
-        nextSeriesBeforeEnd.checked = true;
-      } else {
-        nextSeriesAfterEnd.checked = true;
-      }
-
-      if (skipIntroBool == true) {
-        skipIntro.checked = true;
-      } else {
-        skipIntro.checked = false;
-      }
+  chrome.storage.local.get(["jutsuExtensionConfig"], (result) => {
+    if (result.jutsuExtensionConfig == undefined) {
+      chrome.storage.local.set({
+        jutsuExtensionConfig: jutsuExtensionDefaultConfig,
+      });
+      return storage();
     }
-  );
+
+    let nextSeriesBeforeEndBool =
+      result.jutsuExtensionConfig.nextSeriesBeforeEndBool;
+    let skipIntroBool = result.jutsuExtensionConfig.skipIntroBool;
+    let clickToFullScreenBool =
+      result.jutsuExtensionConfig.clickToFullScreenBool;
+
+    if (nextSeriesBeforeEndBool == true) {
+      nextSeriesBeforeEnd.checked = true;
+    } else {
+      nextSeriesAfterEnd.checked = true;
+    }
+
+    if (skipIntroBool == true) {
+      skipIntro.checked = true;
+    } else {
+      skipIntro.checked = false;
+    }
+
+    if (clickToFullScreenBool == true) {
+      clickToFullScreen.checked = true;
+    } else {
+      clickToFullScreen.checked = false;
+    }
+  });
 }
 
 storage();
 
 nextSeriesBeforeEndLabel.addEventListener("click", () => {
-  chrome.storage.local.set({ nextSeriesBeforeEndBool: true });
-  chrome.storage.local.set({ nextSeriesAfterEndBool: false });
+  chrome.storage.local.get("jutsuExtensionConfig", function (result) {
+    result.jutsuExtensionConfig.nextSeriesBeforeEndBool = true;
+    result.jutsuExtensionConfig.nextSeriesAfterEndBool = false;
+    chrome.storage.local.set({
+      jutsuExtensionConfig: result.jutsuExtensionConfig,
+    });
+  });
 });
 
 nextSeriesAfterEndLabel.addEventListener("click", () => {
-  chrome.storage.local.set({ nextSeriesBeforeEndBool: false });
-  chrome.storage.local.set({ nextSeriesAfterEndBool: true });
+  chrome.storage.local.get("jutsuExtensionConfig", function (result) {
+    result.jutsuExtensionConfig.nextSeriesBeforeEndBool = false;
+    result.jutsuExtensionConfig.nextSeriesAfterEndBool = true;
+    chrome.storage.local.set({
+      jutsuExtensionConfig: result.jutsuExtensionConfig,
+    });
+  });
 });
 
 skipIntroLabel.addEventListener("click", () => {
   if (skipIntro.checked == true) {
-    chrome.storage.local.set({ skipIntroBool: true });
+    chrome.storage.local.get("jutsuExtensionConfig", function (result) {
+      result.jutsuExtensionConfig.skipIntroBool = true;
+      chrome.storage.local.set({
+        jutsuExtensionConfig: result.jutsuExtensionConfig,
+      });
+    });
   } else {
-    chrome.storage.local.set({ skipIntroBool: false });
+    chrome.storage.local.get("jutsuExtensionConfig", function (result) {
+      result.jutsuExtensionConfig.skipIntroBool = false;
+      chrome.storage.local.set({
+        jutsuExtensionConfig: result.jutsuExtensionConfig,
+      });
+    });
+  }
+});
+
+clickToFullScreenLabel.addEventListener("click", () => {
+  if (clickToFullScreen.checked == true) {
+    chrome.storage.local.get("jutsuExtensionConfig", function (result) {
+      result.jutsuExtensionConfig.clickToFullScreenBool = true;
+      chrome.storage.local.set({
+        jutsuExtensionConfig: result.jutsuExtensionConfig,
+      });
+    });
+  } else {
+    chrome.storage.local.get("jutsuExtensionConfig", function (result) {
+      result.jutsuExtensionConfig.clickToFullScreenBool = false;
+      chrome.storage.local.set({
+        jutsuExtensionConfig: result.jutsuExtensionConfig,
+      });
+    });
   }
 });

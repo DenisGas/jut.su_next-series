@@ -72,7 +72,9 @@ function createOverlayBtn(bool) {
       extensionOverlay.style.display = "none";
       const myPlayer = document.querySelector("#my-player");
       myPlayer.requestFullscreen();
-      myPlayer.classList.toggle("vjs-fullscreen");
+      setTimeout(function () {
+        document.querySelector("#my-player").classList.add("vjs-fullscreen");
+      }, 500);
     };
   }
 }

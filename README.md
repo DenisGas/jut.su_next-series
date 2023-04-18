@@ -9,6 +9,15 @@ To use the extension on your phone, you can use the kiwi browser.
 ### Install
 
 1. Install zip and unpack to a convenient location.
+
+   Click on latest release.
+   
+   ![Latest Release img](./img/relise_img.png)
+   
+   Click on jut.su_next-series_v*.zip file (not source code).
+   
+   ![Zip](./img/zip.png)
+
 2. Open the chrome://extensions page.
 3. Turn on developer mode in the top right corner.
 4. Click Load unpacked extension.

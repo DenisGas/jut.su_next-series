@@ -30,7 +30,8 @@ To use the extension on your phone, you can use the kiwi browser.
 1. "Следующая серия до титров" - auto-transition to the next series on credits, before the video end.
 2. "Следующая серия после конца серии" - auto-transition to the next series after the video end.
 3. "Пропускать заставку" - skip anime intro.
-4. "One click to fullScreen" - create overlay which, when clicked, opens the video in full screen.
+4. "Видео с самого начала" - starts the series from the beginning
+5. "One click to fullScreen" - create overlay which, when clicked, opens the video in full screen.
 
 ## Some Error
 

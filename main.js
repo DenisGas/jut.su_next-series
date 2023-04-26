@@ -1,38 +1,79 @@
+const intervalIds = [];
+let btnSkipIntroCanBeClick = true;
+
 window.addEventListener("load", function () {
-  let page = window.location.href;
-  let refactoredEpisodeString = getRefactoredEpisodeString(page);
-  if (refactoredEpisodeString != null) {
-    storage();
-    let video = document.querySelector("#my-player_html5_api");
-    video.play();
+  const page = window.location.href;
+  if (workOnThisPage(page) != false) {
+    (async () => {
+      const config = await storage();
+
+      const video = document.querySelector("#my-player_html5_api");
+
+      playVideo(video);
+
+      if (config.videoFromStartBool) {
+        videoFromStart(video);
+      }
+      createCssBlock();
+      main(config);
+    })();
   }
 });
 
-function storage() {
+async function storage() {
   const jutsuExtensionDefaultConfig = {
     nextSeriesBeforeEndBool: true,
     nextSeriesAfterEndBool: false,
     skipIntroBool: true,
     clickToFullScreenBool: false,
+    videoFromStartBool: false,
   };
 
-  chrome.storage.local.get(["jutsuExtensionConfig"], (result) => {
-    if (result.jutsuExtensionConfig == undefined) {
-      chrome.storage.local.set({
-        jutsuExtensionConfig: jutsuExtensionDefaultConfig,
-      });
-      return storage();
-    }
-
-    const config = result.jutsuExtensionConfig;
-
-    return main(config);
+  return new Promise((resolve, reject) => {
+    chrome.storage.local.get("jutsuExtensionConfig", async (result) => {
+      if (result.jutsuExtensionConfig === undefined) {
+        await new Promise((resolve) => {
+          chrome.storage.local.set(
+            { jutsuExtensionConfig: jutsuExtensionDefaultConfig },
+            resolve
+          );
+        });
+        resolve(jutsuExtensionDefaultConfig);
+      } else {
+        resolve(result.jutsuExtensionConfig);
+      }
+    });
   });
 }
 
-function createOverlayBtn(bool) {
-  if (!document.querySelector(".extension-overlay-button")) {
-    const styles = `
+function playVideo(video) {
+  video.play();
+}
+
+function createInterval(callback, delay) {
+  const intervalId = setInterval(callback, delay);
+  intervalIds.push(intervalId);
+  return intervalId;
+}
+
+function clearAllIntervals() {
+  for (let i = 0; i < intervalIds.length; i++) {
+    clearInterval(intervalIds[i]);
+  }
+  intervalIds.length = 0;
+}
+
+function videoFromStart(video) {
+  let checkVideoTimeNotZero = setInterval(function () {
+    if (video.currentTime != 0) {
+      video.currentTime = 0;
+      clearInterval(checkVideoTimeNotZero);
+    }
+  }, 1000);
+}
+
+function createCssBlock() {
+  const styles = `
       .extension-overlay-button {
         position: fixed;
         top: 0;
@@ -47,19 +88,21 @@ function createOverlayBtn(bool) {
         z-index: 9999;
       }
       `;
-
-    const styleElement = document.createElement("style");
-    if (styleElement.styleSheet) {
-      styleElement.styleSheet.cssText = styles;
-    } else {
-      styleElement.appendChild(document.createTextNode(styles));
-    }
-    document.head.appendChild(styleElement);
+  const styleElement = document.createElement("style");
+  if (styleElement.styleSheet) {
+    styleElement.styleSheet.cssText = styles;
   } else {
-    document.querySelector(".extension-overlay-button").remove();
+    styleElement.appendChild(document.createTextNode(styles));
   }
+  document.head.appendChild(styleElement);
+}
 
-  if (bool) {
+function createOverlayBtn(bool) {
+  const btn = document.querySelector(".extension-overlay-button");
+  if (!btn) {
+    if (!bool) {
+      return;
+    }
     const button = document.createElement("button");
     button.classList.add("extension-overlay-button");
     button.textContent = "Click to fullScreen";
@@ -76,89 +119,84 @@ function createOverlayBtn(bool) {
         document.querySelector("#my-player").classList.add("vjs-fullscreen");
       }, 500);
     };
+  } else {
+    btn.remove();
+    return createOverlayBtn(bool);
   }
 }
 
 chrome.storage.onChanged.addListener(function (changes, namespace) {
   // console.log(changes, namespace);
-  storage();
+  (async () => {
+    const config = await storage();
+    main(config);
+  })();
 });
 
-function getRefactoredEpisodeString(websitePage) {
-  if (websitePage.includes("episode-")) {
-    let urlString = websitePage.split("episode-");
-    urlString.push("episode-");
-    return urlString;
+function workOnThisPage(websitePage) {
+  if (websitePage.includes("episode-") || websitePage.includes("film-")) {
+    return true;
   }
-  if (websitePage.includes("film-")) {
-    let urlString = websitePage.split("film-");
-    urlString.push("film-");
-    return urlString;
+  return false;
+}
+
+function nextSeries(
+  nextSerBtn,
+  nextSeriesAfterEndBool,
+  nextSeriesBeforeEndBool
+) {
+  if (nextSeriesAfterEndBool) {
+    let checkVideoEnded = createInterval(() => {
+      if (document.querySelector("#my-player_html5_api").ended === true) {
+        clickElement(nextSerBtn, checkVideoEnded);
+      }
+    }, 3000);
   }
-  return null;
+
+  if (nextSeriesBeforeEndBool) {
+    let checkVideoEnded = createInterval(() => {
+      if (
+        document.querySelector("#my-player_html5_api").ended === true ||
+        nextSerBtn.classList.contains("vjs-hidden") !== true
+      ) {
+        clickElement(nextSerBtn, checkVideoEnded);
+      }
+    }, 3000);
+  }
 }
 
-function getEpisodeNum(str) {
-  let num = parseInt(str.replace(/[^\d]/g, ""));
-  return num; // return example 20
+function skipIntro(skipIntroBtn) {
+  let checkSkipIntroBtnVisible = createInterval(() => {
+    if (skipIntroBtn.classList.contains("vjs-hidden") != true) {
+      btnSkipIntroCanBeClick = false;
+      clickElement(skipIntroBtn, checkSkipIntroBtnVisible);
+    }
+  }, 2000);
 }
 
-function nextSeries(episodeString, intervalFunc) {
-  clearInterval(intervalFunc);
-  let episodeNum = getEpisodeNum(String(episodeString[1]));
-
-  window.location.href =
-    String(episodeString[0]) +
-    String(episodeString[2]) +
-    String(episodeNum + 1) +
-    ".html";
-}
-
-function skipIntro(element, intervalFunc) {
+function clickElement(element, intervalFunc) {
   clearInterval(intervalFunc);
   element.click();
 }
 
 function main(configObject) {
-  let page = window.location.href;
-  let refactoredEpisodeString = getRefactoredEpisodeString(page);
+  clearAllIntervals();
 
-  if (refactoredEpisodeString != null) {
-    let nextSerBtn = document.querySelector(".vjs-overlay-bottom-right");
-    let skipIntroBtn = document.querySelector(".vjs-overlay-bottom-left");
+  const nextSerBtn = document.querySelector(".vjs-overlay-bottom-right");
+  const skipIntroBtn = document.querySelector(".vjs-overlay-bottom-left");
 
-    let nextSeriesBeforeEndBool = configObject.nextSeriesBeforeEndBool;
-    let nextSeriesAfterEndBool = configObject.nextSeriesAfterEndBool;
-    let skipIntroBool = configObject.skipIntroBool;
-    let clickToFullScreenBool = configObject.clickToFullScreenBool;
+  const nextSeriesBeforeEndBool = configObject.nextSeriesBeforeEndBool;
+  const nextSeriesAfterEndBool = configObject.nextSeriesAfterEndBool;
+  const skipIntroBool = configObject.skipIntroBool;
+  const clickToFullScreenBool = configObject.clickToFullScreenBool;
 
-    createOverlayBtn(clickToFullScreenBool);
+  createOverlayBtn(clickToFullScreenBool);
 
-    if (skipIntroBtn) {
-      if (skipIntroBool == true) {
-        let checkSkipIntroBtnVisible = setInterval(function () {
-          if (skipIntroBtn.classList.contains("vjs-hidden") != true) {
-            skipIntro(skipIntroBtn, checkSkipIntroBtnVisible);
-          }
-        }, 2000);
-      }
-    }
+  if (skipIntroBtn && skipIntroBool && btnSkipIntroCanBeClick) {
+    skipIntro(skipIntroBtn);
+  }
 
-    if (nextSerBtn) {
-      if (nextSeriesBeforeEndBool == true) {
-        let checkVideoEnded = setInterval(function () {
-          if (nextSerBtn.classList.contains("vjs-hidden") != true) {
-            nextSeries(refactoredEpisodeString, checkVideoEnded);
-          }
-        }, 3000);
-      }
-      if (nextSeriesAfterEndBool == true) {
-        let checkVideoEnded = setInterval(function () {
-          if (video.ended == true) {
-            nextSeries(refactoredEpisodeString, checkVideoEnded);
-          }
-        }, 3000);
-      }
-    }
+  if (nextSerBtn) {
+    nextSeries(nextSerBtn, nextSeriesAfterEndBool, nextSeriesBeforeEndBool);
   }
 }

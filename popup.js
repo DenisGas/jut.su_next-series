@@ -1,6 +1,7 @@
 const nextSeriesBeforeEnd = document.getElementById("nextSeriesBeforeEnd");
 const nextSeriesAfterEnd = document.getElementById("nextSeriesAfterEnd");
 const skipIntro = document.getElementById("skipIntro");
+const videoFromStart = document.getElementById("videoFromStart");
 const clickToFullScreen = document.getElementById("clickToFullScreen");
 const nextSeriesBeforeEndLabel = document.getElementById(
   "nextSeriesBeforeEndLabel"
@@ -12,6 +13,7 @@ const skipIntroLabel = document.getElementById("skipIntroLabel");
 const clickToFullScreenLabel = document.getElementById(
   "clickToFullScreenLabel"
 );
+const videoFromStartLabel = document.getElementById("videoFromStartLabel");
 
 function storage() {
   const jutsuExtensionDefaultConfig = {
@@ -19,6 +21,7 @@ function storage() {
     nextSeriesAfterEndBool: false,
     skipIntroBool: true,
     clickToFullScreenBool: false,
+    videoFromStartBool: false,
   };
 
   chrome.storage.local.get(["jutsuExtensionConfig"], (result) => {
@@ -34,6 +37,7 @@ function storage() {
     let skipIntroBool = result.jutsuExtensionConfig.skipIntroBool;
     let clickToFullScreenBool =
       result.jutsuExtensionConfig.clickToFullScreenBool;
+    let videoFromStartBool = result.jutsuExtensionConfig.videoFromStartBool;
 
     if (nextSeriesBeforeEndBool == true) {
       nextSeriesBeforeEnd.checked = true;
@@ -51,6 +55,12 @@ function storage() {
       clickToFullScreen.checked = true;
     } else {
       clickToFullScreen.checked = false;
+    }
+
+    if (videoFromStartBool == true) {
+      videoFromStart.checked = true;
+    } else {
+      videoFromStart.checked = false;
     }
   });
 }
@@ -78,7 +88,7 @@ nextSeriesAfterEndLabel.addEventListener("click", () => {
 });
 
 skipIntroLabel.addEventListener("click", () => {
-  if (skipIntro.checked == true) {
+  if (skipIntro.checked === true) {
     chrome.storage.local.get("jutsuExtensionConfig", function (result) {
       result.jutsuExtensionConfig.skipIntroBool = true;
       chrome.storage.local.set({
@@ -96,7 +106,7 @@ skipIntroLabel.addEventListener("click", () => {
 });
 
 clickToFullScreenLabel.addEventListener("click", () => {
-  if (clickToFullScreen.checked == true) {
+  if (clickToFullScreen.checked === true) {
     chrome.storage.local.get("jutsuExtensionConfig", function (result) {
       result.jutsuExtensionConfig.clickToFullScreenBool = true;
       chrome.storage.local.set({
@@ -106,6 +116,24 @@ clickToFullScreenLabel.addEventListener("click", () => {
   } else {
     chrome.storage.local.get("jutsuExtensionConfig", function (result) {
       result.jutsuExtensionConfig.clickToFullScreenBool = false;
+      chrome.storage.local.set({
+        jutsuExtensionConfig: result.jutsuExtensionConfig,
+      });
+    });
+  }
+});
+
+videoFromStartLabel.addEventListener("click", () => {
+  if (videoFromStart.checked === true) {
+    chrome.storage.local.get("jutsuExtensionConfig", function (result) {
+      result.jutsuExtensionConfig.videoFromStartBool = true;
+      chrome.storage.local.set({
+        jutsuExtensionConfig: result.jutsuExtensionConfig,
+      });
+    });
+  } else {
+    chrome.storage.local.get("jutsuExtensionConfig", function (result) {
+      result.jutsuExtensionConfig.videoFromStartBool = false;
       chrome.storage.local.set({
         jutsuExtensionConfig: result.jutsuExtensionConfig,
       });

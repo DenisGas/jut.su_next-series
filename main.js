@@ -74,18 +74,39 @@ function videoFromStart(video) {
 
 function createCssBlock() {
   const styles = `
-      .extension-overlay-button {
+      .extension-overlay-div {
         position: fixed;
         top: 0;
         left: 0;
         width:100%;
         height:100%;
-        background-color: black;
-        color: white;
-        padding: 10px 20px;
         border: none;
-        opacity:0.5;
         z-index: 9999;
+        display:flex;
+      }
+
+      .extension-overlay-div button:hover{
+        filter: brightness(0.8);
+      }
+
+      .extension-overlay-button{
+        cursor:pointer;
+        border: none;
+        padding:0;
+        color: white;
+        background-color: #485f4880;
+        width:60%;
+        height:100%;
+      }
+
+      .extension-overlay-exit-button{
+        cursor:pointer;
+        border: none;
+        padding:0;
+        color: white;
+        width:40%;
+        height:100%;
+        background-color: #9d363680;
       }
       `;
   const styleElement = document.createElement("style");
@@ -98,29 +119,42 @@ function createCssBlock() {
 }
 
 function createOverlayBtn(bool) {
-  const btn = document.querySelector(".extension-overlay-button");
-  if (!btn) {
+  const div = document.querySelector(".extension-overlay-div");
+  if (!div) {
     if (!bool) {
       return;
     }
-    const button = document.createElement("button");
-    button.classList.add("extension-overlay-button");
-    button.textContent = "Click to fullScreen";
-    document.body.appendChild(button);
 
-    const extensionOverlay = document.querySelector(
-      ".extension-overlay-button"
-    );
-    extensionOverlay.onclick = (event) => {
-      extensionOverlay.style.display = "none";
-      const myPlayer = document.querySelector("#my-player");
-      myPlayer.requestFullscreen();
-      setTimeout(function () {
-        document.querySelector("#my-player").classList.add("vjs-fullscreen");
-      }, 500);
+    const div = document.createElement("div");
+    div.classList.add("extension-overlay-div");
+
+    document.body.appendChild(div);
+
+    const fullScreenBtn = document.createElement("button");
+    fullScreenBtn.classList.add("extension-overlay-button");
+    fullScreenBtn.textContent = "Click to fullScreen";
+
+    div.appendChild(fullScreenBtn);
+
+    const exitBtn = document.createElement("button");
+    exitBtn.classList.add("extension-overlay-exit-button");
+    exitBtn.textContent = "Exit";
+
+    div.appendChild(exitBtn);
+
+    fullScreenBtn.onclick = (event) => {
+      div.style.display = "none";
+      const fullScreenControl = document.querySelector(
+        ".vjs-fullscreen-control"
+      );
+      fullScreenControl.classList.remove("vjs-hidden");
+      fullScreenControl.click();
+    };
+    exitBtn.onclick = (event) => {
+      div.style.display = "none";
     };
   } else {
-    btn.remove();
+    div.remove();
     return createOverlayBtn(bool);
   }
 }

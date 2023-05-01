@@ -78,19 +78,16 @@ section {
 label {
   width: 100%;
   padding: var(--content-gap);
-  border-bottom: solid 2px rgba(255, 0, 0, 0.0);
+  border-bottom: solid 2px #ff000000;
   cursor: pointer;
   text-align: left;
-    gap: var(--content-gap);
+  gap: var(--content-gap);
   display: flex;
 }
 
 label:hover {
   filter: brightness(0.8);
   background-color:var(--main-color);
-
-  /* border-bottom: solid 2px var(--second-color);
-  color: var(--accent); */
 }
 
 label:hover input {

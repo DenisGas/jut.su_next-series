@@ -1,5 +1,6 @@
 const intervalIds = [];
 let btnSkipIntroCanBeClick = true;
+let fullScreenBtnCanBeClick = true;
 
 window.addEventListener("load", function () {
   const page = window.location.href;
@@ -74,6 +75,8 @@ function videoFromStart(video) {
 
 function createCssBlock() {
   const styles = `
+      @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@500;700&display=swap');
+
       .extension-overlay-div {
         position: fixed;
         top: 0;
@@ -87,6 +90,11 @@ function createCssBlock() {
 
       .extension-overlay-div button:hover{
         filter: brightness(0.8);
+      }
+
+      .extension-overlay-div button{
+        font-size: 1.5em;
+        font-family: 'Open Sans', sans-serif;
       }
 
       .extension-overlay-button{
@@ -132,7 +140,7 @@ function createOverlayBtn(bool) {
 
     const fullScreenBtn = document.createElement("button");
     fullScreenBtn.classList.add("extension-overlay-button");
-    fullScreenBtn.textContent = "Click to fullScreen";
+    fullScreenBtn.textContent = "Click to FullScreen";
 
     div.appendChild(fullScreenBtn);
 
@@ -149,9 +157,11 @@ function createOverlayBtn(bool) {
       );
       fullScreenControl.classList.remove("vjs-hidden");
       fullScreenControl.click();
+      fullScreenBtnCanBeClick = false;
     };
     exitBtn.onclick = (event) => {
       div.style.display = "none";
+      fullScreenBtnCanBeClick = false;
     };
   } else {
     div.remove();
@@ -224,7 +234,9 @@ function main(configObject) {
   const skipIntroBool = configObject.skipIntroBool;
   const clickToFullScreenBool = configObject.clickToFullScreenBool;
 
-  createOverlayBtn(clickToFullScreenBool);
+  if (fullScreenBtnCanBeClick) {
+    createOverlayBtn(clickToFullScreenBool);
+  }
 
   if (skipIntroBtn && skipIntroBool && btnSkipIntroCanBeClick) {
     skipIntro(skipIntroBtn);

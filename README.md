@@ -1,21 +1,28 @@
-# jut.su_next-series
+# jut.su Next-Series
 
-Chrome Extension for the site "jut.su" which makes video auto-play and auto-transition to the next series after the end of the current one.
+Chrome extension for [Jut.su](https://jut.su/) which makes video auto-play, auto-skip anime intro, and auto-open next series after the end of the current one.
+
+## Features:
+
+- Automatically plays video ✌️
+- Automatically skip anime intro 🔥
+- Open next episode 🤩
+- One click to FullScreen(Overlay) 👍
 
 ## How to install/use extension
 
 To use the extension on your phone, you can use the kiwi browser.
 
-### Install
+### Install (ZIP edition)
 
 1. Install zip and unpack to a convenient location.
 
    Click on latest release.
-   
+
    ![Latest Release img](./img/relise_img.png)
-   
-   Click on jut.su_next-series_v*.zip file (not source code).
-   
+
+   Click on jut.su_next-series_v\*.zip file (not source code).
+
    ![Zip](./img/zip.png)
 
 2. Open the chrome://extensions page.

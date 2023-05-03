@@ -13,6 +13,11 @@ Chrome extension for [Jut.su](https://jut.su/) which makes video auto-play, auto
 
 To use the extension on your phone, you can use the kiwi browser.
 
+### Install (Chrome store)
+
+[download from chrome store](https://chrome.google.com/webstore/detail/jutsu-next-series/godmnckhgkgojikjpiahppfnmhgkfpjp/related?hl=en)
+
+
 ### Install (ZIP edition)
 
 1. Install zip and unpack to a convenient location.

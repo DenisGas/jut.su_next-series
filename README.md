@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # jut.su Next-Series
 
 Chrome extension for [Jut.su](https://jut.su/) which makes video auto-play, auto-skip anime intro, and auto-open next series after the end of the current one.

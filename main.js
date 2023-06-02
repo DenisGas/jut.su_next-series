@@ -9,8 +9,7 @@ window.addEventListener("load", function () {
       const config = await storage();
 
       const video = document.getElementById("my-player_html5_api");
-
-      video.focus();
+      document.querySelector(".vjs-fullscreen-control").addEventListener('click', () => video.focus())
 
       playVideo(video);
 
@@ -128,6 +127,7 @@ function createCssBlock() {
   document.head.appendChild(styleElement);
 }
 
+
 function createOverlayBtn(bool) {
   const div = document.querySelector(".extension-overlay-div");
   if (!div) {
@@ -152,6 +152,16 @@ function createOverlayBtn(bool) {
 
     div.appendChild(exitBtn);
 
+    const fullscreenChangeHandler = () => {
+      console.log("jj");
+      if (exitBtn) {
+        exitBtn.click();
+      }
+    };
+
+    document.addEventListener('fullscreenchange', fullscreenChangeHandler);
+
+
     fullScreenBtn.onclick = (event) => {
       div.style.display = "none";
       const fullScreenControl = document.querySelector(
@@ -160,11 +170,11 @@ function createOverlayBtn(bool) {
       fullScreenControl.classList.remove("vjs-hidden");
       fullScreenControl.click();
       fullScreenBtnCanBeClick = false;
-      document.getElementById("my-player_html5_api").focus();
     };
     exitBtn.onclick = (event) => {
       div.style.display = "none";
       fullScreenBtnCanBeClick = false;
+      document.removeEventListener('fullscreenchange', fullscreenChangeHandler);
       document.getElementById("my-player_html5_api").focus();
     };
   } else {

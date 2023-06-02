@@ -1,7 +1,7 @@
 {
     "name": "jut.su Next-Series",
-    "description": "Extension for the site 'jut.su' which makes video auto-play, auto-skip anime intro, and auto-open next series after the end of the current one.",
-    "version": "2.2.1",
+    "description": "Extension for jut.su - which makes video auto-play, auto-skip anime intro, and auto-open next series after the end series.",
+    "version": "2.2.2",
     "manifest_version": 3,
     "icons": {
 
@@ -13,7 +13,7 @@
     "action": {
       "default_popup":"popup.html"
     },
-    "permissions": ["scripting", "storage"],
+    "permissions": ["storage"],
     "content_scripts": [
         {
           "js": ["./main.js"],

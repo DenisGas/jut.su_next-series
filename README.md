@@ -2,6 +2,8 @@
 
 Chrome extension for [Jut.su](https://jut.su/) which makes video auto-play, auto-skip anime intro, and auto-open next series after the end of the current one.
 
+if you want the anime to go full screen automatically, i made a [python script](https://github.com/DenisGas/watch_jut.su) that does that 
+
 ## Features:
 
 - Automatically plays video ✌️
@@ -12,6 +14,11 @@ Chrome extension for [Jut.su](https://jut.su/) which makes video auto-play, auto
 ## How to install/use extension
 
 To use the extension on your phone, you can use the kiwi browser.
+
+### Install (Chrome store)
+
+[download from chrome store](https://chrome.google.com/webstore/detail/jutsu-next-series/godmnckhgkgojikjpiahppfnmhgkfpjp/related?hl=en)
+
 
 ### Install (ZIP edition)
 

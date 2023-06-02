@@ -8,7 +8,9 @@ window.addEventListener("load", function () {
     (async () => {
       const config = await storage();
 
-      const video = document.querySelector("#my-player_html5_api");
+      const video = document.getElementById("my-player_html5_api");
+
+      video.focus();
 
       playVideo(video);
 
@@ -158,10 +160,12 @@ function createOverlayBtn(bool) {
       fullScreenControl.classList.remove("vjs-hidden");
       fullScreenControl.click();
       fullScreenBtnCanBeClick = false;
+      document.getElementById("my-player_html5_api").focus();
     };
     exitBtn.onclick = (event) => {
       div.style.display = "none";
       fullScreenBtnCanBeClick = false;
+      document.getElementById("my-player_html5_api").focus();
     };
   } else {
     div.remove();
@@ -184,6 +188,7 @@ function workOnThisPage(websitePage) {
   return false;
 }
 
+
 function nextSeries(
   nextSerBtn,
   nextSeriesAfterEndBool,
@@ -191,7 +196,7 @@ function nextSeries(
 ) {
   if (nextSeriesAfterEndBool) {
     let checkVideoEnded = createInterval(() => {
-      if (document.querySelector("#my-player_html5_api").ended === true) {
+      if (document.getElementById("my-player_html5_api").ended === true) {
         clickElement(nextSerBtn, checkVideoEnded);
       }
     }, 3000);
@@ -200,7 +205,7 @@ function nextSeries(
   if (nextSeriesBeforeEndBool) {
     let checkVideoEnded = createInterval(() => {
       if (
-        document.querySelector("#my-player_html5_api").ended === true ||
+        document.getElementById("my-player_html5_api").ended === true ||
         nextSerBtn.classList.contains("vjs-hidden") !== true
       ) {
         clickElement(nextSerBtn, checkVideoEnded);

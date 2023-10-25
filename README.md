@@ -1,4 +1,4 @@
-![icon](./img/UI.png)
+![icon](./img/icon.png)
 
 # jut.su Next-Series
 

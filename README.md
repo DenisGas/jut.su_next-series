@@ -1,6 +1,8 @@
-![Chrome Web Store Users](https://img.shields.io/chrome-web-store/users/godmnckhgkgojikjpiahppfnmhgkfpjp)
+![icon](./img/UI.png)
 
 # jut.su Next-Series
+
+![Chrome Web Store Users](https://img.shields.io/chrome-web-store/users/godmnckhgkgojikjpiahppfnmhgkfpjp)
 
 Chrome extension for [Jut.su](https://jut.su/) which makes video auto-play, auto-skip anime intro, and auto-open next series after the end of the current one.
 

@@ -3,27 +3,63 @@ let btnSkipIntroCanBeClick = true;
 let fullScreenBtnCanBeClick = true;
 
 window.addEventListener("load", function () {
-  const page = window.location.href;
-  if (workOnThisPage(page) != false) {
+  if (workOnThisPage(window.location.href) != false) {
     (async () => {
       const config = await storage();
 
-      const video = document.getElementById("my-player_html5_api");
-      document.querySelector(".vjs-fullscreen-control").addEventListener('click', () => video.focus())
+      chrome.storage.onChanged.addListener(function (changes, namespace) {
+        console.log(changes, namespace);
+        (async () => {
+          const config = await storage();
+          main(config);
+        })();
+      });
 
-      playVideo(video);
-
-      if (config.videoFromStartBool) {
-        videoFromStart(video);
+      if (config.isExtensionON === false) {
+        extensionOff();
+        return;
       }
-      createCssBlock();
-      main(config);
+
+      const checkVideoElemOnPage = setInterval(() => {
+
+        const video = document.getElementById("my-player_html5_api");
+
+        if (video) {
+
+          clearInterval(checkVideoElemOnPage);
+          playVideo(video);
+
+          const checkForFullScreenButton = setInterval(() => {
+            if (document.querySelector(".vjs-fullscreen-control")) {
+              clearInterval(checkForFullScreenButton);
+
+              document.querySelector(".vjs-fullscreen-control").addEventListener('click', () => video.focus());
+              document.addEventListener('keydown', function (event) {
+                if (event.code === "KeyF") {
+                  const message = document.querySelector('#message');
+                  const search = document.querySelector('input[type="text"][name="ystext"]');
+                  if (message !== document.activeElement && search !== document.activeElement) {
+                    goFullScreen();
+                  }
+
+                }
+              });
+              main(config);
+            }
+          }, 100);
+
+          if (config.videoFromStartBool) {
+            videoFromStart(video);
+          }
+        }
+      }, 100);
     })();
   }
 });
 
 async function storage() {
   const jutsuExtensionDefaultConfig = {
+    isExtensionON: true,
     nextSeriesBeforeEndBool: true,
     nextSeriesAfterEndBool: false,
     skipIntroBool: true,
@@ -46,6 +82,14 @@ async function storage() {
       }
     });
   });
+}
+
+function extensionOff() {
+  const div = document.querySelector(".extension-overlay-div");
+  if (div) {
+    div.style.display = "none";
+  }
+  clearAllIntervals();
 }
 
 function playVideo(video) {
@@ -74,59 +118,13 @@ function videoFromStart(video) {
   }, 1000);
 }
 
-function createCssBlock() {
-  const styles = `
-      @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@500;700&display=swap');
+function goFullScreen() {
+  const fullScreenControl = document.querySelector(
+    ".vjs-fullscreen-control"
+  );
+  fullScreenControl.click();
 
-      .extension-overlay-div {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width:100%;
-        height:100%;
-        border: none;
-        z-index: 9999;
-        display:flex;
-      }
-
-      .extension-overlay-div button:hover{
-        filter: brightness(0.8);
-      }
-
-      .extension-overlay-div button{
-        font-size: 1.5em;
-        font-family: 'Open Sans', sans-serif;
-      }
-
-      .extension-overlay-button{
-        cursor:pointer;
-        border: none;
-        padding:0;
-        color: white;
-        background-color: #485f4880;
-        width:60%;
-        height:100%;
-      }
-
-      .extension-overlay-exit-button{
-        cursor:pointer;
-        border: none;
-        padding:0;
-        color: white;
-        width:40%;
-        height:100%;
-        background-color: #9d363680;
-      }
-      `;
-  const styleElement = document.createElement("style");
-  if (styleElement.styleSheet) {
-    styleElement.styleSheet.cssText = styles;
-  } else {
-    styleElement.appendChild(document.createTextNode(styles));
-  }
-  document.head.appendChild(styleElement);
 }
-
 
 function createOverlayBtn(bool) {
   const div = document.querySelector(".extension-overlay-div");
@@ -153,7 +151,6 @@ function createOverlayBtn(bool) {
     div.appendChild(exitBtn);
 
     const fullscreenChangeHandler = () => {
-      console.log("jj");
       if (exitBtn) {
         exitBtn.click();
       }
@@ -183,13 +180,6 @@ function createOverlayBtn(bool) {
   }
 }
 
-chrome.storage.onChanged.addListener(function (changes, namespace) {
-  // console.log(changes, namespace);
-  (async () => {
-    const config = await storage();
-    main(config);
-  })();
-});
 
 function workOnThisPage(websitePage) {
   if (websitePage.includes("episode-") || websitePage.includes("film-")) {
@@ -209,7 +199,7 @@ function nextSeries(
       if (document.getElementById("my-player_html5_api").ended === true) {
         clickElement(nextSerBtn, checkVideoEnded);
       }
-    }, 3000);
+    }, 1000);
   }
 
   if (nextSeriesBeforeEndBool) {
@@ -220,17 +210,18 @@ function nextSeries(
       ) {
         clickElement(nextSerBtn, checkVideoEnded);
       }
-    }, 3000);
+    }, 1000);
   }
 }
 
 function skipIntro(skipIntroBtn) {
   let checkSkipIntroBtnVisible = createInterval(() => {
     if (skipIntroBtn.classList.contains("vjs-hidden") != true) {
-      btnSkipIntroCanBeClick = false;
-      clickElement(skipIntroBtn, checkSkipIntroBtnVisible);
+      // btnSkipIntroCanBeClick = false;
+      skipIntroBtn.click();
+      // clickElement(skipIntroBtn, checkSkipIntroBtnVisible);
     }
-  }, 2000);
+  }, 1000);
 }
 
 function clickElement(element, intervalFunc) {
@@ -240,7 +231,11 @@ function clickElement(element, intervalFunc) {
 
 function main(configObject) {
   clearAllIntervals();
-
+  const isExtensionON = configObject.isExtensionON;
+  if (isExtensionON === false) {
+    extensionOff();
+    return;
+  }
   const nextSerBtn = document.querySelector(".vjs-overlay-bottom-right");
   const skipIntroBtn = document.querySelector(".vjs-overlay-bottom-left");
 

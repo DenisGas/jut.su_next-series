@@ -1,14 +1,4 @@
-<div align=center>
-   <img width=150 src=https://github.com/DenisGas/jut.su_next-series/blob/main/img/icon.png alt='logo' />
-   <h1>jut.su Next-Series</h1>
-</div>
-
-![Chrome Web Store Users](https://img.shields.io/chrome-web-store/users/godmnckhgkgojikjpiahppfnmhgkfpjp)
-![GitHub release (with filter)](https://img.shields.io/github/v/release/DenisGas/jut.su_next-series)
-![GitHub all releases](https://img.shields.io/github/downloads/DenisGas/jut.su_next-series/total)
-![GitHub Repo stars](https://img.shields.io/github/stars/DenisGas/jut.su_next-series)
-![GitHub](https://img.shields.io/github/license/DenisGas/jut.su_next-series)
-
+# jut.su Next-Series
 
 Chrome extension for [Jut.su](https://jut.su/) which makes video auto-play, auto-skip anime intro, and auto-open next series after the end of the current one.
 

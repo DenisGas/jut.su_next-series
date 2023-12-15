@@ -3,23 +3,29 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Jutsu NextSeries</title>
+  <title>Jut.su Next-Series</title>
 
   <link rel="stylesheet" type="text/css" href="popup.css" />
 </head>
 
 <body>
   <header>
-    <h1>Jutsu NextSeries</h1>
+    <h1>Jut.su Next-Series</h1>
+    <p><a target="_blank" href="https://github.com/DenisGas/jut.su_next-series/releases/tag/2.3.0">2.5.0</a></p>
   </header>
-
   <main>
+    <section class="checkboxes">
+      <label id="OffSwitcherLabel">
+        <input checked class="checkbox" type="checkbox" id="OffSwitcher">
+        Разширение: <span class="On" id="extentionStatus">ON</span>
+      </label>
+    </section>
     <section class="radios">
-      <label id='nextSeriesBeforeEndLabel'>
+      <label id="nextSeriesBeforeEndLabel">
         <input class="radio" type="radio" id="nextSeriesBeforeEnd" name="nextSeries">
         Следующая серия до титров
       </label>
-      <label id='nextSeriesAfterEndLabel'>
+      <label id="nextSeriesAfterEndLabel">
         <input class="radio" type="radio" id="nextSeriesAfterEnd" name="nextSeries">
         Следующая серия после конца серии
       </label>

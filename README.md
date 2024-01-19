@@ -42,9 +42,14 @@ To use the extension on your phone, you can use the kiwi browser.
 
 ## Some Error
 
-1.  Console error after page reload  
-    ![GoogleErrorImg](./img/G_Error.png)
+-  After reloading the page, the autoplay video does not work
+   
+    - **Console error**\
+       ![GoogleErrorImg](./img/G_Error.png)
 
-    Due to Google's policy that video auto-play does not work before the user has interacted with the site.
+       Due to Google's policy that video auto-play does not work before the user has interacted with the site.
 
-    After reloading the page, video auto-play does not work. But the next series will start.
+       After reloading the page, video auto-play does not work. But the next series will start.
+    
+    - **Fix**
+       Also, if you make a [PWA from the site](https://support.google.com/chrome_webstore/answer/3060053#zippy=%2Cadd-an-app-from-the-chrome-web-store), even after restarting the site, autoplay will work (checked Chrome and Edge)

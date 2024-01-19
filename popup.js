@@ -1,23 +1,22 @@
-const nextSeriesBeforeEnd = document.getElementById("nextSeriesBeforeEnd");
-const nextSeriesAfterEnd = document.getElementById("nextSeriesAfterEnd");
-const skipIntro = document.getElementById("skipIntro");
-const OffSwitcher = document.getElementById("OffSwitcher");
-const videoFromStart = document.getElementById("videoFromStart");
-const clickToFullScreen = document.getElementById("clickToFullScreen");
-const nextSeriesBeforeEndLabel = document.getElementById(
+const nextSeriesBeforeEnd = GetElByID("nextSeriesBeforeEnd");
+const nextSeriesAfterEnd = GetElByID("nextSeriesAfterEnd");
+const skipIntro = GetElByID("skipIntro");
+const OffSwitcher = GetElByID("OffSwitcher");
+const videoFromStart = GetElByID("videoFromStart");
+const clickToFullScreen = GetElByID("clickToFullScreen");
+const nextSeriesBeforeEndLabel = GetElByID(
   "nextSeriesBeforeEndLabel"
 );
-const nextSeriesAfterEndLabel = document.getElementById(
+const nextSeriesAfterEndLabel = GetElByID(
   "nextSeriesAfterEndLabel"
 );
-const skipIntroLabel = document.getElementById("skipIntroLabel");
-const clickToFullScreenLabel = document.getElementById(
+const skipIntroLabel = GetElByID("skipIntroLabel");
+const clickToFullScreenLabel = GetElByID(
   "clickToFullScreenLabel"
 );
-const videoFromStartLabel = document.getElementById("videoFromStartLabel");
-const OffSwitcherLabel = document.getElementById("OffSwitcherLabel");
-
-const extentionStatus = document.getElementById("extentionStatus");
+const videoFromStartLabel = GetElByID("videoFromStartLabel");
+const OffSwitcherLabel = GetElByID("OffSwitcherLabel");
+const extentionStatus = GetElByID("extentionStatus");
 
 const jutsuExtensionDefaultConfig = {
   isExtensionON: true,
@@ -26,15 +25,17 @@ const jutsuExtensionDefaultConfig = {
   skipIntroBool: true,
   clickToFullScreenBool: false,
   videoFromStartBool: false,
-};
+}
+
+function GetElByID(id) {
+  return document.getElementById(id);
+}
 
 function saveInStorage(configObject) {
   chrome.storage.local.set({
     jutsuExtensionConfig: configObject.jutsuExtensionConfig,
   });
 }
-
-extentionStatus.style.maxWidth
 
 function defaultSettings(defConfigObject) {
   chrome.storage.local.set({
@@ -62,8 +63,6 @@ function offExtension() {
   videoFromStart.disabled = true;
 }
 
-
-
 function storage() {
   chrome.storage.local.get(["jutsuExtensionConfig"], (result) => {
     if (result.jutsuExtensionConfig == undefined) {
@@ -80,96 +79,128 @@ function storage() {
 
     let isExtensionON = result.jutsuExtensionConfig.isExtensionON;
 
-    if (isExtensionON === true) {
-      OffSwitcher.checked = true;
-      onExtension();
-    } else {
-      OffSwitcher.checked = false;
+    OffSwitcher.checked = isExtensionON;
+    onExtension();
+
+    nextSeriesBeforeEnd.checked = nextSeriesBeforeEndBool;
+    nextSeriesAfterEnd.checked = !nextSeriesBeforeEndBool;
+
+    skipIntro.checked = skipIntroBool;
+    clickToFullScreen.checked = clickToFullScreenBool;
+    videoFromStart.checked = videoFromStartBool;
+
+    if (!isExtensionON) {
       offExtension();
-
-    }
-
-    if (nextSeriesBeforeEndBool === true) {
-      nextSeriesBeforeEnd.checked = true;
-    } else {
-      nextSeriesAfterEnd.checked = true;
     }
 
 
-    if (skipIntroBool === true) {
-      skipIntro.checked = true;
-    } else {
-      skipIntro.checked = false;
-    }
+  });
+}
 
-    if (clickToFullScreenBool === true) {
-      clickToFullScreen.checked = true;
-    } else {
-      clickToFullScreen.checked = false;
-    }
+function handleConfigEvent(listenerElement, checkedElement, options, actions = []) {
+  listenerElement.addEventListener("click", () => {
+    chrome.storage.local.get("jutsuExtensionConfig", (configObj) => {
+      const checked = checkedElement.checked;
 
-    if (videoFromStartBool === true) {
-      videoFromStart.checked = true;
-    } else {
-      videoFromStart.checked = false;
-    }
+      configObj.jutsuExtensionConfig[options[0]] = checked;
 
+      for (let i = 1; i < options.length; i++) {
+        configObj.jutsuExtensionConfig[options[i]] = !checked;
+      }
+
+      if (actions[0] !== undefined && actions[1] !== undefined) {
+        actions[checked ? 0 : 1](); // Run trueFunc or falseFunc
+      }
+      saveInStorage(configObj);
+    });
   });
 }
 
 storage();
 
-nextSeriesBeforeEndLabel.addEventListener("click", () => {
-  chrome.storage.local.get("jutsuExtensionConfig", function (result) {
-    result.jutsuExtensionConfig.nextSeriesBeforeEndBool = true;
-    result.jutsuExtensionConfig.nextSeriesAfterEndBool = false;
-    saveInStorage(result)
-  });
-});
-
-nextSeriesAfterEndLabel.addEventListener("click", () => {
-  chrome.storage.local.get("jutsuExtensionConfig", function (result) {
-    result.jutsuExtensionConfig.nextSeriesBeforeEndBool = false;
-    result.jutsuExtensionConfig.nextSeriesAfterEndBool = true;
-    saveInStorage(result)
-  });
-});
+handleConfigEvent(videoFromStartLabel, videoFromStart, ["videoFromStartBool"]);
+handleConfigEvent(clickToFullScreenLabel, clickToFullScreen, ["clickToFullScreenBool"]);
+handleConfigEvent(skipIntroLabel, skipIntro, ["skipIntroBool"]);
+handleConfigEvent(nextSeriesBeforeEndLabel, nextSeriesBeforeEnd, ["nextSeriesBeforeEndBool", "nextSeriesAfterEndBool"]);
+handleConfigEvent(nextSeriesAfterEndLabel, nextSeriesAfterEnd, ["nextSeriesAfterEndBool", "nextSeriesBeforeEndBool"]);
+handleConfigEvent(OffSwitcherLabel, OffSwitcher, ["isExtensionON"], [onExtension, offExtension]);
 
 
-function swapAndSaveConfigEventListener(listenerElement, checkedElement, extensionOpt) {
-  listenerElement.addEventListener("click", () => {
-    chrome.storage.local.get("jutsuExtensionConfig", function (configObj) {
-      if (checkedElement.checked === true) {
-        configObj.jutsuExtensionConfig[extensionOpt] = true;
-      } else {
-        configObj.jutsuExtensionConfig[extensionOpt] = false;
-      }
-      saveInStorage(configObj)
-    });
-  });
-}
-
-function configEventListener(listenerElement, checkedElement, extensionOpt, trueFunc, falseFunc) {
-  listenerElement.addEventListener("click", () => {
-    chrome.storage.local.get("jutsuExtensionConfig", function (configObj) {
-      if (checkedElement.checked === true) {
-        configObj.jutsuExtensionConfig[extensionOpt] = true;
-        trueFunc();
-      } else {
-        configObj.jutsuExtensionConfig[extensionOpt] = false;
-        falseFunc();
-      }
-      saveInStorage(configObj)
-    });
-  });
-}
+//OLD VARIANT
 
 
-swapAndSaveConfigEventListener(videoFromStartLabel, videoFromStart, "videoFromStartBool");
-swapAndSaveConfigEventListener(clickToFullScreenLabel, clickToFullScreen, "clickToFullScreenBool");
-swapAndSaveConfigEventListener(skipIntroLabel, skipIntro, "skipIntroBool");
+// function swapAndSaveConfig2optEventListener(listenerElement, checkedElement, extensionOpt1, extensionOpt2) {
+//   listenerElement.addEventListener("click", () => {
+//     chrome.storage.local.get("jutsuExtensionConfig", function (configObj) {
+//       if (checkedElement.checked === true) {
+//         configObj.jutsuExtensionConfig[extensionOpt1] = true;
+//         configObj.jutsuExtensionConfig[extensionOpt2] = false;
+//       } else {
+//         configObj.jutsuExtensionConfig[extensionOpt1] = false;
+//         configObj.jutsuExtensionConfig[extensionOpt2] = true;
+//       }
+//       saveInStorage(configObj)
+//     });
+//   });
+// }
 
-configEventListener(OffSwitcherLabel, OffSwitcher, "isExtensionON", onExtension, offExtension);
+
+// function swapAndSaveConfigEventListener(listenerElement, checkedElement, extensionOpt) {
+//   listenerElement.addEventListener("click", () => {
+//     chrome.storage.local.get("jutsuExtensionConfig", function (configObj) {
+//       if (checkedElement.checked === true) {
+//         configObj.jutsuExtensionConfig[extensionOpt] = true;
+//       } else {
+//         configObj.jutsuExtensionConfig[extensionOpt] = false;
+//       }
+//       saveInStorage(configObj)
+//     });
+//   });
+// }
+
+// function configEventListener(listenerElement, checkedElement, extensionOpt, trueFunc, falseFunc) {
+//   listenerElement.addEventListener("click", () => {
+//     chrome.storage.local.get("jutsuExtensionConfig", function (configObj) {
+//       if (checkedElement.checked === true) {
+//         configObj.jutsuExtensionConfig[extensionOpt] = true;
+//         trueFunc();
+//       } else {
+//         configObj.jutsuExtensionConfig[extensionOpt] = false;
+//         falseFunc();
+//       }
+//       saveInStorage(configObj)
+//     });
+//   });
+// }
+
+
+// swapAndSaveConfigEventListener(videoFromStartLabel, videoFromStart, "videoFromStartBool");
+// swapAndSaveConfigEventListener(clickToFullScreenLabel, clickToFullScreen, "clickToFullScreenBool");
+// swapAndSaveConfigEventListener(skipIntroLabel, skipIntro, "skipIntroBool");
+
+// configEventListener(OffSwitcherLabel, OffSwitcher, "isExtensionON", onExtension, offExtension);
+
+// swapAndSaveConfig2optEventListener(nextSeriesBeforeEndLabel, nextSeriesBeforeEnd, "nextSeriesBeforeEndBool", "nextSeriesAfterEndBool");
+
+// swapAndSaveConfig2optEventListener(nextSeriesAfterEndLabel, nextSeriesAfterEnd, "nextSeriesAfterEndBool", "nextSeriesBeforeEndBool");
+
+
+
+// nextSeriesBeforeEndLabel.addEventListener("click", () => {
+//   chrome.storage.local.get("jutsuExtensionConfig", function (result) {
+//     result.jutsuExtensionConfig.nextSeriesBeforeEndBool = true;
+//     result.jutsuExtensionConfig.nextSeriesAfterEndBool = false;
+//     saveInStorage(result)
+//   });
+// });
+
+// nextSeriesAfterEndLabel.addEventListener("click", () => {
+//   chrome.storage.local.get("jutsuExtensionConfig", function (result) {
+//     result.jutsuExtensionConfig.nextSeriesBeforeEndBool = false;
+//     result.jutsuExtensionConfig.nextSeriesAfterEndBool = true;
+//     saveInStorage(result)
+//   });
+// });
 
 
 

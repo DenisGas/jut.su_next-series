@@ -28,7 +28,7 @@ To use the extension on your phone, you can use the kiwi browser.
 
 ### Install (Chrome store)
 
-[download from chrome store](https://chrome.google.com/webstore/detail/jutsu-next-series/godmnckhgkgojikjpiahppfnmhgkfpjp/related?hl=en)
+[download from chrome store](https://chromewebstore.google.com/detail/jutsu-next-series/godmnckhgkgojikjpiahppfnmhgkfpjp)
 
 ### Use
 

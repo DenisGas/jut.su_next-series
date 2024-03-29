@@ -10,15 +10,15 @@
       "128":"./icons/128.png"
     },
     "action": {
-      "default_popup":"popup.html"
+      "default_popup":"./pages/popup.html"
     },
     "permissions": ["storage"],
     "content_scripts": [
         {
           "css":[
-            "contentStyle.css"
+            "./styles/contentStyle.css"
           ],
-          "js": ["./main.js"],
+          "js": ["./scripts/main.js"],
           "matches": [
             "https://jut.su/*"
           ]

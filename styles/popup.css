@@ -99,6 +99,10 @@ label:hover input:checked {
   filter: brightness(0.8);
 }
 
+label:hover input:disabled {
+  filter: brightness(1);
+}
+
 input {
   cursor: pointer;
 }
@@ -179,10 +183,6 @@ input {
   animation-name: none;
 }
 
-label:hover input:disabled {
-  filter: brightness(1);
-}
-
 @keyframes change-opacity {
   0% {
     opacity: 0;
@@ -192,11 +192,14 @@ label:hover input:disabled {
   }
 }
 
-#OffSwitcherLabel span {
-  color: var(--red);
-  font-weight: 700;
+#OffSwitcherLabel span.switcher {
+  font-weight: bold;
 }
 
-#OffSwitcherLabel span.On {
+#OffSwitcherLabel span.disabled {
+  color: var(--red);
+}
+
+#OffSwitcherLabel span.enabled {
   color: var(--link-hover);
 }

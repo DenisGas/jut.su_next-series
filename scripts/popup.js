@@ -1,4 +1,3 @@
-
 function createLocales() {
   return {
     extensionLabel: chrome.i18n.getMessage("extension"),
@@ -14,140 +13,198 @@ function createLocales() {
 
 const locales = createLocales();
 
-function saveInStorage(configObject) {
-  chrome.storage.local.set({
-    jutsuExtensionConfig: configObject,
-  });
-}
-
-function defaultSettings(defConfigObject) {
-  chrome.storage.local.set({
-    jutsuExtensionConfig: defConfigObject,
-  });
-}
-
-
-function update(e) {
-  console.log(e)
-}
-
-
 class ToggleField {
-  constructor(id, labelText) {
+  constructor(id, labelText, btnType) {
     this.id = id;
     this.labelText = labelText;
-    this.element = this.createElem();
-    this.type = "none";
-  }
-
-  getType() {
-    return this.type;
-  }
-
-  getElem() {
-    return this.element;
-  }
-
-  getId() {
-    return this.id;
-  }
-
-  createElem() {
-    return undefined;
-  }
-
-  isChecked() {
-    return this.element.querySelector('input').checked;
-  }
-
-  setChecked(checked) {
-    this.element.querySelector('input').checked = checked;
-  }
-
-  addToPage(parentElement) {
-    this.element.addEventListener('change', () => {
-      update(this)
-    });
-    parentElement.appendChild(this.element);
-  }
-
-}
-
-class RadioButtonField extends ToggleField {
-  constructor(id, name, labelText) {
-    super(id, labelText)
-    this.name = name;
-    this.element = this.createElem();
-    this.type = "radio";
+    this.type = btnType;
   }
 
   createElem() {
     const label = document.createElement('label');
     label.id = this.id + 'Label';
-
-    const input = document.createElement('input');
-    input.className = 'radio';
+    
+    const input = document.createElement(this.type === 'radio' ? 'input' : 'input');
+    input.className = this.type === 'radio' ? 'radio' : 'checkbox';
     input.id = this.id;
-    input.name = this.name;
-    input.type = 'radio';
+    if (this.type === 'radio') {
+      input.name = this.name;
+      input.type = 'radio';
+    } else {
+      input.type = 'checkbox';
+    }
 
     label.appendChild(input);
     label.appendChild(document.createTextNode(this.labelText));
-
+    
     return label;
   }
 
-}
-
-class CheckboxField extends ToggleField {
-  constructor(id, labelText) {
-    super(id, labelText)
-    this.element = this.createElem();
-    this.type = "checkbox";
+  isChecked() {
+    return document.getElementById(this.id).checked;
   }
-  createElem() {
-    const label = document.createElement('label');
-    label.id = this.id + 'Label';
 
-    const input = document.createElement('input');
-    input.className = 'checkbox';
-    input.id = this.id;
-    input.type = 'checkbox';
+  setChecked(checked) {
+    document.getElementById(this.id).checked = checked;
+  }
 
-    const labelTextSpan = document.createElement('span');
-    labelTextSpan.textContent = this.labelText;
+  setDisabled(disabled) {
+    document.getElementById(this.id).disabled = disabled;
+  }
 
-    label.appendChild(input);
-    label.appendChild(labelTextSpan);
-    return label;
+  addToPage(parentElement) {
+    parentElement.appendChild(this.createElem());
   }
 }
 
-class disabledExtensionCheckbox extends CheckboxField {
-  constructor(id, labelText, statusClass, statusText) {
-    super(id, labelText);
+class DisabledExtensionCheckbox extends ToggleField {
+  constructor(id, labelText, btnType, statusClass, statusEnabled, statusDisabled) {
+    super(id, labelText, btnType);
     this.statusClass = statusClass;
-    this.statusText = statusText;
-    this.type = "offBtn";
+    this.statusEnabled = statusEnabled;
+    this.statusDisabled = statusDisabled;
     this.element = this.createElem();
   }
 
+  setChecked(checked) {
+    super.setChecked(checked);
+    this.changeStatus(); // Добавляем вызов метода changeStatus после установки состояния
+}
+
+
+  getNowStatus() {
+    return this.isChecked() ? this.statusEnabled : this.statusDisabled;
+  }
+
+  setStatus(statusElem, textContent, addClass) {
+    statusElem.textContent = textContent;
+    if (addClass && !statusElem.classList.contains("enabled")) {
+      statusElem.classList.add("enabled");
+    } else if (!addClass && statusElem.classList.contains("enabled")) {
+      statusElem.classList.remove("enabled");
+    }
+  }
+
+  changeStatus() {
+    const isChecked = this.isChecked();
+    const statusElem = document.getElementById(this.id + 'Status');
+    const newText = isChecked ? this.statusEnabled : this.statusDisabled;
+    this.setStatus(statusElem, newText, isChecked);
+}
+
   createElem() {
-    const label = super.createElem(); // Вызываем метод createElem родительского класса CheckboxField
-    console.log(label);
-    const labelTextSpan2 = document.createElement('span'); // Создаем второй span
-    labelTextSpan2.textContent = this.statusText; // Устанавливаем текст статуса
-    labelTextSpan2.classList = this.statusClass;
-    label.appendChild(labelTextSpan2); // Добавляем второй span
+    const label = super.createElem();
+    const statusElem = document.createElement('span');
+    statusElem.textContent = this.statusDisabled;
+    statusElem.id = this.id + 'Status';
+    statusElem.classList = this.statusClass;
+    label.appendChild(statusElem);
     return label;
   }
 }
 
+class Extension {
+  constructor(buttons, defaultSettings) {
+    this.buttons = buttons;
+    this.defaultSettings = defaultSettings;
+    this.configObject = {};
+    this.setChangeListener();
+    this.setData();
+  }
+
+  setChangeListener() {
+    this.buttons.forEach(button => {
+      const element = document.getElementById(button.id);
+      element.addEventListener('change', () => {
+        this.configObject = this.getLocalData();
+        this.saveInStorage(this.configObject);
+        this.setData();
+      });
+    });
+  }
+
+  saveInStorage(configObject) {
+    chrome.storage.local.set({ jutsuExtensionConfig: configObject });
+  }
+
+  getLocalData() {
+    const configObject = {};
+
+    this.buttons.forEach(button => {
+      configObject[button.id] = button.isChecked();
+    });
+
+    return configObject;
+  }
+
+  setData() {
+    chrome.storage.local.get("jutsuExtensionConfig", data => {
+      const jutsuExtensionConfig = data["jutsuExtensionConfig"];
+  
+      this.buttons.forEach(button => {
+        const buttonId = button.id;
+        if (jutsuExtensionConfig && jutsuExtensionConfig.hasOwnProperty(buttonId)) {
+          button.setChecked(jutsuExtensionConfig[buttonId]);
+        } else if (this.defaultSettings.hasOwnProperty(buttonId)) {
+          const defaultValue = this.defaultSettings[buttonId];
+          button.setChecked(defaultValue);
+        }
+  
+        if (buttonId !== "offSwitcher" && jutsuExtensionConfig && jutsuExtensionConfig["offSwitcher"] === false) {
+          button.setDisabled(true);
+        } else {
+          button.setDisabled(false);
+        }
+      });
+    });
+  }
+}
 
 const checkboxesSection = document.querySelector('.checkboxes.first');
 const checkboxesSection2 = document.querySelector('.checkboxes.second');
 const radiosSection = document.querySelector('.radios');
 
+const jutsuExtensionButtonsConfig = {
+  offSwitcher: {
+    type: 'offBtn',
+    labelText: locales.extensionLabel,
+    statusClass: 'switcher disabled',
+    statusTextEnabled: locales.statusEnabled,
+    statusTextDisabled: locales.statusDisabled,
+    group: null,
+    defaultSettings: true,
+  },
+  nextSeriesBeforeEnd: {
+    type: 'radio',
+    labelText: locales.nextSeriesBeforeEnd,
+    group: 'seriesOptions',
+    defaultSettings: true,
+  },
+  nextSeriesAfterEnd: {
+    type: 'radio',
+    labelText: locales.nextSeriesAfterEnd,
+    group: 'seriesOptions',
+    defaultSettings: false,
+  },
+  skipIntro: {
+    type: 'checkbox',
+    labelText: locales.skipIntro,
+    group: null,
+    defaultSettings: true,
+  },
+  videoFromStart: {
+    type: 'checkbox',
+    labelText: locales.videoFromStart,
+    group: null,
+    defaultSettings: false,
+  },
+  clickToFullScreen: {
+    type: 'checkbox',
+    labelText: locales.clickToFullScreen,
+    group: null,
+    defaultSettings: false,
+  }
+};
 
 const jutsuExtensionDefaultConfig = {};
 
@@ -157,26 +214,19 @@ for (const btnId in jutsuExtensionButtonsConfig) {
   }
 }
 
-console.log(jutsuExtensionDefaultConfig);
-
 const buttons = [];
 for (const [id, config] of Object.entries(jutsuExtensionButtonsConfig)) {
   if (config.type === 'checkbox') {
-    buttons.push(new CheckboxField(id, config.labelText));
-  }
-  else if (config.type === 'offBtn') {
-    buttons.push(new disabledExtensionCheckbox(id, config.labelText, config.statusClass, config.statusText));
-  }
-  else if (config.type === 'radio') {
-    buttons.push(new RadioButtonField(id, config.group, config.labelText));
+    buttons.push(new ToggleField(id, config.labelText, config.type));
+  } else if (config.type === 'offBtn') {
+    buttons.push(new DisabledExtensionCheckbox(id, config.labelText, config.type, config.statusClass, config.statusTextEnabled, config.statusTextDisabled));
+  } else if (config.type === 'radio') {
+    buttons.push(new ToggleField(id, config.labelText, config.type));
   }
 }
 
-
-
 buttons.forEach(e => {
-  const elementType = e.getType();
-  console.log(e.getType());
+  const elementType = e.type;
   let parentElement;
   switch (elementType) {
     case "radio":
@@ -198,338 +248,316 @@ buttons.forEach(e => {
 
 });
 
+const extension = new Extension(buttons, jutsuExtensionDefaultConfig);
 
-const jutsuExtensionDefaultConfig = {
-  offSwitcher: true,
-  nextSeriesBeforeEnd: true,
-  nextSeriesAfterEnd: false,
-  skipIntroBool: true,
-  clickToFullScreenBool: false,
-  videoFromStartBool: false,
-}
-
-let configObject = {};
-
-buttons.forEach(button => {
-  chrome.storage.local.get(button.getId(), data => {
-    if (data[button.getId()] !== undefined) {
-      button.setChecked(data[button.getId()]);
-      configObject[button.getId()] = data[button.getId()]; // Добавляем значение из хранилища в объект конфигурации
-    } else if (jutsuExtensionDefaultConfig.hasOwnProperty(button.getId())) {
-      const defaultValue = jutsuExtensionDefaultConfig[button.getId()];
-      button.setChecked(defaultValue);
-      configObject[button.getId()] = defaultValue; // Добавляем значение по умолчанию в объект конфигурации
-    }
-  });
-
-  button.getElem().addEventListener('change', () => {
-    configObject[button.getId()] = button.isChecked();
-    saveInStorage(configObject);
-  });
-});
+extension.setData();
 
 
+///OLD
 
 
-
-
-
-
-
-// if (checkboxesSection && checkboxesSection2 && radiosSection) {
-
-
-//   const nextSeriesBeforeEnd = new RadioButtonField('nextSeriesBeforeEnd', 'nextSeries', 'Следующая серия до титров');
-//   const nextSeriesAfterEnd = new RadioButtonField('nextSeriesAfterEnd', 'nextSeries', 'Следующая серия после конца серии');
-//   const skipIntro = new CheckboxField('skipIntro', 'Пропускать заставку');
-//   const videoFromStart = new CheckboxField('videoFromStart', 'Видео с самого начала');
-//   const clickToFullScreen = new CheckboxField('clickToFullScreen', 'One click to FullScreen(Overlay)');
-
-//   // // Добавляем созданные поля в соответствующие секции
-//   // checkboxesSection.appendChild(offSwitcher.createCheckboxField());
-//   // radiosSection.appendChild(nextSeriesBeforeEnd.createRadioButtonField());
-//   // radiosSection.appendChild(nextSeriesAfterEnd.createRadioButtonField());
-//   // checkboxesSection2.appendChild(skipIntro.createCheckboxField());
-//   // checkboxesSection2.appendChild(videoFromStart.createCheckboxField());
-//   // checkboxesSection2.appendChild(clickToFullScreen.createCheckboxField());
-
-
-
-//   // // Пример использования методов
-//   // offSwitcher.setChecked(true); // Устанавливаем галочку
-//   // console.log(`Состояние чекбокса ${offSwitcher.id}:`, offSwitcher.isChecked());
-
-//   // const elements = {
-//   //   offSwitcher: offSwitcher,
-
-//   //   checkboxes: {
-//   //     skipIntro: skipIntro
-//   //   },
-//   //   radios: {
-//   //     nextSeriesBeforeEnd: nextSeriesBeforeEnd
-//   //   }
-//   // };
-
-//   // // Добавление поля offSwitcher на страницу
-//   // checkboxesSection.appendChild(elements.offSwitcher.createCheckboxField());
-
-
-
-//   // // Установка значения checked для поля offSwitcher
-//   // elements.offSwitcher.setChecked(true);
-
-// } else {
-//   console.error('Could not find checkboxes or radios section.');
+// function createLocales() {
+//   return {
+//     extensionLabel: chrome.i18n.getMessage("extension"),
+//     statusEnabled: chrome.i18n.getMessage("status_enabled"),
+//     statusDisabled: chrome.i18n.getMessage("status_disabled"),
+//     nextSeriesBeforeEnd: chrome.i18n.getMessage("next_series_before_end"),
+//     nextSeriesAfterEnd: chrome.i18n.getMessage("next_series_after_end"),
+//     skipIntro: chrome.i18n.getMessage("skip_intro"),
+//     videoFromStart: chrome.i18n.getMessage("video_from_start"),
+//     clickToFullScreen: chrome.i18n.getMessage("click_to_FullScreen")
+//   };
 // }
 
+// const locales = createLocales();
 
+// class ToggleField {
+//   constructor(id, labelText, btnType) {
+//     this.id = id;
+//     this.labelText = labelText;
+//     this.element = this.createElem();
+//     this.type = btnType;
+//   }
 
+//   getType() {
+//     return this.type;
+//   }
 
+//   getElem() {
+//     return this.element;
+//   }
 
+//   getId() {
+//     return this.id;
+//   }
 
+//   createElem() {
+//     return undefined;
+//   }
 
+//   isChecked() {
+//     return this.element.querySelector('input').checked;
+//   }
 
-//const nextSeriesBeforeEnd = GetElByID("nextSeriesBeforeEnd");
-// const nextSeriesAfterEnd = GetElByID("nextSeriesAfterEnd");
-// const skipIntro = GetElByID("skipIntro");
-// const OffSwitcher = GetElByID("OffSwitcher");
-// const videoFromStart = GetElByID("videoFromStart");
-// const clickToFullScreen = GetElByID("clickToFullScreen");
-// const nextSeriesBeforeEndLabel = GetElByID(
-//   "nextSeriesBeforeEndLabel"
-// );
-// const nextSeriesAfterEndLabel = GetElByID(
-//   "nextSeriesAfterEndLabel"
-// );
-// const skipIntroLabel = GetElByID("skipIntroLabel");
-// const clickToFullScreenLabel = GetElByID(
-//   "clickToFullScreenLabel"
-// );
-// const videoFromStartLabel = GetElByID("videoFromStartLabel");
-// const OffSwitcherLabel = GetElByID("OffSwitcherLabel");
-// const extentionStatus = GetElByID("extentionStatus");
+//   setChecked(checked) {
+//     this.element.querySelector('input').checked = checked;
+//   }
 
+//   setDisabled(disabled) {
+//     this.element.querySelector('input').disabled = disabled;
+//   }
 
-
-// Класс для создания полей чекбоксов
-
-
-
-
-// function changeInterfaceLanguage() {
-//   document.getElementById("OffSwitcherText").textContent = locales.extensionLabel + ":";
-
+//   addToPage(parentElement) {
+//     parentElement.appendChild(this.element);
+//   }
 // }
 
+// class RadioButtonField extends ToggleField {
+//   constructor(id, name, btnType, labelText) {
+//     super(id, labelText, btnType);
+//     this.name = name;
+//     this.element = this.createElem();
+//   }
 
+//   createElem() {
+//     const label = document.createElement('label');
+//     label.id = this.id + 'Label';
 
-// function GetElByID(id) {
-//   return document.getElementById(id);
+//     const input = document.createElement('input');
+//     input.className = 'radio';
+//     input.id = this.id;
+//     input.name = this.name;
+//     input.type = 'radio';
+
+//     label.appendChild(input);
+//     label.appendChild(document.createTextNode(this.labelText));
+
+//     return label;
+//   }
 // }
 
-// function saveInStorage(configObject) {
-//   chrome.storage.local.set({
-//     jutsuExtensionConfig: configObject.jutsuExtensionConfig,
-//   });
+// class CheckboxField extends ToggleField {
+//   constructor(id, labelText, btnType) {
+//     super(id, labelText, btnType);
+//     this.element = this.createElem();
+//   }
+
+//   createElem() {
+//     const label = document.createElement('label');
+//     label.id = this.id + 'Label';
+
+//     const input = document.createElement('input');
+//     input.className = 'checkbox';
+//     input.id = this.id;
+//     input.type = 'checkbox';
+
+//     const labelTextSpan = document.createElement('span');
+//     labelTextSpan.textContent = this.labelText;
+
+//     label.appendChild(input);
+//     label.appendChild(labelTextSpan);
+//     return label;
+//   }
 // }
 
-// function defaultSettings(defConfigObject) {
-//   chrome.storage.local.set({
-//     jutsuExtensionConfig: defConfigObject,
-//   });
-// }
+// class DisabledExtensionCheckbox extends CheckboxField {
+//   constructor(id, labelText, btnType, statusClass, statusEnabled, statusDisabled) {
+//     super(id, labelText, btnType);
+//     this.statusClass = statusClass;
+//     this.statusEnabled = statusEnabled;
+//     this.statusDisabled = statusDisabled;
+//     this.statusText = this.getNowStatus();
+//     this.element = this.createElem();
+//   }
 
-// function onExtension() {
-//   extentionStatus.innerText = locales.statusEnabled;
-//   extentionStatus.classList.add("enabled");
-//   nextSeriesAfterEnd.disabled = false;
-//   nextSeriesBeforeEnd.disabled = false;
-//   clickToFullScreen.disabled = false;
-//   skipIntro.disabled = false;
-//   videoFromStart.disabled = false;
-// }
+//   setChecked(checked) {
+//     super.setChecked(checked);
+//     this.changeStatus();
+//   }
 
-// function offExtension() {
-//   extentionStatus.innerText = locales.statusDisabled;
-//   extentionStatus.classList.remove("enabled");
-//   nextSeriesAfterEnd.disabled = true;
-//   nextSeriesBeforeEnd.disabled = true;
-//   clickToFullScreen.disabled = true;
-//   skipIntro.disabled = true;
-//   videoFromStart.disabled = true;
-// }
-
-// function storage() {
-//   chrome.storage.local.get(["jutsuExtensionConfig"], (result) => {
-//     if (result.jutsuExtensionConfig == undefined) {
-//       defaultSettings(jutsuExtensionDefaultConfig)
-//       return storage();
+//   getNowStatus() {
+//     const isChecked = super.isChecked();
+//     if (isChecked) {
+//       return this.statusEnabled;
 //     }
+//     return this.statusDisabled;
+//   }
 
-//     let nextSeriesBeforeEndBool =
-//       result.jutsuExtensionConfig.nextSeriesBeforeEndBool;
-//     let skipIntroBool = result.jutsuExtensionConfig.skipIntroBool;
-//     let clickToFullScreenBool =
-//       result.jutsuExtensionConfig.clickToFullScreenBool;
-//     let videoFromStartBool = result.jutsuExtensionConfig.videoFromStartBool;
+//   setStatusDisabled(statusElem) {
+//     statusElem.textContent = this.statusDisabled;
+//     if (statusElem.classList.contains("enabled")) statusElem.classList.toggle("enabled");
+//   }
 
-//     let isExtensionON = result.jutsuExtensionConfig.isExtensionON;
+//   setStatusEnabled(statusElem) {
+//     statusElem.textContent = this.statusEnabled;
+//     if (statusElem.classList.contains("enabled") !== true) statusElem.classList.toggle("enabled");
+//   }
 
-//     OffSwitcher.checked = isExtensionON;
-//     onExtension();
-
-//     nextSeriesBeforeEnd.checked = nextSeriesBeforeEndBool;
-//     nextSeriesAfterEnd.checked = !nextSeriesBeforeEndBool;
-
-//     skipIntro.checked = skipIntroBool;
-//     clickToFullScreen.checked = clickToFullScreenBool;
-//     videoFromStart.checked = videoFromStartBool;
-
-//     if (!isExtensionON) {
-//       offExtension();
-//     }
-
-
-//   });
-// }
-
-// function handleConfigEvent(listenerElement, checkedElement, options, actions = []) {
-//   listenerElement.addEventListener("click", () => {
-//     chrome.storage.local.get("jutsuExtensionConfig", (configObj) => {
-//       const checked = checkedElement.checked;
-
-//       configObj.jutsuExtensionConfig[options[0]] = checked;
-
-//       for (let i = 1; i < options.length; i++) {
-//         configObj.jutsuExtensionConfig[options[i]] = !checked;
-//       }
-
-//       if (actions[0] !== undefined && actions[1] !== undefined) {
-//         actions[checked ? 0 : 1](); // Run trueFunc or falseFunc
-//       }
-//       saveInStorage(configObj);
-//     });
-//   });
-// }
-
-// storage();
-
-// handleConfigEvent(videoFromStartLabel, videoFromStart, ["videoFromStartBool"]);
-// handleConfigEvent(clickToFullScreenLabel, clickToFullScreen, ["clickToFullScreenBool"]);
-// handleConfigEvent(skipIntroLabel, skipIntro, ["skipIntroBool"]);
-// handleConfigEvent(nextSeriesBeforeEndLabel, nextSeriesBeforeEnd, ["nextSeriesBeforeEndBool", "nextSeriesAfterEndBool"]);
-// handleConfigEvent(nextSeriesAfterEndLabel, nextSeriesAfterEnd, ["nextSeriesAfterEndBool", "nextSeriesBeforeEndBool"]);
-// handleConfigEvent(OffSwitcherLabel, OffSwitcher, ["isExtensionON"], [onExtension, offExtension]);
-
-
-//OLD VARIANT
-
-
-// function swapAndSaveConfig2optEventListener(listenerElement, checkedElement, extensionOpt1, extensionOpt2) {
-//   listenerElement.addEventListener("click", () => {
-//     chrome.storage.local.get("jutsuExtensionConfig", function (configObj) {
-//       if (checkedElement.checked === true) {
-//         configObj.jutsuExtensionConfig[extensionOpt1] = true;
-//         configObj.jutsuExtensionConfig[extensionOpt2] = false;
-//       } else {
-//         configObj.jutsuExtensionConfig[extensionOpt1] = false;
-//         configObj.jutsuExtensionConfig[extensionOpt2] = true;
-//       }
-//       saveInStorage(configObj)
-//     });
-//   });
-// }
-
-
-// function swapAndSaveConfigEventListener(listenerElement, checkedElement, extensionOpt) {
-//   listenerElement.addEventListener("click", () => {
-//     chrome.storage.local.get("jutsuExtensionConfig", function (configObj) {
-//       if (checkedElement.checked === true) {
-//         configObj.jutsuExtensionConfig[extensionOpt] = true;
-//       } else {
-//         configObj.jutsuExtensionConfig[extensionOpt] = false;
-//       }
-//       saveInStorage(configObj)
-//     });
-//   });
-// }
-
-// function configEventListener(listenerElement, checkedElement, extensionOpt, trueFunc, falseFunc) {
-//   listenerElement.addEventListener("click", () => {
-//     chrome.storage.local.get("jutsuExtensionConfig", function (configObj) {
-//       if (checkedElement.checked === true) {
-//         configObj.jutsuExtensionConfig[extensionOpt] = true;
-//         trueFunc();
-//       } else {
-//         configObj.jutsuExtensionConfig[extensionOpt] = false;
-//         falseFunc();
-//       }
-//       saveInStorage(configObj)
-//     });
-//   });
-// }
-
-
-// swapAndSaveConfigEventListener(videoFromStartLabel, videoFromStart, "videoFromStartBool");
-// swapAndSaveConfigEventListener(clickToFullScreenLabel, clickToFullScreen, "clickToFullScreenBool");
-// swapAndSaveConfigEventListener(skipIntroLabel, skipIntro, "skipIntroBool");
-
-// configEventListener(OffSwitcherLabel, OffSwitcher, "isExtensionON", onExtension, offExtension);
-
-// swapAndSaveConfig2optEventListener(nextSeriesBeforeEndLabel, nextSeriesBeforeEnd, "nextSeriesBeforeEndBool", "nextSeriesAfterEndBool");
-
-// swapAndSaveConfig2optEventListener(nextSeriesAfterEndLabel, nextSeriesAfterEnd, "nextSeriesAfterEndBool", "nextSeriesBeforeEndBool");
-
-
-
-// nextSeriesBeforeEndLabel.addEventListener("click", () => {
-//   chrome.storage.local.get("jutsuExtensionConfig", function (result) {
-//     result.jutsuExtensionConfig.nextSeriesBeforeEndBool = true;
-//     result.jutsuExtensionConfig.nextSeriesAfterEndBool = false;
-//     saveInStorage(result)
-//   });
-// });
-
-// nextSeriesAfterEndLabel.addEventListener("click", () => {
-//   chrome.storage.local.get("jutsuExtensionConfig", function (result) {
-//     result.jutsuExtensionConfig.nextSeriesBeforeEndBool = false;
-//     result.jutsuExtensionConfig.nextSeriesAfterEndBool = true;
-//     saveInStorage(result)
-//   });
-// });
-
-
-
-// OffSwitcherLabel.addEventListener("click", () => {
-//   chrome.storage.local.get("jutsuExtensionConfig", function (configObj) {
-//     if (OffSwitcher.checked === true) {
-//       configObj.jutsuExtensionConfig.isExtensionON = true;
-//       offExtension();
+//   changeStatus() {
+//     if (this.getNowStatus() === this.statusEnabled) {
+//       this.setStatusEnabled(this.getElem().querySelector(".disabled"));
 //     } else {
-//       configObj.jutsuExtensionConfig.isExtensionON = false;
-//       onExtension();
+//       this.setStatusDisabled(this.getElem().querySelector(".disabled"));
 //     }
-//     saveInStorage(configObj)
-//   });
-// });
+//   }
 
-
-// // Создайте переменную для хранения текущего значения настройки.
-// let enabled = localStorage.getItem("enabled") === "true";
-
-// // Создайте функцию для проверки значения настройки.
-// function isEnabled() {
-//   return enabled;
+//   createElem() {
+//     const label = super.createElem();
+//     const labelTextSpan2 = document.createElement('span');
+//     labelTextSpan2.textContent = this.statusText;
+//     labelTextSpan2.classList = this.statusClass;
+//     label.appendChild(labelTextSpan2);
+//     return label;
+//   }
 // }
 
-// // Добавьте кнопку для включения функции.
-// document.querySelector(".button-enable").addEventListener("click", () => {
-//   enabled = true;
-//   localStorage.setItem("enabled", true);
+// const checkboxesSection = document.querySelector('.checkboxes.first');
+// const checkboxesSection2 = document.querySelector('.checkboxes.second');
+// const radiosSection = document.querySelector('.radios');
+
+// const jutsuExtensionButtonsConfig = {
+//   offSwitcher: {
+//     type: 'offBtn',
+//     labelText: locales.extensionLabel,
+//     statusClass: 'switcher disabled enabled',
+//     statusTextEnabled: locales.statusEnabled,
+//     statusTextDisabled: locales.statusDisabled,
+//     group: null,
+//     defaultSettings: true,
+//   },
+//   nextSeriesBeforeEnd: {
+//     type: 'radio',
+//     labelText: locales.nextSeriesBeforeEnd,
+//     group: 'seriesOptions',
+//     defaultSettings: true,
+//   },
+//   nextSeriesAfterEnd: {
+//     type: 'radio',
+//     labelText: locales.nextSeriesAfterEnd,
+//     group: 'seriesOptions',
+//     defaultSettings: false,
+//   },
+//   skipIntro: {
+//     type: 'checkbox',
+//     labelText: locales.skipIntro,
+//     group: null,
+//     defaultSettings: true,
+//   },
+//   videoFromStart: {
+//     type: 'checkbox',
+//     labelText: locales.videoFromStart,
+//     group: null,
+//     defaultSettings: false,
+//   },
+//   clickToFullScreen: {
+//     type: 'checkbox',
+//     labelText: locales.clickToFullScreen,
+//     group: null,
+//     defaultSettings: false,
+//   }
+// };
+
+// const jutsuExtensionDefaultConfig = {};
+
+// for (const btnId in jutsuExtensionButtonsConfig) {
+//   if (jutsuExtensionButtonsConfig.hasOwnProperty(btnId)) {
+//     jutsuExtensionDefaultConfig[btnId] = jutsuExtensionButtonsConfig[btnId].defaultSettings;
+//   }
+// }
+
+// const buttons = [];
+// for (const [id, config] of Object.entries(jutsuExtensionButtonsConfig)) {
+//   if (config.type === 'checkbox') {
+//     buttons.push(new CheckboxField(id, config.labelText, config.type));
+//   } else if (config.type === 'offBtn') {
+//     buttons.push(new DisabledExtensionCheckbox(id, config.labelText, config.type, config.statusClass, config.statusTextEnabled, config.statusTextDisabled));
+//   } else if (config.type === 'radio') {
+//     buttons.push(new RadioButtonField(id, config.group, config.type, config.labelText));
+//   }
+// }
+
+// buttons.forEach(e => {
+//   const elementType = e.getType();
+//   let parentElement;
+//   switch (elementType) {
+//     case "radio":
+//       parentElement = radiosSection;
+//       break;
+//     case "checkbox":
+//       parentElement = checkboxesSection2;
+//       break;
+//     case "offBtn":
+//       parentElement = checkboxesSection;
+//       break;
+//     default:
+//       break;
+//   }
+
+//   if (parentElement) {
+//     e.addToPage(parentElement);
+//   }
+
 // });
 
-// // Добавьте переключатель для включения функции.
-// document.querySelector(".switch-enable").addEventListener("change", () => {
-//   enabled = document.querySelector(".switch-enable").checked;
-//   localStorage.setItem("enabled", enabled ? "true" : "false");
-// });
+
+// class Extension {
+//   constructor(buttons, defaultSettings) {
+//     this.buttons = buttons;
+//     this.defaultSettings = defaultSettings;
+//     this.configObject = this.getLocalData();
+//     this.setChangeListener();
+//     this.setData();
+//   }
+
+//   setChangeListener() {
+//     this.buttons.forEach(button => {
+//       button.getElem().addEventListener('change', () => {
+//         this.configObject = this.getLocalData();
+//         this.saveInStorage(this.configObject);
+//         this.setData();
+//       });
+//     });
+//   }
+
+//   saveInStorage(configObject) {
+//     chrome.storage.local.set({
+//       jutsuExtensionConfig: configObject,
+//     });
+//   }
+
+//   getLocalData() {
+//     const configObject = {};
+
+//     this.buttons.forEach(button => {
+//       configObject[button.getId()] = button.isChecked();
+//     });
+
+//     return configObject;
+//   }
+
+//   setData() {
+//     chrome.storage.local.get("jutsuExtensionConfig", data => {
+//       const jutsuExtensionConfig = data["jutsuExtensionConfig"];
+  
+//       this.buttons.forEach(button => {
+//         const buttonId = button.getId();
+//         if (jutsuExtensionConfig && jutsuExtensionConfig.hasOwnProperty(buttonId)) {
+//           button.setChecked(jutsuExtensionConfig[buttonId]);
+//         } else if (this.defaultSettings.hasOwnProperty(buttonId)) {
+//           const defaultValue = this.defaultSettings[buttonId];
+//           button.setChecked(defaultValue);
+//         }
+  
+//         if (buttonId !== "offSwitcher" && jutsuExtensionConfig && jutsuExtensionConfig["offSwitcher"] === false) {
+//           button.setDisabled(true);
+//         } else {
+//           button.setDisabled(false);
+//         }
+//       });
+//     });
+//   }
+// }
+
+// const extension = new Extension(buttons, jutsuExtensionDefaultConfig);
+
+// extension.setData();

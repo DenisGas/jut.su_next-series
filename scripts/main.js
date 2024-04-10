@@ -15,7 +15,7 @@ window.addEventListener("load", function () {
         })();
       });
 
-      if (config.isExtensionON === false) {
+      if (config.offSwitcher === false) {
         extensionOff();
         return;
       }
@@ -48,7 +48,7 @@ window.addEventListener("load", function () {
             }
           }, 100);
 
-          if (config.videoFromStartBool) {
+          if (config.videoFromStart) {
             videoFromStart(video);
           }
         }
@@ -57,14 +57,15 @@ window.addEventListener("load", function () {
   }
 });
 
+
 async function storage() {
   const jutsuExtensionDefaultConfig = {
-    isExtensionON: true,
-    nextSeriesBeforeEndBool: true,
-    nextSeriesAfterEndBool: false,
-    skipIntroBool: true,
-    clickToFullScreenBool: false,
-    videoFromStartBool: false,
+    offSwitcher: true,
+    nextSeriesBeforeEnd: true,
+    nextSeriesAfterEnd: false,
+    skipIntro: true,
+    clickToFullScreen: false,
+    videoFromStart: false,
   };
 
   return new Promise((resolve, reject) => {
@@ -191,10 +192,10 @@ function workOnThisPage(websitePage) {
 
 function nextSeries(
   nextSerBtn,
-  nextSeriesAfterEndBool,
-  nextSeriesBeforeEndBool
+  nextSeriesAfterEnd,
+  nextSeriesBeforeEnd
 ) {
-  if (nextSeriesAfterEndBool) {
+  if (nextSeriesAfterEnd) {
     let checkVideoEnded = createInterval(() => {
       if (document.getElementById("my-player_html5_api").ended === true) {
         clickElement(nextSerBtn, checkVideoEnded);
@@ -202,7 +203,7 @@ function nextSeries(
     }, 1000);
   }
 
-  if (nextSeriesBeforeEndBool) {
+  if (nextSeriesBeforeEnd) {
     let checkVideoEnded = createInterval(() => {
       if (
         document.getElementById("my-player_html5_api").ended === true ||
@@ -231,28 +232,28 @@ function clickElement(element, intervalFunc) {
 
 function main(configObject) {
   clearAllIntervals();
-  const isExtensionON = configObject.isExtensionON;
-  if (isExtensionON === false) {
+  const offSwitcher = configObject.offSwitcher;
+  if (offSwitcher === false) {
     extensionOff();
     return;
   }
   const nextSerBtn = document.querySelector(".vjs-overlay-bottom-right");
   const skipIntroBtn = document.querySelector(".vjs-overlay-bottom-left");
 
-  const nextSeriesBeforeEndBool = configObject.nextSeriesBeforeEndBool;
-  const nextSeriesAfterEndBool = configObject.nextSeriesAfterEndBool;
-  const skipIntroBool = configObject.skipIntroBool;
-  const clickToFullScreenBool = configObject.clickToFullScreenBool;
+  const nextSeriesBeforeEnd = configObject.nextSeriesBeforeEnd;
+  const nextSeriesAfterEnd = configObject.nextSeriesAfterEnd;
+  const skipIntro = configObject.skipIntro;
+  const clickToFullScreen = configObject.clickToFullScreen;
 
   if (fullScreenBtnCanBeClick) {
-    createOverlayBtn(clickToFullScreenBool);
+    createOverlayBtn(clickToFullScreen);
   }
 
-  if (skipIntroBtn && skipIntroBool && btnSkipIntroCanBeClick) {
+  if (skipIntroBtn && skipIntro && btnSkipIntroCanBeClick) {
     skipIntro(skipIntroBtn);
   }
 
   if (nextSerBtn) {
-    nextSeries(nextSerBtn, nextSeriesAfterEndBool, nextSeriesBeforeEndBool);
+    nextSeries(nextSerBtn, nextSeriesAfterEnd, nextSeriesBeforeEnd);
   }
 }

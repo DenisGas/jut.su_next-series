@@ -1,6 +1,6 @@
 {
   "extensionDescription": {
-    "message": "Extension for jut.su - which makes video auto-play, auto-skip anime intro, and auto-open next series after the end series."
+    "message": "An extension for jut.su that allows videos to autoplay, automatically skip anime intros, and automatically play the next episode."
   },
   "extension": {
     "message": "Extension"
@@ -11,10 +11,19 @@
   "status_disabled": {
     "message": "Disabled"
   },
+  "next_series_before_end":{
+    "message": "Next episode before credits"
+  },
+  "next_series_after_end":{
+    "message": "Next episode after credits"
+  },
+  "skip_intro":{
+    "message": "Skip intro"
+  },
   "video_from_start": {
-    "message": "Video from start"
+    "message": "Start from the beginning"
   },
   "click_to_FullScreen":{
-    "message": "Click to FullScreen(Overlay)"
+    "message": "Click to FullScreen (Overlay)"
   }
 }

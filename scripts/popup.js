@@ -117,14 +117,28 @@ class Extension {
       const element = document.getElementById(button.id);
       element.addEventListener('change', () => {
         this.configObject = this.getLocalData();
-        this.saveInStorage(this.configObject);
-        this.setData();
+        this.saveInStorage(this.configObject)
+          .then(() => {
+            this.setData();
+          })
+          .catch(error => {
+            console.error('Error saving data:', error);
+          });
       });
     });
   }
 
-  saveInStorage(configObject) {
-    chrome.storage.local.set({ jutsuExtensionConfig: configObject });
+
+  async saveInStorage(configObject) {
+    return new Promise((resolve, reject) => {
+      chrome.storage.local.set({ jutsuExtensionConfig: configObject }, () => {
+        if (chrome.runtime.lastError) {
+          reject(chrome.runtime.lastError);
+        } else {
+          resolve();
+        }
+      });
+    });
   }
 
   getLocalData() {

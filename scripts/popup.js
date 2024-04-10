@@ -7,15 +7,29 @@ function createLocales() {
     nextSeriesBeforeEnd: chrome.i18n.getMessage("next_series_before_end"),
     nextSeriesAfterEnd: chrome.i18n.getMessage("next_series_after_end"),
     skipIntro: chrome.i18n.getMessage("skip_intro"),
+    videoFromStart: chrome.i18n.getMessage("video_from_start"),
+    clickToFullScreen: chrome.i18n.getMessage("click_to_FullScreen")
   };
+}
+
+const locales = createLocales();
+
+function saveInStorage(configObject) {
+  chrome.storage.local.set({
+    jutsuExtensionConfig: configObject,
+  });
+}
+
+function defaultSettings(defConfigObject) {
+  chrome.storage.local.set({
+    jutsuExtensionConfig: defConfigObject,
+  });
 }
 
 
 function update(e) {
   console.log(e)
 }
-
-const locales = createLocales();
 
 
 class ToggleField {
@@ -56,8 +70,8 @@ class ToggleField {
     });
     parentElement.appendChild(this.element);
   }
-}
 
+}
 
 class RadioButtonField extends ToggleField {
   constructor(id, name, labelText) {
@@ -130,25 +144,37 @@ class disabledExtensionCheckbox extends CheckboxField {
 }
 
 
-
-
 const checkboxesSection = document.querySelector('.checkboxes.first');
 const checkboxesSection2 = document.querySelector('.checkboxes.second');
 const radiosSection = document.querySelector('.radios');
 
 
-const offSwitcher = new disabledExtensionCheckbox('OffSwitcher', locales.extensionLabel, "switcher disabled enabled", locales.statusEnabled);
+const jutsuExtensionDefaultConfig = {};
 
-const nextSeriesAfterEnd = new RadioButtonField('nextSeriesAfterEnd', 'nextSeries', locales.nextSeriesAfterEnd);
-const skipIntro = new CheckboxField('skipIntro', locales.skipIntro);
+for (const btnId in jutsuExtensionButtonsConfig) {
+  if (jutsuExtensionButtonsConfig.hasOwnProperty(btnId)) {
+    jutsuExtensionDefaultConfig[btnId] = jutsuExtensionButtonsConfig[btnId].defaultSettings;
+  }
+}
 
-// offSwitcher.addToPage(checkboxesSection);
-// nextSeriesAfterEnd.addToPage(radiosSection);
-// skipIntro.addToPage(checkboxesSection2);
+console.log(jutsuExtensionDefaultConfig);
 
-const elements = [offSwitcher, nextSeriesAfterEnd, skipIntro];
+const buttons = [];
+for (const [id, config] of Object.entries(jutsuExtensionButtonsConfig)) {
+  if (config.type === 'checkbox') {
+    buttons.push(new CheckboxField(id, config.labelText));
+  }
+  else if (config.type === 'offBtn') {
+    buttons.push(new disabledExtensionCheckbox(id, config.labelText, config.statusClass, config.statusText));
+  }
+  else if (config.type === 'radio') {
+    buttons.push(new RadioButtonField(id, config.group, config.labelText));
+  }
+}
 
-elements.forEach(e => {
+
+
+buttons.forEach(e => {
   const elementType = e.getType();
   console.log(e.getType());
   let parentElement;
@@ -181,6 +207,28 @@ const jutsuExtensionDefaultConfig = {
   clickToFullScreenBool: false,
   videoFromStartBool: false,
 }
+
+let configObject = {};
+
+buttons.forEach(button => {
+  chrome.storage.local.get(button.getId(), data => {
+    if (data[button.getId()] !== undefined) {
+      button.setChecked(data[button.getId()]);
+      configObject[button.getId()] = data[button.getId()]; // Добавляем значение из хранилища в объект конфигурации
+    } else if (jutsuExtensionDefaultConfig.hasOwnProperty(button.getId())) {
+      const defaultValue = jutsuExtensionDefaultConfig[button.getId()];
+      button.setChecked(defaultValue);
+      configObject[button.getId()] = defaultValue; // Добавляем значение по умолчанию в объект конфигурации
+    }
+  });
+
+  button.getElem().addEventListener('change', () => {
+    configObject[button.getId()] = button.isChecked();
+    saveInStorage(configObject);
+  });
+});
+
+
 
 
 

@@ -10,5 +10,11 @@
   },
   "status_disabled": {
     "message": "Disabled"
+  },
+  "video_from_start": {
+    "message": "Video from start"
+  },
+  "click_to_FullScreen":{
+    "message": "Click to FullScreen(Overlay)"
   }
 }

@@ -187,19 +187,20 @@ input {
   0% {
     opacity: 0;
   }
+
   100% {
     opacity: 1;
   }
 }
 
-#OffSwitcherLabel span.switcher {
+span.switcher {
   font-weight: bold;
 }
 
-#OffSwitcherLabel span.disabled {
+span.disabled {
   color: var(--red);
 }
 
-#OffSwitcherLabel span.enabled {
+span.enabled {
   color: var(--link-hover);
 }

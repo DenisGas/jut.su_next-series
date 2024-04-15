@@ -1,259 +1,253 @@
-const intervalIds = [];
-let btnSkipIntroCanBeClick = true;
-let fullScreenBtnCanBeClick = true;
-
-window.addEventListener("load", function () {
-  if (workOnThisPage(window.location.href) != false) {
-    (async () => {
-      const config = await storage();
-
-      chrome.storage.onChanged.addListener(function (changes, namespace) {
-        console.log(changes, namespace);
-        (async () => {
-          const config = await storage();
-          main(config);
-        })();
-      });
-
-      if (config.offSwitcher === false) {
-        extensionOff();
-        return;
-      }
-
-      const checkVideoElemOnPage = setInterval(() => {
-
-        const video = document.getElementById("my-player_html5_api");
-
-        if (video) {
-
-          clearInterval(checkVideoElemOnPage);
-          playVideo(video);
-
-          const checkForFullScreenButton = setInterval(() => {
-            if (document.querySelector(".vjs-fullscreen-control")) {
-              clearInterval(checkForFullScreenButton);
-
-              document.querySelector(".vjs-fullscreen-control").addEventListener('click', () => video.focus());
-              document.addEventListener('keydown', function (event) {
-                if (event.code === "KeyF") {
-                  const message = document.querySelector('#message');
-                  const search = document.querySelector('input[type="text"][name="ystext"]');
-                  if (message !== document.activeElement && search !== document.activeElement) {
-                    goFullScreen();
-                  }
-
-                }
-              });
-              main(config);
-            }
-          }, 100);
-
-          if (config.videoFromStart) {
-            videoFromStart(video);
-          }
-        }
-      }, 100);
-    })();
+class JutsuExtension {
+  constructor() {
+    this.intervalIds = [];
+    this.btnSkipIntroCanBeClick = true;
+    this.fullScreenBtnCanBeClick = true;
+    this.config = {};
   }
-});
 
+  async init() {
+    window.addEventListener("load", async () => {
+      if (this.workOnThisPage(window.location.href)) {
+        this.config = await this.storage();
 
-async function storage() {
-  const jutsuExtensionDefaultConfig = {
-    offSwitcher: true,
-    nextSeriesBeforeEnd: true,
-    nextSeriesAfterEnd: false,
-    skipIntro: true,
-    clickToFullScreen: false,
-    videoFromStart: false,
-  };
-
-  return new Promise((resolve, reject) => {
-    chrome.storage.local.get("jutsuExtensionConfig", async (result) => {
-      if (result.jutsuExtensionConfig === undefined) {
-        await new Promise((resolve) => {
-          chrome.storage.local.set(
-            { jutsuExtensionConfig: jutsuExtensionDefaultConfig },
-            resolve
-          );
+        chrome.storage.onChanged.addListener(async (changes, namespace) => {
+          // console.log(changes, namespace);
+          this.config = await this.storage();
+          this.main();
         });
-        resolve(jutsuExtensionDefaultConfig);
-      } else {
-        resolve(result.jutsuExtensionConfig);
+
+        if (!this.config.extensionEnabled) {
+          this.disableExtension();
+          return;
+        }
+
+        this.checkVideo();
       }
     });
-  });
-}
-
-function extensionOff() {
-  const div = document.querySelector(".extension-overlay-div");
-  if (div) {
-    div.style.display = "none";
   }
-  clearAllIntervals();
-}
 
-function playVideo(video) {
-  video.play();
-}
+  async storage() {
+    const DefaultConfig = {
+      extensionEnabled: true,
+      nextSeriesBeforeEnd: true,
+      nextSeriesAfterEnd: false,
+      skipIntro: true,
+      clickToFullScreen: false,
+      videoFromStart: false,
+    };
 
-function createInterval(callback, delay) {
-  const intervalId = setInterval(callback, delay);
-  intervalIds.push(intervalId);
-  return intervalId;
-}
-
-function clearAllIntervals() {
-  for (let i = 0; i < intervalIds.length; i++) {
-    clearInterval(intervalIds[i]);
+    return new Promise((resolve, reject) => {
+      chrome.storage.local.get("jutsuExtensionConfig", async (result) => {
+        if (result.jutsuExtensionConfig === undefined) {
+          await new Promise((resolve) => {
+            chrome.storage.local.set({ jutsuExtensionConfig: DefaultConfig }, resolve);
+          });
+          resolve(DefaultConfig);
+        } else {
+          resolve(result.jutsuExtensionConfig);
+        }
+      });
+    });
   }
-  intervalIds.length = 0;
-}
 
-function videoFromStart(video) {
-  let checkVideoTimeNotZero = setInterval(function () {
-    if (video.currentTime != 0) {
-      video.currentTime = 0;
-      clearInterval(checkVideoTimeNotZero);
+  disableExtension() {
+    const div = document.querySelector(".extension-overlay-div");
+    if (div) {
+      div.style.display = "none";
     }
-  }, 1000);
-}
+    this.clearAllIntervals();
+  }
 
-function goFullScreen() {
-  const fullScreenControl = document.querySelector(
-    ".vjs-fullscreen-control"
-  );
-  fullScreenControl.click();
+  playVideo(video) {
+    video.play();
+  }
 
-}
+  checkVideo() {
+    const checkVideoElemOnPage = setInterval(() => {
+      const video = document.getElementById("my-player_html5_api");
+      if (video) {
+        clearInterval(checkVideoElemOnPage);
+        this.playVideo(video);
+        this.checkForFullScreenButton();
+        if (this.config.videoFromStart) {
+          this.videoFromStart(video);
+        }
+      }
+    }, 100);
+  }
 
-function createOverlayBtn(bool) {
-  const div = document.querySelector(".extension-overlay-div");
-  if (!div) {
-    if (!bool) {
+  checkForFullScreenButton() {
+    const checkForFullScreenButtonInterval = setInterval(() => {
+      const fullScreenButton = document.querySelector(".vjs-fullscreen-control");
+      if (fullScreenButton) {
+        clearInterval(checkForFullScreenButtonInterval);
+        this.setupFullScreenButton(fullScreenButton);
+        this.main();
+      }
+    }, 100);
+  }
+
+  setupFullScreenButton(fullScreenButton) {
+    fullScreenButton.addEventListener('click', () => {
+      document.getElementById("my-player_html5_api").focus();
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.code === "KeyF") {
+        const message = document.querySelector('#message');
+        const search = document.querySelector('input[type="text"][name="ystext"]');
+        if (message !== document.activeElement && search !== document.activeElement) {
+          this.goFullScreen();
+        }
+      }
+    });
+  }
+
+  goFullScreen() {
+    const fullScreenControl = document.querySelector(".vjs-fullscreen-control");
+    fullScreenControl.click();
+  }
+
+  createOverlayBtn(bool) {
+    const div = document.querySelector(".extension-overlay-div");
+    if (!div) {
+      if (!bool) {
+        return;
+      }
+  
+      const overlayDiv = document.createElement("div");
+      overlayDiv.classList.add("extension-overlay-div");
+      document.body.appendChild(overlayDiv);
+  
+      const fullScreenBtn = document.createElement("button");
+      fullScreenBtn.classList.add("extension-overlay-button");
+      fullScreenBtn.textContent = "Click to FullScreen";
+      overlayDiv.appendChild(fullScreenBtn);
+  
+      const exitBtn = document.createElement("button");
+      exitBtn.classList.add("extension-overlay-exit-button");
+      exitBtn.textContent = "Exit";
+      overlayDiv.appendChild(exitBtn);
+  
+      const closeOverlay = () => {
+        overlayDiv.style.display = "none";
+        this.fullScreenBtnCanBeClick = false;
+        document.removeEventListener('fullscreenchange', closeOverlay);
+        document.getElementById("my-player_html5_api").focus();
+      };
+  
+      document.addEventListener('fullscreenchange', closeOverlay);
+  
+      fullScreenBtn.onclick = () => {
+        overlayDiv.style.display = "none";
+        const fullScreenControl = document.querySelector(".vjs-fullscreen-control");
+        fullScreenControl.classList.remove("vjs-hidden");
+        fullScreenControl.click();
+        this.fullScreenBtnCanBeClick = false;
+        document.removeEventListener('fullscreenchange', closeOverlay);
+      };
+  
+      exitBtn.onclick = closeOverlay;
+    } else {
+      div.remove();
+      this.createOverlayBtn(bool);
+    }
+  }
+  
+  
+
+  workOnThisPage(websitePage) {
+    return websitePage.includes("episode-") || websitePage.includes("film-");
+  }
+
+  clearAllIntervals() {
+    for (const intervalId of this.intervalIds) {
+      clearInterval(intervalId);
+    }
+    this.intervalIds = [];
+  }
+
+  videoFromStart(video) {
+    const checkVideoTimeNotZero = setInterval(() => {
+      if(video.currentTime > 0){
+        video.currentTime = 0.2;
+        clearInterval(checkVideoTimeNotZero);
+      }
+    }, 1000);
+  }
+
+  nextSeriesBeforeEnd(nextSerBtn) {
+    const checkVideoEnded = setInterval(() => {
+      if (document.getElementById("my-player_html5_api").ended === true || nextSerBtn.classList.contains("vjs-hidden") !== true) {
+        clearInterval(checkVideoEnded);
+        nextSerBtn.click();
+      }
+    }, 1000);
+    this.intervalIds.push(checkVideoEnded);
+  }
+
+  nextSeriesAfterEnd(nextSerBtn) {
+    const checkVideoEnded = setInterval(() => {
+      if (document.getElementById("my-player_html5_api").ended === true) {
+        clearInterval(checkVideoEnded);
+        nextSerBtn.click();
+      }
+    }, 1000);
+    this.intervalIds.push(checkVideoEnded);
+  }
+
+  // skipIntroOneTime(skipIntroBtn) {
+  //   const checkSkipIntroBtnVisible = setInterval(() => {
+  //     if (skipIntroBtn.classList.contains("vjs-hidden") !== true) {
+  //       clearInterval(checkSkipIntroBtnVisible);
+  //       skipIntroBtn.click();
+  //     }
+  //   }, 1000);
+  //   this.intervalIds.push(checkSkipIntroBtnVisible);
+  // }
+
+  skipIntro(skipIntroBtn) {
+    const checkSkipIntroBtnVisible = setInterval(() => {
+      if (skipIntroBtn.classList.contains("vjs-hidden") !== true) {
+        skipIntroBtn.click();
+      }
+    }, 1000);
+    this.intervalIds.push(checkSkipIntroBtnVisible);
+  }
+
+
+  main() {
+    this.clearAllIntervals();
+    if (!this.config.extensionEnabled) {
+      this.disableExtension();
       return;
     }
 
-    const div = document.createElement("div");
-    div.classList.add("extension-overlay-div");
+    const nextSerBtn = document.querySelector(".vjs-overlay-bottom-right");
+    const skipIntroBtn = document.querySelector(".vjs-overlay-bottom-left");
 
-    document.body.appendChild(div);
+    const { nextSeriesBeforeEnd, nextSeriesAfterEnd, skipIntro, clickToFullScreen } = this.config;
 
-    const fullScreenBtn = document.createElement("button");
-    fullScreenBtn.classList.add("extension-overlay-button");
-    fullScreenBtn.textContent = "Click to FullScreen";
-
-    div.appendChild(fullScreenBtn);
-
-    const exitBtn = document.createElement("button");
-    exitBtn.classList.add("extension-overlay-exit-button");
-    exitBtn.textContent = "Exit";
-
-    div.appendChild(exitBtn);
-
-    const fullscreenChangeHandler = () => {
-      if (exitBtn) {
-        exitBtn.click();
-      }
-    };
-
-    document.addEventListener('fullscreenchange', fullscreenChangeHandler);
-
-
-    fullScreenBtn.onclick = (event) => {
-      div.style.display = "none";
-      const fullScreenControl = document.querySelector(
-        ".vjs-fullscreen-control"
-      );
-      fullScreenControl.classList.remove("vjs-hidden");
-      fullScreenControl.click();
-      fullScreenBtnCanBeClick = false;
-    };
-    exitBtn.onclick = (event) => {
-      div.style.display = "none";
-      fullScreenBtnCanBeClick = false;
-      document.removeEventListener('fullscreenchange', fullscreenChangeHandler);
-      document.getElementById("my-player_html5_api").focus();
-    };
-  } else {
-    div.remove();
-    return createOverlayBtn(bool);
-  }
-}
-
-
-function workOnThisPage(websitePage) {
-  if (websitePage.includes("episode-") || websitePage.includes("film-")) {
-    return true;
-  }
-  return false;
-}
-
-
-function nextSeries(
-  nextSerBtn,
-  nextSeriesAfterEnd,
-  nextSeriesBeforeEnd
-) {
-  if (nextSeriesAfterEnd) {
-    let checkVideoEnded = createInterval(() => {
-      if (document.getElementById("my-player_html5_api").ended === true) {
-        clickElement(nextSerBtn, checkVideoEnded);
-      }
-    }, 1000);
-  }
-
-  if (nextSeriesBeforeEnd) {
-    let checkVideoEnded = createInterval(() => {
-      if (
-        document.getElementById("my-player_html5_api").ended === true ||
-        nextSerBtn.classList.contains("vjs-hidden") !== true
-      ) {
-        clickElement(nextSerBtn, checkVideoEnded);
-      }
-    }, 1000);
-  }
-}
-
-function skipIntro(skipIntroBtn) {
-  let checkSkipIntroBtnVisible = createInterval(() => {
-    if (skipIntroBtn.classList.contains("vjs-hidden") != true) {
-      // btnSkipIntroCanBeClick = false;
-      skipIntroBtn.click();
-      // clickElement(skipIntroBtn, checkSkipIntroBtnVisible);
+    if (this.fullScreenBtnCanBeClick) {
+      this.createOverlayBtn(clickToFullScreen);
     }
-  }, 1000);
-}
 
-function clickElement(element, intervalFunc) {
-  clearInterval(intervalFunc);
-  element.click();
-}
+    if (skipIntroBtn && skipIntro && this.btnSkipIntroCanBeClick) {
+      this.skipIntro(skipIntroBtn);
+    }
 
-function main(configObject) {
-  clearAllIntervals();
-  const offSwitcher = configObject.offSwitcher;
-  if (offSwitcher === false) {
-    extensionOff();
-    return;
-  }
-  const nextSerBtn = document.querySelector(".vjs-overlay-bottom-right");
-  const skipIntroBtn = document.querySelector(".vjs-overlay-bottom-left");
+    if (nextSerBtn) {
+      if (nextSeriesBeforeEnd){
+        this.nextSeriesBeforeEnd(nextSerBtn);
+      }else if (nextSeriesAfterEnd){
+        this.nextSeriesAfterEnd(nextSerBtn);
+      }
+      
+    }
 
-  const nextSeriesBeforeEnd = configObject.nextSeriesBeforeEnd;
-  const nextSeriesAfterEnd = configObject.nextSeriesAfterEnd;
-  const skipIntro = configObject.skipIntro;
-  const clickToFullScreen = configObject.clickToFullScreen;
-
-  if (fullScreenBtnCanBeClick) {
-    createOverlayBtn(clickToFullScreen);
-  }
-
-  if (skipIntroBtn && skipIntro && btnSkipIntroCanBeClick) {
-    skipIntro(skipIntroBtn);
-  }
-
-  if (nextSerBtn) {
-    nextSeries(nextSerBtn, nextSeriesAfterEnd, nextSeriesBeforeEnd);
   }
 }
+
+const jutsuExtension = new JutsuExtension();
+jutsuExtension.init();

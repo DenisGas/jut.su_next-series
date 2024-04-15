@@ -1,6 +1,6 @@
 <div align=center>
    <img width=150 src=https://github.com/DenisGas/jut.su_next-series/blob/main/img/icon.png?raw=true alt='logo' />
-   <h1>jut.su Next-Series V2.4.0 Beta</h1>
+   <h1>jut.su Next-Series V2.4.1 Beta</h1>
 </div>
 
 <div align=center>
@@ -38,22 +38,36 @@ If you want the anime to go full screen automatically, I made a [python script](
 
 To use the extension on your phone, you can use the [Kivi Browser](https://play.google.com/store/apps/details?id=com.kiwibrowser.browser&pcampaignid=web_share).
 
-### PC
+### Settings
 
-![ExtensionUi](./img/NewUI.png)
+![Extension UI](./img/NewUI_ENG.png)
 
-1. "Разширение: Включено/Выключено" - ON/OFF extension
-2. "Следующая серия до титров" - auto-transition to the next series on credits, before the video end.
-3. "Следующая серия после конца серии" - auto-transition to the next series after the video end.
-4. "Пропускать заставку" - skip anime intro.
-5. "Видео с самого начала" - starts the series from the beginning
+1. "Extension: Enabled/Disabled" - Enabled/Disabled extension
+2. "Next series before credits" - auto-transition to the next series on credits, before the video ends.
+3. "Next episode after credits" - auto-transition to the next series after the video end.
+4. "Skip anime intro" - skip anime intro.
+5. "Video from the beginning" - starts the series from the beginning
 6. "One click to fullScreen" - create overlay which, when clicked, opens the video in full screen.
+
+## Added localization 
+
+### English
+
+   ![Extension UI](./img/NewUI_ENG.png)
+
+### Ukrainian 
+
+   ![Extension UI](./img/NewUI_UKR.png)
+
+### Russian
+
+   ![Extension UI](./img/NewUI_RU.png)
 
 ## What I Want to Implement
 
-- Кросбраузерность версию для (фаерфокс)
-- локализацию и возможность выбора любого языка
-- настройку шорткатов  
+- Cross-browser version for (firefox)
+- localization ✅
+- shortcuts customization  
 
 ## Some Issues
 

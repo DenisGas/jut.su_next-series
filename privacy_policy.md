@@ -11,7 +11,6 @@ The "jut.su Next-Series" Extension collects minimal data necessary for its opera
 - **Video elements on pages:** The Extension identifies video elements on jut.su web pages to play them, skip the intro, and turn on the next episode.
 - **Local storage settings:** The Extension uses Chrome's local storage to save your preferences.
 - **Keystrokes:** The Extension tracks F key presses to enter fullscreen mode.
-- **Error reports:** The Extension may collect information about errors you encounter, including Extension version, browser used, and operating system.
 
 **3. Data Usage**
 

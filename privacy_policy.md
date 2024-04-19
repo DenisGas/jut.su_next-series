@@ -19,11 +19,9 @@ Collected data is used solely for the following purposes:
 - **Playing videos:** The Extension uses video element information to play them, skip the intro, and turn on the next episode.
 - **Saving settings:** The Extension uses local storage to save your preferences.
 - **Fullscreen mode:** The Extension uses F key press information to enter fullscreen mode.
-- **Troubleshooting:** The Developer may use error information to identify and fix issues in the Extension.
 
 **4. Data Disclosure**
 
-- **Error reports:** Error information may be sent to the Developer's server for analysis and troubleshooting.
 - **Third-party services:** The Extension does not use third-party services that could access your data.
 
 **5. Data Security**

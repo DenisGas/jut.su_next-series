@@ -63,13 +63,16 @@ To use the extension on your phone, you can use the [Kivi Browser](https://play.
 
    ![Extension UI](./img/NewUI_RU.png)
 
+
 ## What I Want to Implement
 
 - Cross-browser version for (firefox)
 - localization ✅
 - shortcuts customization  
 
-## Some Issues
+## Known Issues
+
+Please check the [GitHub Issues](https://github.com/DenisGas/jut.su_next-series/issues) for known issues and report any new ones you come across.
 
 -  After reloading the page, the autoplay video does not work
    
@@ -78,12 +81,7 @@ To use the extension on your phone, you can use the [Kivi Browser](https://play.
 
        Due to Google's policy that video auto-play does not work before the user has interacted with the site.
 
-       After reloading the page, video auto-play does not work.
+       After reloading the page, video auto-play does not work. But the next series will start.
     
     - **Fix**
        Also, if you make a [PWA from the site](https://support.google.com/chrome_webstore/answer/3060053#zippy=%2Cadd-an-app-from-the-chrome-web-store), even after restarting the site, autoplay will work (checked Chrome and Edge)
-
-
-## Known Issues
-
-Please check the [GitHub Issues](https://github.com/DenisGas/jut.su_next-series/issues) for known issues and report any new ones you come across.

@@ -1,0 +1,29 @@
+{
+  "extensionDescription": {
+    "message": "Розширення для jut.su, яке дозволяє відео автоматично програватися, автоматично пропускати аніме-інтро та автоматично вмикати наступну серію."
+  },
+  "extension": {
+    "message": "Розширення"
+  },
+  "status_enabled": {
+    "message": "Увімкнено"
+  },
+  "status_disabled": {
+    "message": "Вимкнено"
+  },
+  "next_series_before_end":{
+    "message": "Наступна серія до титрів"
+  },
+  "next_series_after_end":{
+    "message": "Наступна серія після титрів"
+  },
+  "skip_intro":{
+    "message": "Пропускати заставку"
+  },
+  "video_from_start": {
+    "message": "Відео з початку"
+  },
+  "click_to_FullScreen":{
+    "message": "На весь екран по кліку (Оверлей)"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "extensionDescription": {
+    "message": "Расширение для jut.su, которое позволяет видео автоматически проигрываться, автоматически пропускать аниме-интро и автоматически включать следующую серию."
+  },
+  "extension": {
+    "message": "Расширение"
+  },
+  "status_enabled": {
+    "message": "Включено"
+  },
+  "status_disabled": {
+    "message": "Отключено"
+  },
+  "next_series_before_end":{
+    "message": "Следующая серия до титров"
+  },
+  "next_series_after_end":{
+    "message": "Следующая серия после титров"
+  },
+  "skip_intro":{
+    "message": "Пропускать заставку"
+  },
+  "video_from_start": {
+    "message": "Видео сначала"
+  },
+  "click_to_FullScreen":{
+    "message": "На весь экран по клику(Оверлей)"
+  }
+}

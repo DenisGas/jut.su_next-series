@@ -1,6 +1,6 @@
 <div align=center>
    <img width=150 src=https://github.com/DenisGas/jut.su_next-series/blob/main/img/icon.png?raw=true alt='logo' />
-   <h1>jut.su Next-Series V2.4.1 Beta</h1>
+   <h1>jut.su Next-Series V2.4.1</h1>
 </div>
 
 <div align=center>
@@ -17,7 +17,7 @@
 
 Chrome extension for [Jut.su](https://jut.su/) which makes video auto-play, auto-skip anime intro, and auto-open next series after the end of the current one.
 
-If you want the anime to go full screen automatically, I made a [python script](https://github.com/DenisGas/watch_jut.su) that does that.
+If you want the anime to go FullScreen automatically, I made a [python script](https://github.com/DenisGas/watch_jut.su) that does that.
 
 ## Features:
 
@@ -45,9 +45,9 @@ To use the extension on your phone, you can use the [Kivi Browser](https://play.
 1. "Extension: Enabled/Disabled" - Enabled/Disabled extension
 2. "Next series before credits" - auto-transition to the next series on credits, before the video ends.
 3. "Next episode after credits" - auto-transition to the next series after the video end.
-4. "Skip anime intro" - skip anime intro.
+4. "Skip intro" - skip anime intro.
 5. "Video from the beginning" - starts the series from the beginning
-6. "One click to fullScreen" - create overlay which, when clicked, opens the video in full screen.
+6. "Сlick to FullScreen" - create overlay which, when clicked, opens the video in FullScreen.
 
 ## Added localization 
 

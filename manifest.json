@@ -1,28 +1,24 @@
 {
-    "name": "jut.su Next-Series",
-    "description": "__MSG_extensionDescription__",
-    "version": "2.4.1",
-    "manifest_version": 3,
-    "icons": {
-      "16":"./icons/16.png",
-      "32":"./icons/32.png",
-      "48":"./icons/48.png",
-      "128":"./icons/128.png"
-    },
-    "action": {
-      "default_popup":"./pages/popup.html"
-    },
-    "permissions": ["storage"],
-    "content_scripts": [
-        {
-          "css":[
-            "./styles/contentStyle.css"
-          ],
-          "js": ["./scripts/main.js"],
-          "matches": [
-            "https://jut.su/*"
-          ]
-        }
-      ],
-    "default_locale": "en" 
+  "name": "jut.su Next-Series",
+  "description": "__MSG_extensionDescription__",
+  "version": "2.5.0",
+  "manifest_version": 3,
+  "icons": {
+    "16": "./icons/16.png",
+    "32": "./icons/32.png",
+    "48": "./icons/48.png",
+    "128": "./icons/128.png"
+  },
+  "action": {
+    "default_popup": "./pages/popup.html"
+  },
+  "permissions": ["storage"],
+  "content_scripts": [
+    {
+      "css": ["./styles/contentStyle.css"],
+      "js": ["./scripts/main.js"],
+      "matches": ["https://jut.su/*"]
+    }
+  ],
+  "default_locale": "en"
 }

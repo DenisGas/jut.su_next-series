@@ -11,19 +11,31 @@
   "status_disabled": {
     "message": "Отключено"
   },
-  "next_series_before_end":{
+  "next_series_before_end": {
     "message": "Следующая серия до титров"
   },
-  "next_series_after_end":{
+  "next_series_after_end": {
     "message": "Следующая серия после титров"
   },
-  "skip_intro":{
+  "skip_intro": {
     "message": "Пропускать заставку"
   },
   "video_from_start": {
     "message": "Видео сначала"
   },
-  "click_to_FullScreen":{
+  "click_to_FullScreen": {
     "message": "На весь экран по клику(Оверлей)"
+  },
+  "add_speed_control": {
+    "message": "Добавить контроль скорости видео"
+  },
+  "mark_video_time_line": {
+    "message": "Отметить заставку и титры в таймлайне"
+  },
+  "showMain": {
+    "message": "Показать основные функции"
+  },
+  "showAdditional": {
+    "message": "Показать дополнительные функции"
   }
 }

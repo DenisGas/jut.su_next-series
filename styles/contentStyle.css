@@ -39,3 +39,43 @@
   height: 100%;
   background-color: #9d363680;
 }
+
+.vjs-control.speed {
+  width: auto !important;
+  display: flex;
+  align-items: center;
+}
+
+.vjs-control.vjs-button {
+  cursor: pointer;
+  padding: 5px 10px;
+}
+
+.speed-range {
+  visibility: hidden; 
+  opacity: 0;
+  max-width: 0; 
+  box-sizing: border-box; 
+  overflow: hidden; 
+  transition: opacity 0.5s, visibility 0.5s, max-width 0.5s ease-in-out; 
+  white-space: nowrap; 
+}
+
+
+.vjs-control.speed:hover .speed-range,
+.speed-range:hover {
+  visibility: visible; 
+  opacity: 1; 
+  max-width: 100px; 
+}
+
+@media (hover: none) {
+  .vjs-control.speed:hover .speed-range,
+  .speed-range:hover {
+    visibility: hidden;
+    opacity: 0;
+    max-width: 0;
+    pointer-events: none; 
+  }
+}
+

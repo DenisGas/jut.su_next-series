@@ -11,19 +11,31 @@
   "status_disabled": {
     "message": "Вимкнено"
   },
-  "next_series_before_end":{
+  "next_series_before_end": {
     "message": "Наступна серія до титрів"
   },
-  "next_series_after_end":{
+  "next_series_after_end": {
     "message": "Наступна серія після титрів"
   },
-  "skip_intro":{
+  "skip_intro": {
     "message": "Пропускати заставку"
   },
   "video_from_start": {
     "message": "Відео з початку"
   },
-  "click_to_FullScreen":{
+  "click_to_FullScreen": {
     "message": "На весь екран по кліку (Оверлей)"
+  },
+  "add_speed_control": {
+    "message": "Додати контроль швидкості відео"
+  },
+  "mark_video_time_line": {
+    "message": "Позначити заставку та титри на таймлайні"
+  },
+  "showMain": {
+    "message": "Показати основні функції"
+  },
+  "showAdditional": {
+    "message": "Показати додаткові функції"
   }
 }

@@ -11,19 +11,31 @@
   "status_disabled": {
     "message": "Disabled"
   },
-  "next_series_before_end":{
+  "next_series_before_end": {
     "message": "Next episode before credits"
   },
-  "next_series_after_end":{
+  "next_series_after_end": {
     "message": "Next episode after credits"
   },
-  "skip_intro":{
+  "skip_intro": {
     "message": "Skip intro"
   },
   "video_from_start": {
     "message": "Start from the beginning"
   },
-  "click_to_FullScreen":{
+  "click_to_FullScreen": {
     "message": "Click to FullScreen (Overlay)"
+  },
+  "add_speed_control": {
+    "message": "Add video speed control"
+  },
+  "mark_video_time_line": {
+    "message": "Mark intro and credits on timeline "
+  },
+  "showMain": {
+    "message": "Show Main Features"
+  },
+  "showAdditional": {
+    "message": "Show Additional Features"
   }
 }

@@ -1,28 +1,36 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
   <title>Jut.su Next-Series</title>
-
   <link rel="stylesheet" type="text/css" href="../styles/popup.css" />
 </head>
 
 <body>
   <header>
     <h1>Jut.su Next-Series</h1>
-    <p><a target="_blank" href="https://github.com/DenisGas/jut.su_next-series/releases/tag/2.4.1">2.4.1</a></p>
+    <p><a target="_blank" href="https://github.com/DenisGas/jut.su_next-series/releases/tag/2.5.0">2.5.0</a></p>
   </header>
+
   <main>
-    <section class="checkboxes extension_toggle">
+    <section id="extension-toggle-section" class="extension_toggle">
     </section>
-
-    <section class="radios extension_config">
+    <section id="main-section" class="section">
+      <div class="radios extension_config_main"></div>
+      <div class="checkboxes extension_config_main"></div>
     </section>
-
-    <section class="checkboxes extension_config">
+    <section id="additional-section" class="section" style="display: none;">
+      <div class="radios extension_config_additional"></div>
+      <div class="checkboxes extension_config_additional"></div>
     </section>
   </main>
+
+  <div class="button-container">
+    <button id="toggle-settings" data-locale="showAdditional">showAdditional</button>
+  </div>
+
+
 
   <footer>
     <p>&copy; Made by DenisGasilo <a target="_blank" href="https://github.com/DenisGas/jut.su_next-series">Extension

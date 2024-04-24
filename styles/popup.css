@@ -11,7 +11,6 @@
   --red: #d8215e;
   --gray: #3d3d3d;
   --font-size: 16px;
-  /* Добавлено: базовый размер шрифта */
 }
 
 * {
@@ -28,7 +27,7 @@ body {
   text-align: center;
   background-color: var(--black);
   color: var(--second-color);
-  min-width: 400px;
+  min-width: 440px;
 }
 
 header,
@@ -182,15 +181,16 @@ input:disabled {
 }
 
 #toggle-settings {
+  color: var(--main-color);
   background: var(--second-color);
-  border: none;
+  border: transparent;
   min-width: 80%;
   padding: 10px 20px;
   border-radius: 25px;
   font-size: 1em;
   font-weight: 700;
   cursor: pointer;
-  outline: none;
+  outline: transparent;
   transition: all 0.3s ease-in-out;
 }
 
@@ -199,9 +199,11 @@ input:disabled {
   transform: scale(1.05);
 }
 
-#toggle-settings:active,
-#toggle-settings:focus {
+#toggle-settings:active{
   transform: scale(0.95);
+}
+
+#toggle-settings:focus {
   box-shadow: 0 0 0 2px white;
 }
 

@@ -1,4 +1,5 @@
 class JutsuExtension {
+  #saveRateTimeout = null;
   #intervalIds = [];
   #config = {};
   #videoData = {};
@@ -39,15 +40,18 @@ class JutsuExtension {
       clickToFullScreen: false,
       videoFromStart: false,
       addSpeedControl: false,
-      markVideoTimeLine: true
+      markVideoTimeLine: true,
     };
 
     return new Promise((resolve) => {
       chrome.storage.local.get("jutsuExtensionConfig", (result) => {
         if (result.jutsuExtensionConfig === undefined) {
-          chrome.storage.local.set({ jutsuExtensionConfig: DefaultConfig }, () => {
-            resolve(DefaultConfig);
-          });
+          chrome.storage.local.set(
+            { jutsuExtensionConfig: DefaultConfig },
+            () => {
+              resolve(DefaultConfig);
+            }
+          );
         } else {
           resolve(result.jutsuExtensionConfig);
         }
@@ -69,57 +73,66 @@ class JutsuExtension {
   #extractVideoData() {
     const scripts = document.querySelectorAll("script");
     let videoData = {};
-
+    let sum = "";
     scripts.forEach((script) => {
-      const hasPviewId = /pview_id\s*=\s*"\d+";/;
+      // sum += script.innerText;
+      const hasPviewId = /pview_id\s*=\s*".*?";/;
+      // const hasPviewId = /pview_id\s*=\s*"\d+";/;
       if (hasPviewId.test(script.innerText)) {
         let code = script.innerText;
+        // console.log(code)
         const base64StartIndex = code.indexOf("Base64.decode(") + 15;
         const base64EndIndex = code.indexOf(")");
 
-        const base64String = code.substring(base64StartIndex, base64EndIndex).trim();
+        const base64String = code
+          .substring(base64StartIndex, base64EndIndex)
+          .trim();
         const decodedString = atob(base64String.replace(/"/g, ""));
 
-        decodedString.split(";").filter(line => line.trim() !== "").forEach(line => {
-          const [key, value] = line.trim().split("=");
-          if (key && value) {
-            videoData[key.trim()] = value.trim().replace(/"/g, "");
-          }
-        });
+        decodedString
+          .split(";")
+          .filter((line) => line.trim() !== "")
+          .forEach((line) => {
+            const [key, value] = line.trim().split("=");
+            if (key && value) {
+              videoData[key.trim()] = value.trim().replace(/"/g, "");
+            }
+          });
       }
     });
+
+    // console.log(sum);
 
     return videoData;
   }
 
   #markVideoTimeLine() {
-    console.log(this.#videoData);
-    if (!this.#videoElement || !this.#videoData || !this.#config.markVideoTimeLine) {
-      this.#clearTimeLineMarks(); // Удаляет отметки, если функция выключена
+    // console.log(this.#videoData);
+    if (!this.#videoElement || this.#videoData.length === 0) {
       return;
     }
-    const progressHolder = document.querySelector(".vjs-progress-holder.vjs-slider.vjs-slider-horizontal");
+    const progressHolder = document.querySelector(
+      ".vjs-progress-holder.vjs-slider.vjs-slider-horizontal"
+    );
     if (!progressHolder) return;
-
-    this.#clearTimeLineMarks(); // Очистка предыдущих отметок
 
     const segments = [
       {
         id: "intro",
         start: parseInt(this.#videoData.video_intro_start),
         end: parseInt(this.#videoData.video_intro_end),
-        color: "yellow"
+        color: "yellow",
       },
       {
         id: "outro",
         start: parseInt(this.#videoData.video_outro_start),
         // end: parseInt(this.#videoData.this_video_duration),
         end: parseInt(this.#videoData.video_outro_start),
-        color: "red"
-      }
+        color: "red",
+      },
     ];
 
-    segments.forEach(segment => {
+    segments.forEach((segment) => {
       const existingLine = document.getElementById(segment.id);
       if (existingLine) return;
 
@@ -129,95 +142,36 @@ class JutsuExtension {
       markLine.style.position = "absolute";
       markLine.style.width = "4px";
       if (segment.end - segment.start !== 0) {
-        markLine.style.width = `${((segment.end - segment.start) / parseInt(this.#videoData.this_video_duration)) * 100}%`;
+        markLine.style.width = `${
+          ((segment.end - segment.start) /
+            parseInt(this.#videoData.this_video_duration)) *
+          100
+        }%`;
       }
       markLine.style.height = "100%";
-      markLine.style.left = `${(segment.start / parseInt(this.#videoData.this_video_duration)) * 100}%`;
+      markLine.style.left = `${
+        (segment.start / parseInt(this.#videoData.this_video_duration)) * 100
+      }%`;
       markLine.style.background = `${segment.color}`;
 
       progressHolder.appendChild(markLine);
     });
-
   }
 
-  // addSpeedControl(videoElement) {
-  //   console.log(videoElement);
-  //   const controlBar = document.querySelector(".vjs-control-bar");
-  //   if (controlBar) {
-  //     const speedControl = document.querySelector(".vjs-control.speed");
-  //     if (speedControl) {
-  //       return;
-  //     }
-  //     const speedDiv = document.createElement("div");
-  //     speedDiv.className = "vjs-control speed";
+  #savePlaybackRate(rate) {
 
-  //     function findExactIndex(array, target) {
-  //       const index = array.indexOf(target);
-  //       return index !== -1 ? index : undefined;
-  //     }
+    if (this.#saveRateTimeout) {
+        clearTimeout(this.#saveRateTimeout);
+    }
 
-  //     const speeds = [0.5, 1.0, 1.5, 2.0];
-
-  //     let currentSpeedIndex = findExactIndex(speeds, videoElement.playbackRate.toFixed(1));
-
-
-
-  //     const speedButton = document.createElement("button");
-  //     speedButton.className = "vjs-control vjs-button";
-
-  //     speedButton.textContent = videoElement.playbackRate.toFixed(1) + 'x';
-
-  //     if (currentSpeedIndex !== undefined) {
-  //       speedButton.textContent = currentSpeedIndex.toFixed(1) + 'x';
-  //     }
-
-  //     speedButton.title = "Скорость воспроизведения";
-
-  //     const speedRange = document.createElement("input");
-  //     speedRange.type = "range";
-  //     speedRange.min = "0.5";
-  //     speedRange.max = "2.0";
-  //     speedRange.step = "0.1";
-  //     speedRange.value = currentSpeedIndex !== undefined ? speeds[currentSpeedIndex].toFixed(1) : videoElement.playbackRate.toFixed(1);
-  //     speedRange.className = "speed-range";
-
-  //     // Округление до ближайшего стандартного значения
-  //     function roundToNearestSpeed(value) {
-  //       return speeds.reduce((prev, curr) => Math.abs(curr - value) < Math.abs(prev - value) ? curr : prev);
-  //     }
-
-  //     // Обработчик события клика на кнопке
-  //     speedButton.addEventListener("click", function () {
-  //       let currentSpeed = parseFloat(speedRange.value);
-  //       if (!speeds.includes(currentSpeed)) {
-  //         currentSpeed = roundToNearestSpeed(currentSpeed);
-  //       } else {
-  //         currentSpeedIndex = (speeds.indexOf(currentSpeed) + 1) % speeds.length;
-  //         currentSpeed = speeds[currentSpeedIndex];
-  //       }
-  //       speedRange.value = currentSpeed;
-  //       speedButton.textContent = currentSpeed.toFixed(1) + 'x';
-  //       videoElement.playbackRate = currentSpeed;
-  //     });
-
-  //     // Обработчик события input на ползунке
-  //     speedRange.addEventListener("input", function () {
-  //       const newSpeed = parseFloat(this.value);
-  //       speedButton.textContent = newSpeed.toFixed(1) + 'x';
-  //       videoElement.playbackRate = newSpeed;
-  //     });
-
-  //     speedDiv.appendChild(speedButton);
-  //     speedDiv.appendChild(speedRange);
-
-
-  //   }
-  // }
-
+    this.#saveRateTimeout = setTimeout(() => {
+        chrome.storage.local.set({ videoPlaybackRate: rate });
+        // console.log(`Playback rate saved: ${rate}`);
+    }, 2000);  
+}
 
   #addSpeedControl() {
-    if (!this.#videoElement || !this.#config.addSpeedControl) {
-      this.#removeSpeedControl(); // Удаляет элементы управления скоростью, если функция выключена
+    if (!this.#videoElement) {
       return;
     }
     const controlBar = document.querySelector(".vjs-control-bar");
@@ -225,29 +179,56 @@ class JutsuExtension {
 
     let speedControl = document.querySelector(".vjs-control.speed");
     if (!speedControl) {
-      speedControl = this.#createSpeedControl();
+      this.#createSpeedControl().then((control) => {
+        if (control) {
+          const volumePanel = controlBar.querySelector(
+            ".vjs-volume-panel.vjs-control"
+          );
 
-      const volumePanel = controlBar.querySelector(".vjs-volume-panel.vjs-control");
+          control.addEventListener("mouseleave", () => {
+            this.#savePlaybackRate(this.#videoElement.playbackRate);
+          });
 
-      if (volumePanel) {
-        controlBar.insertBefore(speedControl, volumePanel.nextSibling);
-      } else {
-        controlBar.appendChild(speedControl);
-      }
+          if (volumePanel) {
+            controlBar.insertBefore(control, volumePanel.nextSibling);
+          } else {
+            controlBar.appendChild(control);
+          }
+        }
+      });
     }
   }
 
-  #createSpeedControl() {
+  async #createSpeedControl() {
     const speedControl = document.createElement("div");
     speedControl.className = "vjs-control speed";
     const speeds = [0.5, 1.0, 1.5, 2.0];
-    let currentSpeed = this.#videoElement.playbackRate;
-    currentSpeed = speeds.includes(currentSpeed) ? currentSpeed : 1.0;
+    // let currentSpeed = this.#videoElement.playbackRate;
+    let currentSpeed = await this.#loadPlaybackRate();
+    // currentSpeed = speeds.includes(currentSpeed) ? currentSpeed : 1.0;
 
     const speedButton = document.createElement("button");
     speedButton.className = "vjs-control vjs-button";
     speedButton.textContent = `${currentSpeed.toFixed(1)}x`;
     speedButton.title = "Скорость воспроизведения";
+
+    function findExactIndex(array, target) {
+      const index = array.indexOf(target);
+      return index !== -1 ? index : undefined;
+    }
+
+    let currentSpeedIndex = findExactIndex(
+      speeds,
+      this.#videoElement.playbackRate.toFixed(1)
+    );
+
+    speedButton.textContent = this.#videoElement.playbackRate.toFixed(1) + "x";
+
+    if (currentSpeedIndex !== undefined) {
+      speedButton.textContent = currentSpeedIndex.toFixed(1) + "x";
+    }
+
+    // console.log(currentSpeed);
 
     const speedRange = document.createElement("input");
     speedRange.type = "range";
@@ -255,19 +236,36 @@ class JutsuExtension {
     speedRange.min = "0.5";
     speedRange.max = "2.0";
     speedRange.step = "0.1";
-    speedRange.value = currentSpeed.toFixed(1);
+    // speedRange.value = currentSpeed.toFixed(1);
+    speedRange.value =
+      currentSpeedIndex !== undefined
+        ? speeds[currentSpeedIndex].toFixed(1)
+        : this.#videoElement.playbackRate.toFixed(1);
+
+    function roundToNearestSpeed(value) {
+      return speeds.reduce((prev, curr) =>
+        Math.abs(curr - value) < Math.abs(prev - value) ? curr : prev
+      );
+    }
 
     speedButton.addEventListener("click", () => {
-      let index = speeds.indexOf(parseFloat(speedRange.value));
-      index = (index + 1) % speeds.length;
-      speedRange.value = speeds[index].toFixed(1);
-      this.#videoElement.playbackRate = speeds[index];
-      speedButton.textContent = `${speeds[index].toFixed(1)}x`;
+      let currentSpeed = parseFloat(speedRange.value);
+      if (!speeds.includes(currentSpeed)) {
+        currentSpeed = roundToNearestSpeed(currentSpeed);
+      } else {
+        currentSpeedIndex = (speeds.indexOf(currentSpeed) + 1) % speeds.length;
+        currentSpeed = speeds[currentSpeedIndex];
+      }
+      speedRange.value = currentSpeed;
+      speedButton.textContent = `${currentSpeed.toFixed(1)}x`;
+      this.#videoElement.playbackRate = currentSpeed;
+      // this.#savePlaybackRate(this.#videoElement.playbackRate);
     });
 
     speedRange.addEventListener("input", () => {
       this.#videoElement.playbackRate = parseFloat(speedRange.value);
-      speedButton.textContent = `${speedRange.value}x`;
+      speedButton.textContent = `${parseFloat(speedRange.value).toFixed(1)}x`;
+      // this.#savePlaybackRate(this.#videoElement.playbackRate);
     });
 
     speedControl.appendChild(speedButton);
@@ -275,40 +273,62 @@ class JutsuExtension {
     return speedControl;
   }
 
-
-
   #removeSpeedControl() {
     const speedControl = document.querySelector(".vjs-control.speed");
     speedControl?.remove();
+    if (this.#videoElement) {
+      this.#videoElement.playbackRate = 1.0;
+    }
   }
 
   #clearTimeLineMarks() {
-    document.querySelectorAll(".mark-line").forEach(mark => mark.remove());
+    document.querySelectorAll(".mark-line").forEach((mark) => mark.remove());
   }
 
   #playVideo() {
     this.#videoElement.play();
   }
 
-  #checkVideo() {
+  #loadPlaybackRate() {
+    return new Promise((resolve) => {
+      chrome.storage.local.get("videoPlaybackRate", (result) => {
+        if (result.videoPlaybackRate) {
+          this.#videoElement.playbackRate = result.videoPlaybackRate;
+        }
+        resolve(this.#videoElement.playbackRate);
+      });
+    });
+  }
+
+  #findVideoElement(callback) {
     const checkVideoElemOnPage = setInterval(() => {
       const video = document.getElementById("my-player_html5_api");
       if (video) {
         clearInterval(checkVideoElemOnPage);
-        this.#videoElement = video;
-        this.#playVideo();
-        this.#checkForFullScreenButton();
-        if (this.#config.videoFromStart) {
-          this.#videoFromStart();
-        }
-        this.#videoData = this.#extractVideoData();
+        callback(video);
       }
     }, 100);
   }
 
+  #initializeVideoFeatures(video) {
+    this.#videoElement = video;
+    this.#playVideo();
+    this.#checkForFullScreenButton(); 
+    if (this.#config.videoFromStart) {
+      this.#videoFromStart(); 
+    }
+    this.#videoData = this.#extractVideoData(); 
+  }
+
+  #checkVideo() {
+    this.#findVideoElement(this.#initializeVideoFeatures.bind(this));
+  }
+
   #checkForFullScreenButton() {
     const checkForFullScreenButtonInterval = setInterval(() => {
-      const fullScreenButton = document.querySelector(".vjs-fullscreen-control");
+      const fullScreenButton = document.querySelector(
+        ".vjs-fullscreen-control"
+      );
       if (fullScreenButton) {
         clearInterval(checkForFullScreenButtonInterval);
         this.#setupFullScreenButton(fullScreenButton);
@@ -323,7 +343,12 @@ class JutsuExtension {
     });
 
     document.addEventListener("keydown", (event) => {
-      if (event.code === "KeyF" && document.activeElement !== document.querySelector("#message") && document.activeElement !== document.querySelector('input[type="text"][name="ystext"]')) {
+      if (
+        event.code === "KeyF" &&
+        document.activeElement !== document.querySelector("#message") &&
+        document.activeElement !==
+          document.querySelector('input[type="text"][name="ystext"]')
+      ) {
         this.#goFullScreen();
       }
     });
@@ -343,10 +368,16 @@ class JutsuExtension {
       overlayDiv.className = "extension-overlay-div";
       document.body.appendChild(overlayDiv);
 
-      const fullScreenBtn = this.#createButton("Click to FullScreen", "extension-overlay-button");
+      const fullScreenBtn = this.#createButton(
+        "Click to FullScreen",
+        "extension-overlay-button"
+      );
       overlayDiv.appendChild(fullScreenBtn);
 
-      const exitBtn = this.#createButton("Exit", "extension-overlay-exit-button");
+      const exitBtn = this.#createButton(
+        "Exit",
+        "extension-overlay-exit-button"
+      );
       overlayDiv.appendChild(exitBtn);
 
       const closeOverlay = () => {
@@ -360,7 +391,9 @@ class JutsuExtension {
 
       fullScreenBtn.onclick = () => {
         overlayDiv.style.display = "none";
-        const fullScreenControl = document.querySelector(".vjs-fullscreen-control");
+        const fullScreenControl = document.querySelector(
+          ".vjs-fullscreen-control"
+        );
         fullScreenControl.classList.remove("vjs-hidden");
         fullScreenControl.click();
         this.#fullScreenBtnCanBeClick = false;
@@ -403,7 +436,10 @@ class JutsuExtension {
 
   #nextSeriesBeforeEnd(nextSerBtn) {
     const checkVideoEnded = setInterval(() => {
-      if (this.#videoElement.ended || !nextSerBtn.classList.contains("vjs-hidden")) {
+      if (
+        this.#videoElement.ended ||
+        !nextSerBtn.classList.contains("vjs-hidden")
+      ) {
         clearInterval(checkVideoEnded);
         nextSerBtn.click();
       }
@@ -427,7 +463,13 @@ class JutsuExtension {
     }
 
     const checkSkipIntroBtnVisible = setInterval(() => {
-      if (!skipIntroBtn.classList.contains("vjs-hidden") || (this.#videoElement.currentTime > parseInt(this.#videoData.video_intro_start) && this.#videoElement.currentTime < parseInt(this.#videoData.video_intro_end))) {
+      if (
+        !skipIntroBtn.classList.contains("vjs-hidden") ||
+        (this.#videoElement.currentTime >
+          parseInt(this.#videoData.video_intro_start) &&
+          this.#videoElement.currentTime <
+            parseInt(this.#videoData.video_intro_end))
+      ) {
         skipIntroBtn.click();
       }
     }, 1000);
@@ -443,13 +485,18 @@ class JutsuExtension {
       return;
     }
 
+    if (!this.#videoElement) {
+      this.#checkVideo();
+      return;
+    }
+
     const nextSerBtn = document.querySelector(".vjs-overlay-bottom-right");
     const skipIntroBtn = document.querySelector(".vjs-overlay-bottom-left");
 
-    console.log(this.#config)
+    // console.log(this.#config);
 
     if (this.#config.markVideoTimeLine) {
-      console.log(this.#config.markVideoTimeLine);
+      // console.log(this.#config.markVideoTimeLine);
       this.#markVideoTimeLine();
     }
 
@@ -461,7 +508,11 @@ class JutsuExtension {
       this.#createOverlayBtn(this.#config.clickToFullScreen);
     }
 
-    if (skipIntroBtn && this.#config.skipIntro && this.#btnSkipIntroCanBeClick) {
+    if (
+      skipIntroBtn &&
+      this.#config.skipIntro &&
+      this.#btnSkipIntroCanBeClick
+    ) {
       this.#skipIntro(skipIntroBtn);
     }
 
@@ -476,4 +527,4 @@ class JutsuExtension {
 }
 
 const jutsuExtension = new JutsuExtension();
-jutsuExtension.init();
+// jutsuExtension.init();

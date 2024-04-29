@@ -3,7 +3,7 @@
 :root {
   --main-color: #363a37;
   --second-color: #9aa777;
-  --rgb-hover-color: 154, 167, 119;
+  --bnts-hover-color: #687157;
   --content-gap: 10px;
   --black: #272827;
   --accent: #bc40ea;
@@ -18,11 +18,14 @@
 }
 
 body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; 
+  font-family: "Open Sans", sans-serif;
   user-select: none;
   display: flex;
   flex-direction: column;
   font-family: "Open Sans", sans-serif;
-  font-weight: 500;
+  /* font-weight: 500; */
   font-size: var(--font-size);
   text-align: center;
   background-color: var(--black);
@@ -41,7 +44,7 @@ footer {
 
 footer p,
 header {
-  font-weight: 700;
+  font-weight: bold;
 }
 
 main {
@@ -54,11 +57,13 @@ main {
 a {
   color: var(--accent);
   text-decoration: none;
+  transition: color 0.3s ease;
 }
 
 a:hover {
   color: var(--link-hover);
 }
+
 
 label {
   display: flex;
@@ -70,7 +75,7 @@ label {
 }
 
 label:hover {
-  background-color: rgba(var(--rgb-hover-color), 0.5);
+  background-color: var(--bnts-hover-color);
   color: var(--main-color);
   transform: scale(1.02);
 }
@@ -188,7 +193,7 @@ input:disabled {
   padding: 10px 20px;
   border-radius: 25px;
   font-size: 1em;
-  font-weight: 700;
+  font-weight: bold;
   cursor: pointer;
   outline: transparent;
   transition: all 0.3s ease-in-out;
@@ -207,8 +212,11 @@ input:disabled {
   box-shadow: 0 0 0 2px white;
 }
 
-span.disabled {
+span{
   font-weight: bold;
+}
+
+span.disabled {
   margin-left: 10px;
   color: var(--red);
 }

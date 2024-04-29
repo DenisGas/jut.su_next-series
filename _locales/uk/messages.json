@@ -29,7 +29,7 @@
   "add_speed_control": {
     "message": "Додати контроль швидкості відео"
   },
-  "mark_video_time_line": {
+  "mark_video_timeline": {
     "message": "Позначити заставку та титри на таймлайні"
   },
   "showMain": {
@@ -37,5 +37,11 @@
   },
   "showAdditional": {
     "message": "Показати додаткові функції"
+  },
+  "fullScreen":{
+    "message": "На весь екран"
+  },
+  "exit":{
+    "message": "Вийти"
   }
 }

@@ -8,7 +8,7 @@ function createLocales() {
     skipIntro: chrome.i18n.getMessage("skip_intro"),
     videoFromStart: chrome.i18n.getMessage("video_from_start"),
     clickToFullScreen: chrome.i18n.getMessage("click_to_FullScreen"),
-    markVideoTimeLine: chrome.i18n.getMessage("mark_video_time_line"),
+    markVideoTimeLine: chrome.i18n.getMessage("mark_video_timeline"),
     addSpeedControl: chrome.i18n.getMessage("add_speed_control")
   };
 }

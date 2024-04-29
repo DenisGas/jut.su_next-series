@@ -29,7 +29,7 @@
   "add_speed_control": {
     "message": "Add video speed control"
   },
-  "mark_video_time_line": {
+  "mark_video_timeline": {
     "message": "Mark intro and credits on timeline "
   },
   "showMain": {
@@ -37,5 +37,11 @@
   },
   "showAdditional": {
     "message": "Show Additional Features"
+  },
+  "fullScreen":{
+    "message": "FullScreen"
+  },
+  "exit":{
+    "message": "Exit"
   }
 }

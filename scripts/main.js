@@ -107,14 +107,16 @@ class JutsuExtension {
   }
 
   #markVideoTimeLine() {
-    // console.log(this.#videoData);
-    if (!this.#videoElement || this.#videoData.length === 0) {
-      return;
+    if (!this.#videoElement || !this.#videoData || Object.keys(this.#videoData).length === 0) {
+        console.log("No video element or data available.");
+        return;
     }
-    const progressHolder = document.querySelector(
-      ".vjs-progress-holder.vjs-slider.vjs-slider-horizontal"
-    );
-    if (!progressHolder) return;
+
+    const progressHolder = document.querySelector(".vjs-progress-holder.vjs-slider.vjs-slider-horizontal");
+    if (!progressHolder) {
+        console.log("No progress holder found.");
+        return;
+    }
 
     const segments = [
       {
@@ -133,6 +135,11 @@ class JutsuExtension {
     ];
 
     segments.forEach((segment) => {
+      if (isNaN(segment.start) || isNaN(segment.end) || segment.end < segment.start) {
+        console.log(`Skipping invalid segment: ${segment.id}`);
+        return;
+      } 
+
       const existingLine = document.getElementById(segment.id);
       if (existingLine) return;
 
@@ -159,16 +166,26 @@ class JutsuExtension {
   }
 
   #savePlaybackRate(rate) {
-
-    if (this.#saveRateTimeout) {
-        clearTimeout(this.#saveRateTimeout);
-    }
+    // Очистка предыдущего таймаута, чтобы избежать излишних сохранений
+    clearTimeout(this.#saveRateTimeout);
 
     this.#saveRateTimeout = setTimeout(() => {
-        chrome.storage.local.set({ videoPlaybackRate: rate });
-        // console.log(`Playback rate saved: ${rate}`);
-    }, 2000);  
+        // Проверяем, не уничтожен ли контекст выполнения
+        if (chrome.runtime.lastError) {
+            console.error(`Error saving playback rate: ${chrome.runtime.lastError.message}`);
+            return;
+        }
+
+        chrome.storage.local.set({ videoPlaybackRate: rate }, () => {
+            if (chrome.runtime.lastError) {
+                console.error(`Error saving playback rate: ${chrome.runtime.lastError.message}`);
+            } else {
+                console.log(`Playback rate saved: ${rate}`);
+            }
+        });
+    }, 1000);  // Уменьшенное время задержки для быстрого сохранения, но с предотвращением излишних операций
 }
+
 
   #addSpeedControl() {
     if (!this.#videoElement) {
@@ -185,9 +202,9 @@ class JutsuExtension {
             ".vjs-volume-panel.vjs-control"
           );
 
-          control.addEventListener("mouseleave", () => {
-            this.#savePlaybackRate(this.#videoElement.playbackRate);
-          });
+          // control.addEventListener("mouseleave", () => {
+          //   this.#savePlaybackRate(this.#videoElement.playbackRate);
+          // });
 
           if (volumePanel) {
             controlBar.insertBefore(control, volumePanel.nextSibling);
@@ -259,13 +276,13 @@ class JutsuExtension {
       speedRange.value = currentSpeed;
       speedButton.textContent = `${currentSpeed.toFixed(1)}x`;
       this.#videoElement.playbackRate = currentSpeed;
-      // this.#savePlaybackRate(this.#videoElement.playbackRate);
+      this.#savePlaybackRate(this.#videoElement.playbackRate);
     });
 
     speedRange.addEventListener("input", () => {
       this.#videoElement.playbackRate = parseFloat(speedRange.value);
       speedButton.textContent = `${parseFloat(speedRange.value).toFixed(1)}x`;
-      // this.#savePlaybackRate(this.#videoElement.playbackRate);
+      this.#savePlaybackRate(this.#videoElement.playbackRate);
     });
 
     speedControl.appendChild(speedButton);
@@ -275,8 +292,12 @@ class JutsuExtension {
 
   #removeSpeedControl() {
     const speedControl = document.querySelector(".vjs-control.speed");
-    speedControl?.remove();
     if (this.#videoElement) {
+      if(speedControl){
+        if(this.#config.addSpeedControl === false){
+          speedControl?.remove(); 
+        }
+      }
       this.#videoElement.playbackRate = 1.0;
     }
   }
@@ -290,15 +311,27 @@ class JutsuExtension {
   }
 
   #loadPlaybackRate() {
-    return new Promise((resolve) => {
-      chrome.storage.local.get("videoPlaybackRate", (result) => {
-        if (result.videoPlaybackRate) {
-          this.#videoElement.playbackRate = result.videoPlaybackRate;
+    return new Promise((resolve, reject) => {
+        if (!this.#videoElement) {
+            reject("Video element is not available.");
+            return;
         }
-        resolve(this.#videoElement.playbackRate);
-      });
+
+        chrome.storage.local.get("videoPlaybackRate", (result) => {
+            if (chrome.runtime.lastError) {
+                reject(`Error fetching storage: ${chrome.runtime.lastError.message}`);
+                return;
+            }
+
+            const rate = result.videoPlaybackRate;
+            if (rate) {
+                this.#videoElement.playbackRate = rate;
+            }
+            resolve(this.#videoElement.playbackRate);
+        });
     });
-  }
+}
+
 
   #findVideoElement(callback) {
     const checkVideoElemOnPage = setInterval(() => {
@@ -369,13 +402,13 @@ class JutsuExtension {
       document.body.appendChild(overlayDiv);
 
       const fullScreenBtn = this.#createButton(
-        "Click to FullScreen",
+        chrome.i18n.getMessage("fullScreen"),
         "extension-overlay-button"
       );
       overlayDiv.appendChild(fullScreenBtn);
 
       const exitBtn = this.#createButton(
-        "Exit",
+        chrome.i18n.getMessage("exit"),
         "extension-overlay-exit-button"
       );
       overlayDiv.appendChild(exitBtn);

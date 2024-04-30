@@ -156,8 +156,8 @@ input:disabled {
 
 
 .extension_toggle {
-  /* border-bottom: solid 2px var(--second-color); */
-  border-bottom: solid 2px rgba(var(--rgb-hover-color), 0.5)
+  border-bottom: solid 2px var(--bnts-hover-color);
+  /* border-bottom: solid 2px rgba(var(--rgb-hover-color), 0.5) */
 }
 
 /* .extension_toggle input {
@@ -181,8 +181,8 @@ input:disabled {
   align-items: center;
   width: 100%;
   background: var(--main-color);
-  /* border-top: solid 2px var(--second-color); */
-  border-top: solid 2px rgba(var(--rgb-hover-color), 0.5)
+  border-top: solid 2px var(--bnts-hover-color);
+  /* border-top: solid 2px rgba(var(--rgb-hover-color), 0.5) */
 }
 
 #toggle-settings {

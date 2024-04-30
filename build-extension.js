@@ -5,6 +5,8 @@ const path = require('path');
 // Read data from manifest.json
 const manifest = JSON.parse(fs.readFileSync('manifest.json', 'utf8'));
 const version = manifest.version; // Retrieve the version from the manifest
+// const name = manifest.name; // Retrieve the name from the manifest
+const name = "jns"
 
 // Path to the directory where the archive will be saved
 const distPath = path.join(__dirname, 'dist');
@@ -15,13 +17,13 @@ if (!fs.existsSync(distPath)) {
 }
 
 // Create an archive file with the version in the name
-const output = fs.createWriteStream(path.join(distPath, `extension-${version}.zip`));
+const output = fs.createWriteStream(path.join(distPath, `${name}_v${version}.zip`));
 const archive = archiver('zip', {
   zlib: { level: 9 } // Maximum compression ratio
 });
 
 output.on('close', function() {
-  console.log(`Archive created successfully. Total bytes: ${archive.pointer()}`);
+  console.log(`Archive created successfully. Total bytes: ${(archive.pointer())} | kilobytes: ${(archive.pointer() / 1024).toFixed(0)}`);
 });
 
 archive.on('error', function(err) {
@@ -34,9 +36,9 @@ archive.pipe(output);
 // Add files and folders to the archive
 const filesToInclude = [
   'manifest.json',
-  'LICENSE.md',
-  'README.md',
-  'privacy_policy.md'
+  // 'LICENSE.md',
+  // 'README.md',
+  // 'privacy_policy.md'
 ];
 
 filesToInclude.forEach(file => {

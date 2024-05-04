@@ -1,7 +1,7 @@
 {
   "name": "jut.su Next-Series",
   "description": "__MSG_extensionDescription__",
-  "version": "2.5.1",
+  "version": "3.0.0",
   "manifest_version": 3,
   "icons": {
     "16": "./assets/icons/16.png",
@@ -17,7 +17,8 @@
     {
       "css": ["./styles/contentStyle.css"],
       "js": ["./scripts/main.js"],
-      "matches": ["https://jut.su/*"]
+      "matches": ["*://jut.su/*"],
+      "run_at": "document_start"
     }
   ],
   "default_locale": "en"

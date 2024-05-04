@@ -16,10 +16,12 @@ class JutsuExtension {
       if (this.#workOnThisPage(window.location.href)) {
         this.#config = await this.#loadConfig();
 
+
         chrome.storage.onChanged.addListener(async (changes) => {
           this.#config = await this.#loadConfig();
           this.#main();
         });
+
 
         if (!this.#config.extensionEnabled) {
           this.#disableExtension();
@@ -44,9 +46,9 @@ class JutsuExtension {
     };
 
     return new Promise((resolve) => {
-      chrome.storage.local.get("jutsuExtensionConfig", (result) => {
+      chrome.storage.sync.get("jutsuExtensionConfig", (result) => {
         if (result.jutsuExtensionConfig === undefined) {
-          chrome.storage.local.set(
+          chrome.storage.sync.set(
             { jutsuExtensionConfig: DefaultConfig },
             () => {
               resolve(DefaultConfig);
@@ -59,16 +61,82 @@ class JutsuExtension {
     });
   }
 
+  #scrollToElement(elementId) {
+    const element = document.getElementById(elementId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
+
+
   #disableExtension() {
     const div = document.querySelector(".extension-overlay-div");
     if (div !== null) {
       div.style.display = "none";
     }
 
+
+    this.#kino(false);
+
     this.#clearAllIntervals();
     this.#clearTimeLineMarks();
     this.#removeSpeedControl();
   }
+
+  #kino(flag) {
+    const elements = document.querySelectorAll(".sidebar, .slicknav_menu, .header, .logo_b, .info_panel, .achiv_switcher, .video_plate_title, .header_video, .all_anime_title.aat_ep, .footer ");
+    elements.forEach(el => el.style.display = flag ? "none" : "");
+    // elements.forEach(el => el.style.opacity = flag ? "0" : "");
+
+    const html = document.querySelector("html");
+    html.style.overflowY = flag ? "hidden" : "";
+
+    setTimeout(() => {
+      this.#scrollToElement('my-player');
+    }, 100);
+
+
+    // const player = document.getElementById("my-player");
+    if (flag) {
+      this.#addStyles();
+    } else {
+      this.#removeStyles();
+    }
+  }
+
+  #addStyles() {
+    if (document.getElementById("kino-styles")) {
+      return;
+    }
+    const style = document.createElement('style');
+    style.id = 'kino-styles';
+    style.innerHTML = `
+    .hidden { display: none; }
+    #my-player {
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      width: 100dvw !important;
+      height: 100dvh !important;
+      z-index: 9999 !important;
+      background-color: black !important;
+      outline: none !important;
+    }
+  `;
+    document.head.appendChild(style);
+  }
+
+  #removeStyles() {
+    const style = document.getElementById('kino-styles');
+    if (style) {
+      style.remove();
+    }
+  }
+
+
+
 
   #extractVideoData() {
     const scripts = document.querySelectorAll("script");
@@ -108,14 +176,14 @@ class JutsuExtension {
 
   #markVideoTimeLine() {
     if (!this.#videoElement || !this.#videoData || Object.keys(this.#videoData).length === 0) {
-        console.log("No video element or data available.");
-        return;
+      console.log("No video element or data available.");
+      return;
     }
 
     const progressHolder = document.querySelector(".vjs-progress-holder.vjs-slider.vjs-slider-horizontal");
     if (!progressHolder) {
-        console.log("No progress holder found.");
-        return;
+      console.log("No progress holder found.");
+      return;
     }
 
     const segments = [
@@ -138,7 +206,7 @@ class JutsuExtension {
       if (isNaN(segment.start) || isNaN(segment.end) || segment.end < segment.start) {
         console.log(`Skipping invalid segment: ${segment.id}`);
         return;
-      } 
+      }
 
       const existingLine = document.getElementById(segment.id);
       if (existingLine) return;
@@ -149,16 +217,14 @@ class JutsuExtension {
       markLine.style.position = "absolute";
       markLine.style.width = "4px";
       if (segment.end - segment.start !== 0) {
-        markLine.style.width = `${
-          ((segment.end - segment.start) /
-            parseInt(this.#videoData.this_video_duration)) *
+        markLine.style.width = `${((segment.end - segment.start) /
+          parseInt(this.#videoData.this_video_duration)) *
           100
-        }%`;
+          }%`;
       }
       markLine.style.height = "100%";
-      markLine.style.left = `${
-        (segment.start / parseInt(this.#videoData.this_video_duration)) * 100
-      }%`;
+      markLine.style.left = `${(segment.start / parseInt(this.#videoData.this_video_duration)) * 100
+        }%`;
       markLine.style.background = `${segment.color}`;
 
       progressHolder.appendChild(markLine);
@@ -170,21 +236,21 @@ class JutsuExtension {
     clearTimeout(this.#saveRateTimeout);
 
     this.#saveRateTimeout = setTimeout(() => {
-        // Проверяем, не уничтожен ли контекст выполнения
-        if (chrome.runtime.lastError) {
-            console.error(`Error saving playback rate: ${chrome.runtime.lastError.message}`);
-            return;
-        }
+      // Проверяем, не уничтожен ли контекст выполнения
+      if (chrome.runtime.lastError) {
+        console.error(`Error saving playback rate: ${chrome.runtime.lastError.message}`);
+        return;
+      }
 
-        chrome.storage.local.set({ videoPlaybackRate: rate }, () => {
-            if (chrome.runtime.lastError) {
-                console.error(`Error saving playback rate: ${chrome.runtime.lastError.message}`);
-            } else {
-                console.log(`Playback rate saved: ${rate}`);
-            }
-        });
+      chrome.storage.sync.set({ videoPlaybackRate: rate }, () => {
+        if (chrome.runtime.lastError) {
+          console.error(`Error saving playback rate: ${chrome.runtime.lastError.message}`);
+        } else {
+          console.log(`Playback rate saved: ${rate}`);
+        }
+      });
     }, 1000);  // Уменьшенное время задержки для быстрого сохранения, но с предотвращением излишних операций
-}
+  }
 
 
   #addSpeedControl() {
@@ -293,9 +359,9 @@ class JutsuExtension {
   #removeSpeedControl() {
     const speedControl = document.querySelector(".vjs-control.speed");
     if (this.#videoElement) {
-      if(speedControl){
-        if(this.#config.addSpeedControl === false){
-          speedControl?.remove(); 
+      if (speedControl) {
+        if (this.#config.addSpeedControl === false) {
+          speedControl?.remove();
         }
       }
       this.#videoElement.playbackRate = 1.0;
@@ -312,25 +378,25 @@ class JutsuExtension {
 
   #loadPlaybackRate() {
     return new Promise((resolve, reject) => {
-        if (!this.#videoElement) {
-            reject("Video element is not available.");
-            return;
+      if (!this.#videoElement) {
+        reject("Video element is not available.");
+        return;
+      }
+
+      chrome.storage.sync.get("videoPlaybackRate", (result) => {
+        if (chrome.runtime.lastError) {
+          reject(`Error fetching storage: ${chrome.runtime.lastError.message}`);
+          return;
         }
 
-        chrome.storage.local.get("videoPlaybackRate", (result) => {
-            if (chrome.runtime.lastError) {
-                reject(`Error fetching storage: ${chrome.runtime.lastError.message}`);
-                return;
-            }
-
-            const rate = result.videoPlaybackRate;
-            if (rate) {
-                this.#videoElement.playbackRate = rate;
-            }
-            resolve(this.#videoElement.playbackRate);
-        });
+        const rate = result.videoPlaybackRate;
+        if (rate) {
+          this.#videoElement.playbackRate = rate;
+        }
+        resolve(this.#videoElement.playbackRate);
+      });
     });
-}
+  }
 
 
   #findVideoElement(callback) {
@@ -346,11 +412,11 @@ class JutsuExtension {
   #initializeVideoFeatures(video) {
     this.#videoElement = video;
     this.#playVideo();
-    this.#checkForFullScreenButton(); 
+    this.#checkForFullScreenButton();
     if (this.#config.videoFromStart) {
-      this.#videoFromStart(); 
+      this.#videoFromStart();
     }
-    this.#videoData = this.#extractVideoData(); 
+    this.#videoData = this.#extractVideoData();
   }
 
   #checkVideo() {
@@ -380,7 +446,7 @@ class JutsuExtension {
         event.code === "KeyF" &&
         document.activeElement !== document.querySelector("#message") &&
         document.activeElement !==
-          document.querySelector('input[type="text"][name="ystext"]')
+        document.querySelector('input[type="text"][name="ystext"]')
       ) {
         this.#goFullScreen();
       }
@@ -501,7 +567,7 @@ class JutsuExtension {
         (this.#videoElement.currentTime >
           parseInt(this.#videoData.video_intro_start) &&
           this.#videoElement.currentTime <
-            parseInt(this.#videoData.video_intro_end))
+          parseInt(this.#videoData.video_intro_end))
       ) {
         skipIntroBtn.click();
       }
@@ -522,6 +588,8 @@ class JutsuExtension {
       this.#checkVideo();
       return;
     }
+
+    // this.#kino(true);
 
     const nextSerBtn = document.querySelector(".vjs-overlay-bottom-right");
     const skipIntroBtn = document.querySelector(".vjs-overlay-bottom-left");

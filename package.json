@@ -1,9 +1,10 @@
 {
   "name": "jut.su_next-series",
   "version": "1.0.0",
-  "description": "<div align=center>\r    <img width=150 src=https://github.com/DenisGas/jut.su_next-series/blob/main/img/icon.png?raw=true alt='logo' />\r    <h1>jut.su Next-Series V2.4.1</h1>\r </div>",
-  "main": "index.js",
+  "description": "",
+  "main": "build-extension.js",
   "scripts": {
+    "start": "node build-extension.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

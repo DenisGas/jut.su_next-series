@@ -165,7 +165,7 @@ class Extension {
 
   async saveInStorage(configObject) {
     return new Promise((resolve, reject) => {
-      chrome.storage.local.set({ jutsuExtensionConfig: configObject }, () => {
+      chrome.storage.sync.set({ jutsuExtensionConfig: configObject }, () => {
         if (chrome.runtime.lastError) {
           reject(chrome.runtime.lastError);
         } else {
@@ -186,7 +186,7 @@ class Extension {
   }
 
   setData() {
-    chrome.storage.local.get("jutsuExtensionConfig", data => {
+    chrome.storage.sync.get("jutsuExtensionConfig", data => {
       const jutsuExtensionConfig = data["jutsuExtensionConfig"];
 
       this.buttons.forEach(button => {

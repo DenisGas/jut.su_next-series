@@ -9,7 +9,9 @@ function createLocales() {
     videoFromStart: chrome.i18n.getMessage("video_from_start"),
     clickToFullScreen: chrome.i18n.getMessage("click_to_FullScreen"),
     markVideoTimeLine: chrome.i18n.getMessage("mark_video_timeline"),
-    addSpeedControl: chrome.i18n.getMessage("add_speed_control")
+    addSpeedControl: chrome.i18n.getMessage("add_speed_control"),
+    pseudoFullscreen: chrome.i18n.getMessage("pseudo_Fullscreen"),
+
   };
 }
 
@@ -244,6 +246,13 @@ const jutsuExtensionButtonsConfig = {
   videoFromStart: {
     type: 'checkbox',
     labelText: locales.videoFromStart,
+    group: null,
+    defaultSettings: false,
+    section: 'additional'
+  },
+  pseudoFullscreen: {
+    type: 'checkbox',
+    labelText: locales.pseudoFullscreen,
     group: null,
     defaultSettings: false,
     section: 'main'

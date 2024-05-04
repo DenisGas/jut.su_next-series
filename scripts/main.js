@@ -15,10 +15,14 @@ class JutsuExtension {
     window.addEventListener("load", async () => {
       if (this.#workOnThisPage(window.location.href)) {
         this.#config = await this.#loadConfig();
+        this.#config.canBePseudoFullscreen = await this.#loadCanBePseudoFullscreen();
 
 
         chrome.storage.onChanged.addListener(async (changes) => {
+          console.log("Before", this.#config.canBePseudoFullscreen);
           this.#config = await this.#loadConfig();
+          this.#config.canBePseudoFullscreen = await this.#loadCanBePseudoFullscreen();
+          console.log("After", this.#config.canBePseudoFullscreen);
           this.#main();
         });
 
@@ -43,31 +47,24 @@ class JutsuExtension {
       videoFromStart: false,
       addSpeedControl: false,
       markVideoTimeLine: true,
+      pseudoFullscreen: false,
     };
 
     return new Promise((resolve) => {
       chrome.storage.sync.get("jutsuExtensionConfig", (result) => {
         if (result.jutsuExtensionConfig === undefined) {
-          chrome.storage.sync.set(
-            { jutsuExtensionConfig: DefaultConfig },
-            () => {
-              resolve(DefaultConfig);
-            }
-          );
+          chrome.storage.sync.set({ jutsuExtensionConfig: DefaultConfig }, () => {
+            resolve(DefaultConfig);
+          });
         } else {
-          resolve(result.jutsuExtensionConfig);
+          const updatedConfig = { ...DefaultConfig, ...result.jutsuExtensionConfig };
+          chrome.storage.sync.set({ jutsuExtensionConfig: updatedConfig }, () => {
+            resolve(updatedConfig);
+          });
         }
       });
     });
   }
-
-  #scrollToElement(elementId) {
-    const element = document.getElementById(elementId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-  }
-
 
   #disableExtension() {
     const div = document.querySelector(".extension-overlay-div");
@@ -75,33 +72,17 @@ class JutsuExtension {
       div.style.display = "none";
     }
 
-
-    this.#kino(false);
+    this.#deactivateKinoMode();
+    this.#removeKinoModeToggle();
 
     this.#clearAllIntervals();
     this.#clearTimeLineMarks();
     this.#removeSpeedControl();
   }
 
-  #kino(flag) {
-    const elements = document.querySelectorAll(".sidebar, .slicknav_menu, .header, .logo_b, .info_panel, .achiv_switcher, .video_plate_title, .header_video, .all_anime_title.aat_ep, .footer ");
-    elements.forEach(el => el.style.display = flag ? "none" : "");
-    // elements.forEach(el => el.style.opacity = flag ? "0" : "");
-
-    const html = document.querySelector("html");
-    html.style.overflowY = flag ? "hidden" : "";
-
-    setTimeout(() => {
-      this.#scrollToElement('my-player');
-    }, 100);
-
-
-    // const player = document.getElementById("my-player");
-    if (flag) {
-      this.#addStyles();
-    } else {
-      this.#removeStyles();
-    }
+  #removeKinoModeToggle() {
+    const kinoToggleBtn = document.querySelector(".vjs-kino-toggle");
+    if (kinoToggleBtn) kinoToggleBtn.remove();
   }
 
   #addStyles() {
@@ -128,6 +109,7 @@ class JutsuExtension {
     document.head.appendChild(style);
   }
 
+
   #removeStyles() {
     const style = document.getElementById('kino-styles');
     if (style) {
@@ -135,8 +117,105 @@ class JutsuExtension {
     }
   }
 
+  async #loadCanBePseudoFullscreen() {
+    return new Promise((resolve) => {
+      chrome.storage.sync.get("canBePseudoFullscreen", (result) => {
+        if (result.canBePseudoFullscreen === undefined) {
+          chrome.storage.sync.set({ canBePseudoFullscreen: true }, () => {
+            resolve(true);
+          });
+        } else {
+          resolve(result.canBePseudoFullscreen);
+        }
+      });
+    });
+  }
 
+  #saveCanBePseudoFullscreen(value) {
+    chrome.storage.sync.set({ canBePseudoFullscreen: value });
+  }
 
+  #updateKinoMode() {
+    if (this.#config.pseudoFullscreen && this.#config.canBePseudoFullscreen) {
+      this.#activateKinoMode();
+    } else {
+      this.#deactivateKinoMode();
+    }
+    if (!this.#config.pseudoFullscreen) {
+      const shareButton = document.querySelector('.vjs-share-control');
+      if (shareButton) {
+        shareButton.style.display = "";
+      }
+    }
+  }
+
+  #manageKinoModeToggle() {
+    const controlBar = document.querySelector(".vjs-control-bar");
+    if (!controlBar) return;
+
+    let kinoToggleBtn = document.querySelector(".vjs-kino-toggle");
+    if (this.#config.pseudoFullscreen) {
+      if (!kinoToggleBtn) {
+        kinoToggleBtn = this.#createKinoToggleButton();
+        controlBar.appendChild(kinoToggleBtn);
+      }
+      this.#updateKinoButton(kinoToggleBtn);
+    } else {
+      if (kinoToggleBtn) kinoToggleBtn.remove();
+    }
+  }
+
+  #updateKinoButton(button) {
+    const icon = button.querySelector(".kino-mode-icon");
+    if (this.#config.canBePseudoFullscreen) {
+      icon.classList.add("cancel");
+      icon.classList.remove("kino");
+      button.title = "Disable cinema mode";
+    } else {
+      icon.classList.add("kino");
+      icon.classList.remove("cancel");
+      button.title = "Enable cinema mode";
+    }
+  }
+
+  #activateKinoMode() {
+    this.#addStyles();
+    document.querySelectorAll(".sidebar, .slicknav_menu, .header, .logo_b, .info_panel, .achiv_switcher, .video_plate_title, .header_video, .all_anime_title.aat_ep, .footer")
+      .forEach(el => el.style.display = "none");
+  }
+
+  #deactivateKinoMode() {
+    this.#removeStyles();
+    document.querySelectorAll(".sidebar, .slicknav_menu, .header, .logo_b, .info_panel, .achiv_switcher, .video_plate_title, .header_video, .all_anime_title.aat_ep, .footer")
+      .forEach(el => el.style.display = "");
+    this.#scrollToPlayer();
+
+  }
+
+  #createKinoToggleButton() {
+    const shareButton = document.querySelector('.vjs-share-control');
+    if (shareButton) {
+      shareButton.style.display = "none";
+    }
+    const button = document.createElement("button");
+    button.className = "vjs-control vjs-kino-toggle";
+    button.innerHTML = '<span class="kino-mode-icon kino"></span>';
+    button.title = "Toggle cinema mode availability";
+
+    button.addEventListener("click", () => {
+      this.#config.canBePseudoFullscreen = !this.#config.canBePseudoFullscreen;
+      this.#saveCanBePseudoFullscreen(this.#config.canBePseudoFullscreen);
+      this.#updateKinoButton(button);
+    });
+    return button;
+  }
+
+  #scrollToPlayer() {
+    const player = document.getElementById('my-player');
+    if (player) {
+      player.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
 
   #extractVideoData() {
     const scripts = document.querySelectorAll("script");
@@ -251,7 +330,6 @@ class JutsuExtension {
       });
     }, 1000);  // Уменьшенное время задержки для быстрого сохранения, но с предотвращением излишних операций
   }
-
 
   #addSpeedControl() {
     if (!this.#videoElement) {
@@ -576,6 +654,7 @@ class JutsuExtension {
   }
 
   #main() {
+
     this.#clearAllIntervals();
     this.#removeSpeedControl();
     this.#clearTimeLineMarks();
@@ -589,7 +668,8 @@ class JutsuExtension {
       return;
     }
 
-    // this.#kino(true);
+    this.#manageKinoModeToggle();
+    this.#updateKinoMode();
 
     const nextSerBtn = document.querySelector(".vjs-overlay-bottom-right");
     const skipIntroBtn = document.querySelector(".vjs-overlay-bottom-left");

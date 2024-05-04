@@ -52,30 +52,84 @@
 }
 
 .speed-range {
-  visibility: hidden; 
+  visibility: hidden;
   opacity: 0;
-  max-width: 0; 
-  box-sizing: border-box; 
-  overflow: hidden; 
-  transition: opacity 0.5s, visibility 0.5s, max-width 0.5s ease-in-out; 
-  white-space: nowrap; 
+  max-width: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+  transition: opacity 0.5s, visibility 0.5s, max-width 0.5s ease-in-out;
+  white-space: nowrap;
 }
 
 
 .vjs-control.speed:hover .speed-range,
 .speed-range:hover {
-  visibility: visible; 
-  opacity: 1; 
-  max-width: 100px; 
+  visibility: visible;
+  opacity: 1;
+  max-width: 100px;
 }
 
+.kino-mode-icon {
+  border: 2.5px solid #fff;
+}
+
+.vjs-kino-toggle {
+  position: relative;
+  height: 100%;
+  width: auto;
+  background: transparent;
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vjs-kino-toggle::before,
+.vjs-kino-toggle::after {
+  content: "";
+  position: absolute;
+  background-color: white;
+  /* Цвет иконки */
+  transition: transform 0.3s ease;
+}
+
+/* Горизонтальная часть иконки фуллскрина */
+.vjs-kino-toggle::before {
+  height: 2px;
+  width: 50%;
+  /* ширина горизонтальной части */
+  top: 50%;
+  left: 25%;
+  /* центрирование */
+}
+
+/* Вертикальная часть иконки фуллскрина */
+.vjs-kino-toggle::after {
+  width: 2px;
+  height: 50%;
+  /* высота вертикальной части */
+  left: 50%;
+  top: 25%;
+  /* центрирование */
+}
+
+/* Стили для наведения - поворот иконки для имитации выхода из полноэкранного режима */
+.vjs-kino-toggle:hover::before {
+  transform: rotate(90deg);
+}
+
+.vjs-kino-toggle:hover::after {
+  transform: rotate(180deg);
+}
+
+
 @media (hover: none) {
+
   .vjs-control.speed:hover .speed-range,
   .speed-range:hover {
     visibility: hidden;
     opacity: 0;
     max-width: 0;
-    pointer-events: none; 
+    pointer-events: none;
   }
 }
-

@@ -38,10 +38,13 @@
   "showAdditional": {
     "message": "Show Additional Features"
   },
-  "fullScreen":{
+  "fullScreen": {
     "message": "FullScreen"
   },
-  "exit":{
+  "exit": {
     "message": "Exit"
+  },
+  "pseudo_Fullscreen": {
+    "message": "Pseudo-Fullscreen"
   }
 }

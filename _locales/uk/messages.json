@@ -43,5 +43,9 @@
   },
   "exit":{
     "message": "Вийти"
+  },
+  "pseudo_Fullscreen": {
+    "message": "Псевдо-повноекранний режим"
   }
+  
 }

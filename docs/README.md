@@ -1,87 +1,103 @@
-<div align=center>
-   <img width=150 src=https://github.com/DenisGas/jut.su_next-series/blob/main/img/icon.png?raw=true alt='logo' />
-   <h1>jut.su Next-Series V2.4.1</h1>
+<div align="center">
+   <img width="150" src="https://github.com/DenisGas/jut.su_next-series/blob/main/img/icon.png?raw=true" alt="logo" />
+   <h1>jut.su Next-Series V3.0.0</h1>
 </div>
 
-<div align=center>
+<div align="center">
    
-![Chrome Web Store Users](https://img.shields.io/chrome-web-store/users/godmnckhgkgojikjpiahppfnmhgkfpjp)
-![GitHub release (with filter)](https://img.shields.io/github/v/release/DenisGas/jut.su_next-series)
-![GitHub all releases](https://img.shields.io/github/downloads/DenisGas/jut.su_next-series/total)
-![GitHub Repo stars](https://img.shields.io/github/stars/DenisGas/jut.su_next-series)
-![GitHub](https://img.shields.io/github/license/DenisGas/jut.su_next-series)
+[![Chrome Web Store Users](https://img.shields.io/chrome-web-store/users/godmnckhgkgojikjpiahppfnmhgkfpjp)](https://chromewebstore.google.com/detail/jutsu-next-series/godmnckhgkgojikjpiahppfnmhgkfpjp)
+[![GitHub release](https://img.shields.io/github/v/release/DenisGas/jut.su_next-series)](https://github.com/DenisGas/jut.su_next-series/releases/latest)
+[![GitHub downloads](https://img.shields.io/github/downloads/DenisGas/jut.su_next-series/total)](https://github.com/DenisGas/jut.su_next-series/releases)
+[![GitHub stars](https://img.shields.io/github/stars/DenisGas/jut.su_next-series)](https://github.com/DenisGas/jut.su_next-series/stargazers)
+[![GitHub license](https://img.shields.io/github/license/DenisGas/jut.su_next-series)](https://github.com/DenisGas/jut.su_next-series/blob/main/LICENSE.md)
 
 </div>
 
 ## Description
 
-Chrome extension for [Jut.su](https://jut.su/) which makes video auto-play, auto-skip anime intro, and auto-open next series after the end of the current one.
+Enhance your viewing experience on [Jut.su](https://jut.su/) with our extension that supports autoplay, skips anime intros automatically, and transitions seamlessly to the next episode.
 
-If you want the anime to go FullScreen automatically, I made a [python script](https://github.com/DenisGas/watch_jut.su) that does that.
+## Features
 
-## Features:
-
-- Automatically plays video ✌️
-- Automatically skip anime intro 🔥
-- Open next episode 🤩
-- One click to FullScreen(Overlay) 👍
-- Video hotkey work (Press "F" to fullScreen) ❤️
-
+- **Automatically Plays Video** ✅🎥
+- **Automatically Skip Anime Intro** ⏩🎬
+- **Pseudo-Fullscreen Mode** 🌐📺
+- **Open Next Episode** 🚀🎞️
+- **Video Hotkey Work (Press "F" to FullScreen)** 🖥️❤️
+- **Mark Video Timeline** 📊🕓
+- **Video Speed Control** ⏩⏪🎚️
 
 ## Installation
 
-[download from chrome store](https://chromewebstore.google.com/detail/jutsu-next-series/godmnckhgkgojikjpiahppfnmhgkfpjp)
+[Download from the Chrome Web Store](https://chromewebstore.google.com/detail/jutsu-next-series/godmnckhgkgojikjpiahppfnmhgkfpjp)
 
 ## Usage
 
-### Phone
+### Mobile Support
 
-To use the extension on your phone, you can use the [Kivi Browser](https://play.google.com/store/apps/details?id=com.kiwibrowser.browser&pcampaignid=web_share).
+Use the extension on your phone via the [Kiwi Browser](https://play.google.com/store/apps/details?id=com.kiwibrowser.browser&pcampaignid=web_share), which supports Chrome extensions.
 
-### Settings
+### Settings Documentation
 
-![Extension UI](./img/NewUI_ENG.png)
+#### Main Settings
 
-1. "Extension: Enabled/Disabled" - Enabled/Disabled extension
-2. "Next series before credits" - auto-transition to the next series on credits, before the video ends.
-3. "Next episode after credits" - auto-transition to the next series after the video end.
-4. "Skip intro" - skip anime intro.
-5. "Video from the beginning" - starts the series from the beginning
-6. "Сlick to FullScreen" - create overlay which, when clicked, opens the video in FullScreen.
+- ![Main Settings](./img/MainFutures.png)
 
-## Added localization 
+- **Enable/Disable Extension**
+   - **Toggle the entire extension on or off.**
+   - **Type:** Checkbox
 
-### English
+- **Next Series Before Credits**
+   - **Automatically advance to the next episode before the current episode's credits roll.**
+   - **Type:** Radio button
 
-   ![Extension UI](./img/NewUI_ENG.png)
+- **Next Series After Credits**
+   - **Transition to the next episode after the credits finish.**
+   - **Type:** Radio button
 
-### Ukrainian 
+- **Skip Intro**
+   - **Skip the intro of each episode automatically.**
+   - **Type:** Checkbox
 
-   ![Extension UI](./img/NewUI_UKR.png)
+- **Pseudo-Fullscreen Mode**
+   - **Activate a fullscreen experience without entering true fullscreen mode, enhancing focus on the video by hiding other elements.**
+   - **Type:** Checkbox
 
-### Russian
+#### Additional Settings
 
-   ![Extension UI](./img/NewUI_RU.png)
+- ![Additional Settings](./img/AdditionalFutures.png)
 
+- **Video from the Start**
+   - **Begin every video from its start automatically.**
+   - **Type:** Checkbox
 
-## What I Want to Implement
+- **Click to Fullscreen (Overlay)**
+   - **Enter fullscreen mode with a single click on the video player for convenience.**
+   - **Type:** Checkbox
 
-- Cross-browser version for (firefox)
-- localization ✅
-- shortcuts customization  
+- **Add Video Speed Control**
+   - **Add a feature to adjust video playback speed according to user preference.**
+   - **Type:** Checkbox
+
+- **Mark Video Timeline**
+   - **Place markers on the video timeline to easily identify and skip intros and credits.**
+   - **Type:** Checkbox
+
+## Planned Features
+
+- **Firefox Compatibility** 🔬
+- **Extended Localization** ✅
+- **Customizable Shortcuts** ⚙️
+
+The test tube emoji (🔬) signifies that the feature is currently being tested, which aligns well with the state of development you described.
 
 ## Known Issues
 
-Please check the [GitHub Issues](https://github.com/DenisGas/jut.su_next-series/issues) for known issues and report any new ones you come across.
+Check our [GitHub Issues page](https://github.com/DenisGas/jut.su_next-series/issues) for ongoing issues and report any new ones.
 
--  After reloading the page, the autoplay video does not work
-   
-    - **Console error**\
-       ![GoogleErrorImg](./img/G_Error.png)
+- **Autoplay Not Working on Reload**
+    - **Issue:** Due to browser policies, autoplay may not work after reloading a page.
+    - **Screenshot:** ![GoogleErrorImg](./img/G_Error.png)
+    - **Workaround:** Convert the site into a [PWA](https://support.google.com/chrome_webstore/answer/3060053#zippy=%2Cadd-an-app-from-the-chrome-web-store) to enable consistent autoplay functionality after restarts, tested on Chrome and Edge.
 
-       Due to Google's policy that video auto-play does not work before the user has interacted with the site.
 
-       After reloading the page, video auto-play does not work. But the next series will start.
-    
-    - **Fix**
-       Also, if you make a [PWA from the site](https://support.google.com/chrome_webstore/answer/3060053#zippy=%2Cadd-an-app-from-the-chrome-web-store), even after restarting the site, autoplay will work (checked Chrome and Edge)

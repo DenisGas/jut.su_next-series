@@ -69,9 +69,6 @@
   max-width: 100px;
 }
 
-.kino-mode-icon {
-  border: 2.5px solid #fff;
-}
 
 .vjs-kino-toggle {
   position: relative;
@@ -84,43 +81,10 @@
   justify-content: center;
 }
 
-.vjs-kino-toggle::before,
-.vjs-kino-toggle::after {
-  content: "";
-  position: absolute;
-  background-color: white;
-  /* Цвет иконки */
-  transition: transform 0.3s ease;
+.vjs-kino-toggle:hover {
+  scale: 1.2;
 }
 
-/* Горизонтальная часть иконки фуллскрина */
-.vjs-kino-toggle::before {
-  height: 2px;
-  width: 50%;
-  /* ширина горизонтальной части */
-  top: 50%;
-  left: 25%;
-  /* центрирование */
-}
-
-/* Вертикальная часть иконки фуллскрина */
-.vjs-kino-toggle::after {
-  width: 2px;
-  height: 50%;
-  /* высота вертикальной части */
-  left: 50%;
-  top: 25%;
-  /* центрирование */
-}
-
-/* Стили для наведения - поворот иконки для имитации выхода из полноэкранного режима */
-.vjs-kino-toggle:hover::before {
-  transform: rotate(90deg);
-}
-
-.vjs-kino-toggle:hover::after {
-  transform: rotate(180deg);
-}
 
 
 @media (hover: none) {

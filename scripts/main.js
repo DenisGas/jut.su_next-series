@@ -19,10 +19,8 @@ class JutsuExtension {
 
 
         chrome.storage.onChanged.addListener(async (changes) => {
-          console.log("Before", this.#config.canBePseudoFullscreen);
           this.#config = await this.#loadConfig();
           this.#config.canBePseudoFullscreen = await this.#loadCanBePseudoFullscreen();
-          console.log("After", this.#config.canBePseudoFullscreen);
           this.#main();
         });
 
@@ -53,17 +51,18 @@ class JutsuExtension {
     return new Promise((resolve) => {
       chrome.storage.sync.get("jutsuExtensionConfig", (result) => {
         if (result.jutsuExtensionConfig === undefined) {
-          chrome.storage.sync.set({ jutsuExtensionConfig: DefaultConfig }, () => {
-            resolve(DefaultConfig);
-          });
+          chrome.storage.sync.set(
+            { jutsuExtensionConfig: DefaultConfig },
+            () => {
+              resolve(DefaultConfig);
+            }
+          );
         } else {
-          const updatedConfig = { ...DefaultConfig, ...result.jutsuExtensionConfig };
-          chrome.storage.sync.set({ jutsuExtensionConfig: updatedConfig }, () => {
-            resolve(updatedConfig);
-          });
+          resolve(result.jutsuExtensionConfig);
         }
       });
     });
+
   }
 
   #disableExtension() {
@@ -104,6 +103,8 @@ class JutsuExtension {
       z-index: 9999 !important;
       background-color: black !important;
       outline: none !important;
+      padding: 1vh 0 !important;
+
     }
   `;
     document.head.appendChild(style);
@@ -199,7 +200,7 @@ class JutsuExtension {
     }
     const button = document.createElement("button");
     button.className = "vjs-control vjs-kino-toggle";
-    button.innerHTML = '<span class="kino-mode-icon kino"></span>';
+    button.innerHTML = '<span class="kino-mode-icon kino"><svg height="100%" version="1.1" viewBox="0 0 36 36" width="100%"><use class="ytp-svg-shadow" xlink:href="#ytp-id-30"></use><path d="m 28,11 0,14 -20,0 0,-14 z m -18,2 16,0 0,10 -16,0 0,-10 z" fill="#fff" fill-rule="evenodd" id="ytp-id-30"></path></svg></span>';
     button.title = "Toggle cinema mode availability";
 
     button.addEventListener("click", () => {
@@ -514,26 +515,43 @@ class JutsuExtension {
     }, 100);
   }
 
+
+  #createShortCat(key, func, excludeSelectors = []) {
+    document.addEventListener("keydown", (event) => {
+      if (event.code === key && !excludeSelectors.some(selector => document.activeElement === document.querySelector(selector))) {
+        func(event);
+      }
+    });
+  }
+
+  #setupShortcuts() {
+    this.#createShortCat("KeyF", () => {
+      this.#goFullScreen();
+    }, ["#message", 'input[type="text"][name="ystext"]']);
+
+    this.#createShortCat("KeyT", () => {
+      const pseudoFullScreenButton = document.querySelector(".vjs-kino-toggle");
+      if (pseudoFullScreenButton) {
+        pseudoFullScreenButton.click(); 
+        this.#videoElement.focus();
+      }
+    }, ["#message", 'input[type="text"][name="ystext"]']);
+  }
+
+
   #setupFullScreenButton(fullScreenButton) {
     fullScreenButton.addEventListener("click", () => {
       this.#videoElement.focus();
     });
 
-    document.addEventListener("keydown", (event) => {
-      if (
-        event.code === "KeyF" &&
-        document.activeElement !== document.querySelector("#message") &&
-        document.activeElement !==
-        document.querySelector('input[type="text"][name="ystext"]')
-      ) {
-        this.#goFullScreen();
-      }
-    });
+    this.#setupShortcuts();
+
   }
 
   #goFullScreen() {
     const fullScreenControl = document.querySelector(".vjs-fullscreen-control");
     fullScreenControl.click();
+    this.#videoElement.focus();
   }
 
   #createOverlayBtn(bool) {

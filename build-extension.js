@@ -44,6 +44,7 @@ function deleteDirectory(directoryPath) {
 //   }
 //   return modifiedManifest;
 // }
+
 function modifyManifestForBrowser(manifest, browserName) {
   // Deep copy of the manifest to avoid modifying the original by reference
   const modifiedManifest = JSON.parse(JSON.stringify(manifest));

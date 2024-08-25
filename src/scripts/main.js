@@ -629,6 +629,9 @@ class JutsuExtension {
     }, 1000);
   }
 
+
+  // ---------------NextSeriesManager.js----------------
+
   #nextSeriesBeforeEnd(nextSerBtn) {
     const checkVideoEnded = setInterval(() => {
       if (
@@ -652,6 +655,11 @@ class JutsuExtension {
     this.#intervalIds.push(checkVideoEnded);
   }
 
+  // -------------------------------------------------
+
+
+  // ---------------skipIntroManager.js----------------
+
   #skipIntro(skipIntroBtn) {
     if (!this.#videoData) {
       this.#videoData = this.#extractVideoData();
@@ -670,6 +678,8 @@ class JutsuExtension {
     }, 1000);
     this.#intervalIds.push(checkSkipIntroBtnVisible);
   }
+
+  // -------------------------------------------------
 
   #main() {
 

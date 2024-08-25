@@ -1,19 +1,4 @@
-function createLocales() {
-  return {
-    extensionLabel: chrome.i18n.getMessage("extension"),
-    statusEnabled: chrome.i18n.getMessage("status_enabled"),
-    statusDisabled: chrome.i18n.getMessage("status_disabled"),
-    nextSeriesBeforeEnd: chrome.i18n.getMessage("next_series_before_end"),
-    nextSeriesAfterEnd: chrome.i18n.getMessage("next_series_after_end"),
-    skipIntro: chrome.i18n.getMessage("skip_intro"),
-    videoFromStart: chrome.i18n.getMessage("video_from_start"),
-    clickToFullScreen: chrome.i18n.getMessage("click_to_FullScreen"),
-    markVideoTimeLine: chrome.i18n.getMessage("mark_video_timeline"),
-    addSpeedControl: chrome.i18n.getMessage("add_speed_control"),
-    pseudoFullscreen: chrome.i18n.getMessage("pseudo_Fullscreen"),
-
-  };
-}
+import {jutsuExtensionButtonsConfig,jutsuExtensionDefaultConfig } from "./modules/Config";
 
 document.querySelectorAll('[data-locale]').forEach(element => {
   const key = element.getAttribute('data-locale');
@@ -44,8 +29,6 @@ toggleBtn.addEventListener('click', function () {
   }
 });
 
-
-const locales = createLocales();
 
 class ToggleField {
   constructor(id, labelText, btnType, section, name = null) {
@@ -211,109 +194,25 @@ class Extension {
 }
 
 
-const jutsuExtensionButtonsConfig = {
-  extensionEnabled: {
-    type: 'extensionSwitch',
-    labelText: locales.extensionLabel + ": ",
-    statusClass: 'switcher disabled',
-    statusTextEnabled: locales.statusEnabled,
-    statusTextDisabled: locales.statusDisabled,
-    group: null,
-    defaultSettings: true,
-    section: 'main'
-  },
-  nextSeriesBeforeEnd: {
-    type: 'radio',
-    labelText: locales.nextSeriesBeforeEnd,
-    group: 'seriesOptions',
-    defaultSettings: true,
-    section: 'main'
-  },
-  nextSeriesAfterEnd: {
-    type: 'radio',
-    labelText: locales.nextSeriesAfterEnd,
-    group: 'seriesOptions',
-    defaultSettings: false,
-    section: 'main'
-  },
-  skipIntro: {
-    type: 'checkbox',
-    labelText: locales.skipIntro,
-    group: null,
-    defaultSettings: true,
-    section: 'main'
-  },
-  videoFromStart: {
-    type: 'checkbox',
-    labelText: locales.videoFromStart,
-    group: null,
-    defaultSettings: false,
-    section: 'additional'
-  },
-  pseudoFullscreen: {
-    type: 'checkbox',
-    labelText: locales.pseudoFullscreen,
-    group: null,
-    defaultSettings: false,
-    section: 'main'
-  },
-  clickToFullScreen: {
-    type: 'checkbox',
-    labelText: locales.clickToFullScreen,
-    group: null,
-    defaultSettings: false,
-    section: 'additional'
-  },
-  addSpeedControl: {
-    type: 'checkbox',
-    labelText: locales.addSpeedControl,
-    group: null,
-    defaultSettings: false,
-    section: 'additional'
-  },
-  markVideoTimeLine: {
-    type: 'checkbox',
-    labelText: locales.markVideoTimeLine,
-    group: null,
-    defaultSettings: true,
-    section: 'additional'
-  }
-};
-
-
-const jutsuExtensionDefaultConfig = {};
-
-for (const btnId in jutsuExtensionButtonsConfig) {
-  if (jutsuExtensionButtonsConfig.hasOwnProperty(btnId)) {
-    jutsuExtensionDefaultConfig[btnId] = jutsuExtensionButtonsConfig[btnId].defaultSettings;
-  }
-}
-
-const buttons = [];
-for (const [id, config] of Object.entries(jutsuExtensionButtonsConfig)) {
-  if (config.type === 'checkbox') {
-    buttons.push(new ToggleField(id, config.labelText, config.type, config.section));
-  } else if (config.type === 'extensionSwitch') {
-    buttons.push(new DisabledExtensionCheckbox(id, config.labelText, config.type, config.section, config.statusClass, config.statusTextEnabled, config.statusTextDisabled));
-  } else if (config.type === 'radio') {
-    buttons.push(new ToggleField(id, config.labelText, config.type, config.section, config.group));
-  }
-}
-
-buttons.forEach(e => {
-  let parentElement;
-  if (e.type === 'radio') {
-    parentElement = e.section === 'main' ? document.querySelector('#main-section .radios') : document.querySelector('#additional-section .radios');
-  } else if (e.type === 'checkbox') {
-    parentElement = e.section === 'main' ? document.querySelector('#main-section .checkboxes') : document.querySelector('#additional-section .checkboxes');
-  } else if (e.type === 'extensionSwitch') {
-    parentElement = document.querySelector('#extension-toggle-section');
-  }
-
-  if (parentElement) {
-    e.addToPage(parentElement);
+const buttons = Object.entries(jutsuExtensionButtonsConfig).map(([id, config]) => {
+  if (config.type === 'extensionSwitch') {
+    return new DisabledExtensionCheckbox(id, config.labelText, config.type, config.section, config.statusClass, config.statusTextEnabled, config.statusTextDisabled);
+  } else {
+    return new ToggleField(id, config.labelText, config.type, config.section, config.group);
   }
 });
+
+buttons.forEach(button => {
+  const parentElement = document.querySelector(
+    button.type === 'radio'
+      ? `#${button.section}-section .radios`
+      : button.type === 'checkbox'
+      ? `#${button.section}-section .checkboxes`
+      : '#extension-toggle-section'
+  );
+  if (parentElement) button.addToPage(parentElement);
+});
+
 
 
 const extension = new Extension(buttons, jutsuExtensionDefaultConfig);

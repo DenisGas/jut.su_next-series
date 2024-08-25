@@ -1,10 +1,11 @@
-import NextSeriesManager from "./modules/NextSeriesManager";
-import MarkVideoTimeLineManager from "./modules/markVideoTimeLineManager";
-import SkipIntroManager from "./modules/SkipIntroManager";
-import { jutsuExtensionDefaultConfig } from "./modules/Config";
-import { EventManager } from "./modules/EventManager";
-import { ConfigManager } from "./modules/ConfigManager";
-import { VideoManager } from "./modules/VideoManager";
+import { jutsuExtensionDefaultConfig } from "./modules/common/Config";
+import NextSeriesManager from "./modules/content/NextSeriesManager";
+import MarkVideoTimeLineManager from "./modules/content/MarkVideoTimeLineManager";
+import SkipIntroManager from "./modules/content/SkipIntroManager";
+import EventManager from "./modules/content/EventManager";
+import ConfigManager from "./modules/content/ConfigManager";
+import VideoManager from "./modules/content/VideoManager";
+// import PseudoFullscreenManager from "./modules/content/PseudoFullscreenManager";
 
 class JutsuExtension {
   #config = {};
@@ -13,6 +14,7 @@ class JutsuExtension {
   #NextSeriesManager;
   #MarkVideoTimeLineManager;
   #SkipIntroManager;
+  // #PseudoFullscreenManager;
   #allManager = [];
 
   constructor() {
@@ -22,10 +24,15 @@ class JutsuExtension {
   async init() {
     EventManager.addWindowLoadListener(async () => {
       if (this.#workOnThisPage(window.location.href)) {
-        this.#config = await ConfigManager.loadConfig(jutsuExtensionDefaultConfig);
+        this.#config = await ConfigManager.loadConfig(
+          jutsuExtensionDefaultConfig
+        );
         this.#videoElement = await VideoManager.findVideoElement();
         if (this.#videoElement) {
-          this.#videoData = new VideoManager(this.#videoElement).extractVideoData();
+          this.#videoData = new VideoManager(
+            this.#videoElement
+          ).extractVideoData();
+
           this.#NextSeriesManager = new NextSeriesManager(this.#videoElement);
           this.#MarkVideoTimeLineManager = new MarkVideoTimeLineManager(
             this.#videoElement,
@@ -35,30 +42,38 @@ class JutsuExtension {
             this.#videoElement,
             this.#videoData
           );
+          // this.#PseudoFullscreenManager = new PseudoFullscreenManager(
+          //   this.#videoElement,
+          //   this.#config
+          // );
           this.#allManager = [
             this.#NextSeriesManager,
             this.#SkipIntroManager,
             this.#MarkVideoTimeLineManager,
+            // this.#PseudoFullscreenManager,
           ];
 
           if (this.#config.extensionEnabled) {
             this.#enableExtension();
             this.#videoElement.play();
             if (this.#config.videoFromStart) {
-                this.#videoFromStart();
+              this.#videoFromStart();
             }
           } else {
             this.#disableExtension();
           }
         }
+
         EventManager.addStorageChangeListener(async (changes) => {
-            this.#config = await ConfigManager.loadConfig(jutsuExtensionDefaultConfig);
-            if (this.#config.extensionEnabled === true) {
-              this.#enableExtension();
-            } else {
-              this.#disableExtension();
-            }
-          });
+          this.#config = await ConfigManager.loadConfig(
+            jutsuExtensionDefaultConfig
+          );
+          if (this.#config.extensionEnabled === true) {
+            this.#enableExtension();
+          } else {
+            this.#disableExtension();
+          }
+        });
       }
     });
   }
@@ -78,16 +93,16 @@ class JutsuExtension {
     });
   }
 
-
   #workOnThisPage(websitePage) {
     return websitePage.includes("episode-") || websitePage.includes("film-");
   }
 
   #enableExtension() {
     this.#disableExtension();
-    // console.log(this.#videoData);
+
     const nextSerBtn = document.querySelector(".vjs-overlay-bottom-right");
     const skipIntroBtn = document.querySelector(".vjs-overlay-bottom-left");
+
     if (nextSerBtn) {
       if (this.#config.nextSeriesBeforeEnd) {
         this.#NextSeriesManager.nextSeriesBeforeEnd(nextSerBtn);
@@ -103,9 +118,11 @@ class JutsuExtension {
     if (this.#config.markVideoTimeLine) {
       this.#MarkVideoTimeLineManager.markVideoTimeLine();
     }
+
+    // if (this.#config.pseudoFullscreen) {
+    //   this.#PseudoFullscreenManager.updatePseudoFullscreen();
+    // }
   }
-
-
 }
 
 const jutsuExtension = new JutsuExtension();

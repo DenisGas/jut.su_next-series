@@ -1,5 +1,5 @@
 // EventManager.js
-export class EventManager {
+class EventManager {
     static addWindowLoadListener(callback) {
       window.addEventListener("load", callback);
     }
@@ -9,3 +9,4 @@ export class EventManager {
     }
   }
   
+export default EventManager;

@@ -1,5 +1,5 @@
 // VideoManager.js
-export class VideoManager {
+class VideoManager {
     constructor(videoElement, videoData) {
       this.videoElement = videoElement;
       this.videoData = videoData;
@@ -47,3 +47,4 @@ export class VideoManager {
     }
   }
   
+export default VideoManager;

@@ -79,6 +79,10 @@ class MarkVideoTimeLineManager {
     });
   }
 
+  update(){
+    this.disable();
+  }
+
   disable() {
     document.querySelectorAll(".mark-line").forEach((mark) => mark.remove());
   }

@@ -6,6 +6,8 @@ import EventManager from "./modules/content/EventManager";
 import ConfigManager from "./modules/content/ConfigManager";
 import VideoManager from "./modules/content/VideoManager";
 // import PseudoFullscreenManager from "./modules/content/PseudoFullscreenManager";
+import { defaultShortcuts, getUserShortcuts, saveUserShortcuts } from './modules/content/shortcuts';
+import ShortCatsManager from './modules/content/ShortCutsManager';
 
 class JutsuExtension {
   #config = {};
@@ -16,6 +18,7 @@ class JutsuExtension {
   #SkipIntroManager;
   // #PseudoFullscreenManager;
   #allManager = [];
+  #shortCatsManager;
 
   constructor() {
     this.init();
@@ -42,6 +45,7 @@ class JutsuExtension {
             this.#videoElement,
             this.#videoData
           );
+          this.#shortCatsManager = new ShortCatsManager();
           // this.#PseudoFullscreenManager = new PseudoFullscreenManager(
           //   this.#videoElement,
           //   this.#config
@@ -50,6 +54,7 @@ class JutsuExtension {
             this.#NextSeriesManager,
             this.#SkipIntroManager,
             this.#MarkVideoTimeLineManager,
+            this.#shortCatsManager,
             // this.#PseudoFullscreenManager,
           ];
 
@@ -78,6 +83,50 @@ class JutsuExtension {
     });
   }
 
+  #initializeShortcuts() {
+    const shortcuts = defaultShortcuts;
+
+    for (let i = 0; i <= 9; i++) {
+      this.#shortCatsManager.registerShortcut(`Digit${i}`, () => {
+        const jumpTime = (i / 9) * this.#videoElement.duration;
+        this.#videoElement.currentTime = jumpTime;
+      });
+    }
+
+    this.#shortCatsManager.registerShortcut(shortcuts.pause, () => {
+      if (this.#videoElement.paused) {
+        this.#videoElement.play();
+      } else {
+        this.#videoElement.pause();
+      }
+    });
+
+    this.#shortCatsManager.registerShortcut(shortcuts.actionT, () => {
+      console.log("T");
+    });
+
+    this.#shortCatsManager.registerShortcut("KeyM", () => {
+      const muteControl = document.querySelector(".vjs-mute-control");
+      if (muteControl) {
+        muteControl.click();
+        this.#videoElement.focus();
+      } else {
+        console.warn("mute control button not found.");
+      }
+    });
+
+    this.#shortCatsManager.registerShortcut(shortcuts.actionF, () => {
+      const fullScreenControl = document.querySelector(".vjs-fullscreen-control");
+      if (fullScreenControl) {
+        fullScreenControl.click();
+        this.#videoElement.focus();
+      } else {
+        console.warn("Full screen control button not found.");
+      }
+    });
+  }
+
+
   #videoFromStart() {
     const checkVideoTimeNotZero = setInterval(() => {
       if (this.#videoElement.currentTime > 0) {
@@ -93,15 +142,23 @@ class JutsuExtension {
     });
   }
 
+  #updateManager(){
+    this.#allManager.forEach((m) => {
+      m.update();
+    });
+  }
+
   #workOnThisPage(websitePage) {
     return websitePage.includes("episode-") || websitePage.includes("film-");
   }
 
   #enableExtension() {
-    this.#disableExtension();
+    this.#updateManager();
 
     const nextSerBtn = document.querySelector(".vjs-overlay-bottom-right");
     const skipIntroBtn = document.querySelector(".vjs-overlay-bottom-left");
+
+    this.#initializeShortcuts();
 
     if (nextSerBtn) {
       if (this.#config.nextSeriesBeforeEnd) {

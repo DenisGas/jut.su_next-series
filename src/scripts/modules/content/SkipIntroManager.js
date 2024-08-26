@@ -26,6 +26,10 @@ class SkipIntroManager {
     this.#intervalIds.push(checkSkipIntroBtnVisible);
   }
 
+  update(){
+    this.disable();
+  }
+
   disable() {
     this.#intervalIds.forEach(clearInterval);
     this.#intervalIds = [];

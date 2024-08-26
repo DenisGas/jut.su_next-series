@@ -33,6 +33,10 @@ class NextSeriesManager {
     this.#intervalIds.push(checkVideoEnded);
   }
 
+  update(){
+    this.disable();
+  }
+
   disable() {
     this.#intervalIds.forEach(clearInterval);
     this.#intervalIds = [];

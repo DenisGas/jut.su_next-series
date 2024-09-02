@@ -1,11 +1,13 @@
 // VideoSpeedManager.js
+import BaseManager from './BaseManager.js';
 
-class VideoSpeedManager {
+class VideoSpeedManager extends BaseManager{
     #videoElement;
     #intervalIds = [];
     #config;
   
     constructor(videoElement) {
+      super();
       this.#videoElement = videoElement;
     }
   

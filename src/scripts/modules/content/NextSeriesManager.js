@@ -1,10 +1,12 @@
 // NextSeriesManager.js
+import BaseManager from './BaseManager.js';
 
-class NextSeriesManager {
+class NextSeriesManager extends BaseManager {
   #videoElement;
   #intervalIds = [];
 
   constructor(videoElement) {
+    super();
     this.#videoElement = videoElement;
   }
 
@@ -33,7 +35,7 @@ class NextSeriesManager {
     this.#intervalIds.push(checkVideoEnded);
   }
 
-  update(){
+  update() {
     this.disable();
   }
 

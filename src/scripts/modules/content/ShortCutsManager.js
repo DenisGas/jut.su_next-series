@@ -1,8 +1,11 @@
-class ShortCutsManager {
+import BaseManager from './BaseManager.js';
+
+class ShortCutsManager extends BaseManager {
     #shortcuts = {};
     #eventListener;
   
     constructor() {
+      super();
       this.#initializeEventListeners();
     }
   

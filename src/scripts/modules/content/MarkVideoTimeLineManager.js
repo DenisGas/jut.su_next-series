@@ -1,10 +1,12 @@
 // MarkVideoTimeLineManager.js
+import BaseManager from './BaseManager.js';
 
-class MarkVideoTimeLineManager {
+class MarkVideoTimeLineManager  extends BaseManager{
   #videoElement;
   #videoData = {};
 
   constructor(videoElement, videoData) {
+    super();
     this.#videoElement = videoElement;
     this.#videoData = videoData;
   }

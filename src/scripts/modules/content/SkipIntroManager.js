@@ -1,11 +1,13 @@
 // SkipIntroManager.js
+import BaseManager from './BaseManager.js';
 
-class SkipIntroManager {
+class SkipIntroManager extends BaseManager{
   #videoElement;
   #videoData;
   #intervalIds = [];
 
   constructor(videoElement, videoData) {
+    super();
     this.#videoElement = videoElement;
     this.#videoData = videoData;
   }

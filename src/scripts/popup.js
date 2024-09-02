@@ -1,6 +1,7 @@
 // popup.js
 import { initializeUI } from './modules/popup/ui.js';
-import { ToggleField, DisabledExtensionCheckbox } from './modules/popup/toggleField.js';
+import { ToggleField} from './modules/popup/toggleField.js';
+import { DisabledExtensionCheckbox } from './modules/popup/DisabledExtensionCheckbox.js';
 import { Extension } from './modules/popup/extension.js';
 import { jutsuExtensionButtonsConfig, jutsuExtensionDefaultConfig } from './modules/common/Config.js';
 

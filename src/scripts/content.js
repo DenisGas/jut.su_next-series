@@ -5,7 +5,7 @@ import SkipIntroManager from "./modules/content/SkipIntroManager";
 import EventManager from "./modules/content/EventManager";
 import ConfigManager from "./modules/content/ConfigManager";
 import VideoManager from "./modules/content/VideoManager";
-// import PseudoFullscreenManager from "./modules/content/PseudoFullscreenManager";
+import PseudoFullscreenManager from "./modules/content/PseudoFullscreenManager";
 import { defaultShortcuts, getUserShortcuts, saveUserShortcuts } from './modules/content/shortcuts';
 import ShortCatsManager from './modules/content/ShortCutsManager';
 
@@ -16,7 +16,7 @@ class JutsuExtension {
   #NextSeriesManager;
   #MarkVideoTimeLineManager;
   #SkipIntroManager;
-  // #PseudoFullscreenManager;
+  #PseudoFullscreenManager;
   #allManager = [];
   #shortCatsManager;
 
@@ -46,16 +46,27 @@ class JutsuExtension {
             this.#videoData
           );
           this.#shortCatsManager = new ShortCatsManager();
-          // this.#PseudoFullscreenManager = new PseudoFullscreenManager(
-          //   this.#videoElement,
-          //   this.#config
-          // );
+          this.#PseudoFullscreenManager = new PseudoFullscreenManager(
+            this.#videoElement,
+            [
+              ".sidebar",
+              " .slicknav_menu",
+              " .header",
+              " .logo_b",
+              " .info_panel",
+              " .achiv_switcher",
+              " .video_plate_title",
+              " .header_video",
+              " .all_anime_title.aat_ep",
+              " .footer"
+          ]
+          );
           this.#allManager = [
             this.#NextSeriesManager,
             this.#SkipIntroManager,
             this.#MarkVideoTimeLineManager,
             this.#shortCatsManager,
-            // this.#PseudoFullscreenManager,
+            this.#PseudoFullscreenManager,
           ];
 
           if (this.#config.extensionEnabled) {
@@ -176,9 +187,9 @@ class JutsuExtension {
       this.#MarkVideoTimeLineManager.markVideoTimeLine();
     }
 
-    // if (this.#config.pseudoFullscreen) {
-    //   this.#PseudoFullscreenManager.updatePseudoFullscreen();
-    // }
+    if (this.#config.pseudoFullscreen) {
+      this.#PseudoFullscreenManager.start();
+    }
   }
 }
 

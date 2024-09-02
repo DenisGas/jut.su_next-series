@@ -54,14 +54,13 @@ export const jutsuExtensionButtonsConfig = {
     defaultSettings: false,
     section: 'additional'
   },
-  
-  // pseudoFullscreen: {
-  //   type: 'checkbox',
-  //   labelText: locales.pseudoFullscreen,
-  //   group: null,
-  //   defaultSettings: false,
-  //   section: 'main'
-  // },
+  pseudoFullscreen: {
+    type: 'checkbox',
+    labelText: locales.pseudoFullscreen,
+    group: null,
+    defaultSettings: false,
+    section: 'main'
+  },
 
   // clickToFullScreen: {
   //   type: 'checkbox',

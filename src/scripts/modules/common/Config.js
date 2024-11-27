@@ -70,13 +70,13 @@ export const jutsuExtensionButtonsConfig = {
   //   section: 'additional'
   // },
 
-  // addSpeedControl: {
-  //   type: 'checkbox',
-  //   labelText: locales.addSpeedControl,
-  //   group: null,
-  //   defaultSettings: false,
-  //   section: 'additional'
-  // },
+  addSpeedControl: {
+    type: 'checkbox',
+    labelText: locales.addSpeedControl,
+    group: null,
+    defaultSettings: false,
+    section: 'additional'
+  },
 
   markVideoTimeLine: {
     type: 'checkbox',

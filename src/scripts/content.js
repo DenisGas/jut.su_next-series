@@ -8,6 +8,7 @@ import VideoManager from "./modules/content/VideoManager";
 import PseudoFullscreenManager from "./modules/content/PseudoFullscreenManager";
 import { defaultShortcuts, getUserShortcuts, saveUserShortcuts } from './modules/content/shortcuts';
 import ShortCatsManager from './modules/content/ShortCutsManager';
+import VideoSpeedManager from "./modules/content/VideoSpeedManager";
 
 class JutsuExtension {
   #config = {};
@@ -19,6 +20,7 @@ class JutsuExtension {
   #PseudoFullscreenManager;
   #allManager = [];
   #shortCatsManager;
+  #VideoSpeedManager;
 
   constructor() {
     this.init();
@@ -45,6 +47,7 @@ class JutsuExtension {
             this.#videoElement,
             this.#videoData
           );
+          this.#VideoSpeedManager = new VideoSpeedManager(this.#videoElement);
           this.#shortCatsManager = new ShortCatsManager();
           this.#PseudoFullscreenManager = new PseudoFullscreenManager(
             this.#videoElement,
@@ -59,7 +62,7 @@ class JutsuExtension {
               " .header_video",
               " .all_anime_title.aat_ep",
               " .footer"
-          ]
+            ]
           );
           this.#allManager = [
             this.#NextSeriesManager,
@@ -67,6 +70,7 @@ class JutsuExtension {
             this.#MarkVideoTimeLineManager,
             this.#shortCatsManager,
             this.#PseudoFullscreenManager,
+            this.#VideoSpeedManager
           ];
 
           if (this.#config.extensionEnabled) {
@@ -153,7 +157,7 @@ class JutsuExtension {
     });
   }
 
-  #updateManager(){
+  #updateManager() {
     this.#allManager.forEach((m) => {
       m.update();
     });
@@ -189,6 +193,10 @@ class JutsuExtension {
 
     if (this.#config.pseudoFullscreen) {
       this.#PseudoFullscreenManager.start();
+    }
+
+    if (this.#config.addSpeedControl) {
+      this.#VideoSpeedManager.start();
     }
   }
 }

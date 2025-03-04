@@ -44,44 +44,51 @@ Use the extension on your phone via the [Kiwi Browser](https://play.google.com/s
 - ![Main Settings](./img/MainFutures.png)
 
 - **Enable/Disable Extension**
-   - **Toggle the entire extension on or off.**
-   - **Type:** Checkbox
+
+  - **Toggle the entire extension on or off.**
+  - **Type:** Checkbox
 
 - **Next Series Before Credits**
-   - **Automatically advance to the next episode before the current episode's credits roll.**
-   - **Type:** Radio button
+
+  - **Automatically advance to the next episode before the current episode's credits roll.**
+  - **Type:** Radio button
 
 - **Next Series After Credits**
-   - **Transition to the next episode after the credits finish.**
-   - **Type:** Radio button
+
+  - **Transition to the next episode after the credits finish.**
+  - **Type:** Radio button
 
 - **Skip Intro**
-   - **Skip the intro of each episode automatically.**
-   - **Type:** Checkbox
+
+  - **Skip the intro of each episode automatically.**
+  - **Type:** Checkbox
 
 - **Pseudo-Fullscreen Mode**
-   - **Activate a fullscreen experience without entering true fullscreen mode, enhancing focus on the video by hiding other elements.**
-   - **Type:** Checkbox
+  - **Activate a fullscreen experience without entering true fullscreen mode, enhancing focus on the video by hiding other elements.**
+  - **Type:** Checkbox
 
 #### Additional Settings
 
 - ![Additional Settings](./img/AdditionalFutures.png)
 
 - **Video from the Start**
-   - **Begin every video from its start automatically.**
-   - **Type:** Checkbox
+
+  - **Begin every video from its start automatically.**
+  - **Type:** Checkbox
 
 - **Click to Fullscreen (Overlay)**
-   - **Enter fullscreen mode with a single click on the video player for convenience.**
-   - **Type:** Checkbox
+
+  - **Enter fullscreen mode with a single click on the video player for convenience.**
+  - **Type:** Checkbox
 
 - **Add Video Speed Control**
-   - **Add a feature to adjust video playback speed according to user preference.**
-   - **Type:** Checkbox
+
+  - **Add a feature to adjust video playback speed according to user preference.**
+  - **Type:** Checkbox
 
 - **Mark Video Timeline**
-   - **Place markers on the video timeline to easily identify and skip intros and credits.**
-   - **Type:** Checkbox
+  - **Place markers on the video timeline to easily identify and skip intros and credits.**
+  - **Type:** Checkbox
 
 ## Planned Features
 
@@ -96,8 +103,6 @@ The test tube emoji (🔬) signifies that the feature is currently being tested,
 Check our [GitHub Issues page](https://github.com/DenisGas/jut.su_next-series/issues) for ongoing issues and report any new ones.
 
 - **Autoplay Not Working on Reload**
-    - **Issue:** Due to browser policies, autoplay may not work after reloading a page.
-    - **Screenshot:** ![GoogleErrorImg](./img/G_Error.png)
-    - **Workaround:** Convert the site into a [PWA](https://support.google.com/chrome_webstore/answer/3060053#zippy=%2Cadd-an-app-from-the-chrome-web-store) to enable consistent autoplay functionality after restarts, tested on Chrome and Edge.
-
-
+  - **Issue:** Due to browser policies, autoplay may not work after reloading a page.
+  - **Screenshot:** ![GoogleErrorImg](./img/G_Error.png)
+  - **Workaround:** Convert the site into a [PWA](https://support.google.com/chrome_webstore/answer/3060053#zippy=%2Cadd-an-app-from-the-chrome-web-store) to enable consistent autoplay functionality after restarts, tested on Chrome and Edge.

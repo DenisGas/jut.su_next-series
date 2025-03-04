@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@500;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@500;700&display=swap');
 
 .extension-overlay-div {
   position: fixed;
@@ -17,7 +17,7 @@
 
 .extension-overlay-div button {
   font-size: 1.5em;
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Open Sans', sans-serif;
 }
 
 .extension-overlay-button {
@@ -57,10 +57,12 @@
   max-width: 0;
   box-sizing: border-box;
   overflow: hidden;
-  transition: opacity 0.5s, visibility 0.5s, max-width 0.5s ease-in-out;
+  transition:
+    opacity 0.5s,
+    visibility 0.5s,
+    max-width 0.5s ease-in-out;
   white-space: nowrap;
 }
-
 
 .vjs-control.speed:hover .speed-range,
 .speed-range:hover {
@@ -68,7 +70,6 @@
   opacity: 1;
   max-width: 100px;
 }
-
 
 .vjs-kino-toggle {
   position: relative;
@@ -85,10 +86,7 @@
   scale: 1.2;
 }
 
-
-
 @media (hover: none) {
-
   .vjs-control.speed:hover .speed-range,
   .speed-range:hover {
     visibility: hidden;

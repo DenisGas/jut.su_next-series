@@ -1,5 +1,3 @@
-// BaseManager.js
-
 class BaseManager {
   update() {
     throw new Error('Method "update" must be implemented in a subclass');

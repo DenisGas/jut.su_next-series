@@ -1,6 +1,6 @@
 {
   "extensionDescription": {
-    "message": "An extension for jut.su that allows videos to autoplay, automatically skip anime intros, and automatically play the next episode."
+    "message": "An extension for jut.su that allows videos to play automatically, automatically skip anime intros, and automatically start the next episode."
   },
   "extension": {
     "message": "Extension"
@@ -21,30 +21,111 @@
     "message": "Skip intro"
   },
   "video_from_start": {
-    "message": "Start from the beginning"
+    "message": "Play video from the start"
   },
-  "click_to_FullScreen": {
-    "message": "Click to FullScreen (Overlay)"
+  "click_to_fullscreen": {
+    "message": "Click to fullscreen (Overlay)"
   },
   "add_speed_control": {
     "message": "Add video speed control"
   },
   "mark_video_timeline": {
-    "message": "Mark intro and credits on timeline "
+    "message": "Mark intro and credits on timeline"
   },
   "showMain": {
-    "message": "Show Main Features"
+    "message": "Show main features"
   },
   "showAdditional": {
-    "message": "Show Additional Features"
+    "message": "Show additional features"
   },
   "fullScreen": {
-    "message": "FullScreen"
+    "message": "Fullscreen"
   },
   "exit": {
     "message": "Exit"
   },
-  "pseudo_Fullscreen": {
-    "message": "Pseudo-Fullscreen"
+  "pseudo_fullscreen": {
+    "message": "Pseudo-fullscreen mode"
+  },
+  "extension_description": {
+    "message": "An extension for jut.su that allows videos to autoplay, skip anime intros, and start the next episode automatically."
+  },
+  "next_series_before_end_description": {
+    "message": "Automatically start the next episode before the credits begin."
+  },
+  "next_series_after_end_description": {
+    "message": "Automatically start the next episode after the credits end."
+  },
+  "skip_intro_description": {
+    "message": "Automatically skip anime intros to save time."
+  },
+  "video_from_start_description": {
+    "message": "Always start the video from the beginning, ignoring previous progress."
+  },
+  "pseudo_fullscreen_description": {
+    "message": "Enable pseudo-fullscreen mode without switching to fullscreen."
+  },
+  "mark_video_timeline_description": {
+    "message": "Show markers for intro and credits on the timeline."
+  },
+  "click_to_fullscreen_description": {
+    "message": "Click on the video to enter fullscreen mode with overlay."
+  },
+  "add_speed_control_description": {
+    "message": "Add a control panel to adjust video playback speed."
+  },
+  "title": {
+    "message": "Jut.su Next-Series"
+  },
+  "version": {
+    "message": "3.0.0"
+  },
+  "page_description": {
+    "message": "This page provides information about all extension features with the ability to modify them, as well as a list of available shortcuts."
+  },
+  "settings_title": {
+    "message": "Settings"
+  },
+  "settings_description": {
+    "message": "Here is a description of how various extension features work."
+  },
+  "settings_note": {
+    "message": "*All changes are applied immediately."
+  },
+  "shortcuts_title": {
+    "message": "Shortcuts"
+  },
+  "shortcuts_description": {
+    "message": "Here are the hotkeys and their functions."
+  },
+  "shortcut_numbers": {
+    "message": "Numbers 0-9"
+  },
+  "shortcut_numbers_desc": {
+    "message": "Rewind the video to the corresponding percentage of its length."
+  },
+  "shortcut_f": {
+    "message": "F"
+  },
+  "shortcut_f_desc": {
+    "message": "Toggle fullscreen mode."
+  },
+  "shortcut_m": {
+    "message": "M"
+  },
+  "shortcut_m_desc": {
+    "message": "Toggle mute."
+  },
+  "shortcut_t": {
+    "message": "T"
+  },
+  "shortcut_t_desc": {
+    "message": "Toggle pseudo-fullscreen mode."
+  },
+  "footer_text": {
+    "message": "Created by DenisGasilo"
+  },
+  "footer_link": {
+    "message": "Extension page"
   }
 }

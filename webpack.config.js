@@ -1,129 +1,64 @@
-const path = require('path');
 const fs = require('fs');
+const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
-const archiver = require('archiver');
-const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
+const ArchivePlugin = require('./webpack/archivePlugin');
+const modifyManifest = require('./webpack/modifyManifest');
+const getCopyPatterns = require('./webpack/copyPatterns');
 
-function createArchive(browserDir) {
-  const archiveDir = path.resolve(__dirname, 'dist', 'prod');
-  if (!fs.existsSync(archiveDir)) {
-    fs.mkdirSync(archiveDir, { recursive: true });
+module.exports = (env = {}) => {
+  const browserDir = path.resolve(
+    __dirname,
+    'dist',
+    process.env.BROWSER || 'chrome'
+  );
+
+  if (!fs.existsSync(browserDir)) {
+    fs.mkdirSync(browserDir, { recursive: true });
   }
 
-  const output = fs.createWriteStream(path.resolve(archiveDir, `${process.env.BROWSER || 'chrome'}.zip`));
-  const archive = archiver('zip', { zlib: { level: 9 } });
-  output.on('close', function () {
-    console.log(`Archive created: ${archive.pointer()} total bytes`);
-  });
-  archive.on('error', function (err) {
-    throw err;
-  });
+  const manifest = modifyManifest(process.env.BROWSER || 'chrome');
+  const manifestPath = path.resolve(browserDir, 'manifest.json');
+  fs.writeFileSync(manifestPath, manifest);
 
-  archive.pipe(output);
-  archive.directory(browserDir, false);
-  archive.finalize();
-}
+  const shouldClean = env.clean === 'true';
 
-class ArchivePlugin {
-  apply(compiler) {
-    compiler.hooks.afterEmit.tapPromise('ArchivePlugin', compilation => {
-      // Perform archiving only if NODE_ENV is set to 'production'
-      if (process.env.NODE_ENV !== 'production') {
-        return Promise.resolve();
-      }
-
-      const browserDir = path.resolve(__dirname, 'dist', process.env.BROWSER || 'chrome');
-      return new Promise((resolve, reject) => {
-        createArchive(browserDir);
-        resolve();
-      });
-    });
-  }
-}
-
-const baseManifestPath = path.resolve(__dirname, 'src', 'base-manifest.json');
-const baseManifest = JSON.parse(fs.readFileSync(baseManifestPath, 'utf8'));
-
-function modifyManifest(browser) {
-  const manifest = { ...baseManifest };
-  if (browser === 'firefox') {
-    manifest['manifest_version'] = 2;
-    manifest['applications'] = {
-      "gecko": {
-        "id": "jns@example.com"
-      }
-    };
-    manifest['browser_action'] = { "default_popup": "./pages/popup.html" };
-    manifest['permissions'] = [...manifest.permissions];
-  } else {
-    manifest['manifest_version'] = 3;
-    manifest['action'] = { "default_popup": "./pages/popup.html" };
-  }
-  return JSON.stringify(manifest, null, 2);
-}
-
-const browserDir = path.resolve(__dirname, 'dist', process.env.BROWSER || 'chrome');
-if (!fs.existsSync(browserDir)) {
-  fs.mkdirSync(browserDir, { recursive: true });
-}
-
-const manifest = modifyManifest(process.env.BROWSER || 'chrome');
-const manifestPath = path.resolve(browserDir, 'manifest.json');
-fs.writeFileSync(manifestPath, manifest);
-
-
-module.exports = {
-  mode: process.env.NODE_ENV,
-  devtool: 'source-map',
-  entry: {
-    popup: './src/scripts/popup.js',
-    content: './src/scripts/content.js'
-  },
-  output: {
-    path: path.resolve(browserDir, 'scripts'),
-    filename: '[name].js',
-    clean: true,
-  },
-  module: {
-    rules: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-env']
-          }
-        }
-      },
-      {
-        test: /\.css$/,
-        use: [  MiniCssExtractPlugin.loader,
-          'css-loader',
-          'postcss-loader'  
-        ]
-      }
-    ]
-  },
-  plugins: [
-    new CopyPlugin({
-      patterns: [
-        { from: 'src/_locales', to: path.resolve(browserDir, '_locales') },
-        { from: 'src/icons', to: path.resolve(browserDir, 'icons') },
-        { from: 'src/pages', to: path.resolve(browserDir, 'pages') },
-        { from: 'src/styles', to: path.resolve(browserDir, 'styles') },
-        { from: manifestPath, to: path.resolve(browserDir, 'manifest.json') }
-      ]
-    }),
-    new ArchivePlugin(),
-    new MiniCssExtractPlugin({
-      filename: '../styles/[name].css', 
-    }),
-  ],
-
+  return {
+    mode: process.env.NODE_ENV || 'development',
+    entry: {
+      background: './src/scripts/background.js',
+      settings: './src/scripts/settings.js',
+      popup: './src/scripts/popup.js',
+      content: './src/scripts/content.js',
+    },
+    output: {
+      path: path.resolve(browserDir, 'scripts'),
+      filename: '[name].js',
+      clean: shouldClean,
+    },
+    module: {
+      rules: [
+        {
+          test: /\.js$/,
+          exclude: /node_modules/,
+          use: 'babel-loader',
+        },
+        {
+          test: /\.css$/,
+          use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader'],
+        },
+      ],
+    },
+    plugins: [
+      new CopyPlugin({
+        patterns: getCopyPatterns(browserDir, manifestPath),
+      }),
+      new MiniCssExtractPlugin({
+        filename: '../styles/[name].css',
+      }),
+      new ArchivePlugin(),
+    ],
+    devtool: 'source-map',
+  };
 };
-
-
-

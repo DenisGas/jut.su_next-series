@@ -3,6 +3,7 @@ import BaseManager from './BaseManager.js';
 
 class NextSeriesManager extends BaseManager {
   #videoElement;
+
   #intervalIds = [];
 
   constructor(videoElement) {
@@ -15,7 +16,7 @@ class NextSeriesManager extends BaseManager {
     const checkVideoEnded = setInterval(() => {
       if (
         this.#videoElement.ended ||
-        !nextSerBtn.classList.contains("vjs-hidden")
+        !nextSerBtn.classList.contains('vjs-hidden')
       ) {
         clearInterval(checkVideoEnded);
         nextSerBtn.click();

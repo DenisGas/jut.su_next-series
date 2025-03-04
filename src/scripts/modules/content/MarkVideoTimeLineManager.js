@@ -1,8 +1,9 @@
 // MarkVideoTimeLineManager.js
 import BaseManager from './BaseManager.js';
 
-class MarkVideoTimeLineManager  extends BaseManager{
+class MarkVideoTimeLineManager extends BaseManager {
   #videoElement;
+
   #videoData = {};
 
   constructor(videoElement, videoData) {
@@ -18,38 +19,40 @@ class MarkVideoTimeLineManager  extends BaseManager{
       !this.#videoData ||
       Object.keys(this.#videoData).length === 0
     ) {
-      console.log("No video element or data available.");
+      console.log('No video element or data available.');
       return;
     }
 
     const progressHolder = document.querySelector(
-      ".vjs-progress-holder.vjs-slider.vjs-slider-horizontal"
+      '.vjs-progress-holder.vjs-slider.vjs-slider-horizontal'
     );
     if (!progressHolder) {
-      console.log("No progress holder found.");
+      console.log('No progress holder found.');
       return;
     }
 
     const segments = [
       {
-        id: "intro",
-        start: parseInt(this.#videoData.video_intro_start),
-        end: parseInt(this.#videoData.video_intro_end),
-        color: "yellow",
+        id: 'intro',
+        start: parseInt(this.#videoData.video_intro_start, 10),
+        end: parseInt(this.#videoData.video_intro_end, 10),
+        color: 'yellow',
       },
       {
-        id: "outro",
-        start: parseInt(this.#videoData.video_outro_start),
+        id: 'outro',
+        start: parseInt(this.#videoData.video_outro_start, 10),
         // end: parseInt(this.#videoData.this_video_duration),
-        end: parseInt(this.#videoData.video_outro_start),
-        color: "red",
+        end: parseInt(this.#videoData.video_outro_start, 10),
+        color: 'red',
       },
     ];
 
     segments.forEach((segment) => {
       if (
-        isNaN(segment.start) ||
-        isNaN(segment.end) ||
+        typeof segment.start !== 'number' ||
+        typeof segment.end !== 'number' ||
+        Number.isNaN(segment.start) ||
+        Number.isNaN(segment.end) ||
         segment.end < segment.start
       ) {
         console.log(`Skipping invalid segment: ${segment.id}`);
@@ -59,21 +62,22 @@ class MarkVideoTimeLineManager  extends BaseManager{
       const existingLine = document.getElementById(segment.id);
       if (existingLine) return;
 
-      const markLine = document.createElement("div");
+      const markLine = document.createElement('div');
       markLine.id = segment.id;
-      markLine.className = "mark-line";
-      markLine.style.position = "absolute";
-      markLine.style.width = "4px";
+      markLine.className = 'mark-line';
+      markLine.style.position = 'absolute';
+      markLine.style.width = '4px';
       if (segment.end - segment.start !== 0) {
         markLine.style.width = `${
           ((segment.end - segment.start) /
-            parseInt(this.#videoData.this_video_duration)) *
+            parseInt(this.#videoData.this_video_duration, 10)) *
           100
         }%`;
       }
-      markLine.style.height = "100%";
+      markLine.style.height = '100%';
       markLine.style.left = `${
-        (segment.start / parseInt(this.#videoData.this_video_duration)) * 100
+        (segment.start / parseInt(this.#videoData.this_video_duration, 10)) *
+        100
       }%`;
       markLine.style.background = `${segment.color}`;
 
@@ -81,12 +85,12 @@ class MarkVideoTimeLineManager  extends BaseManager{
     });
   }
 
-  update(){
+  update() {
     this.disable();
   }
 
   disable() {
-    document.querySelectorAll(".mark-line").forEach((mark) => mark.remove());
+    document.querySelectorAll('.mark-line').forEach((mark) => mark.remove());
   }
 }
 

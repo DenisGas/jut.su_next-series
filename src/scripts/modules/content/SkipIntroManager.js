@@ -1,9 +1,11 @@
 // SkipIntroManager.js
-import BaseManager from './BaseManager.js';
+import BaseManager from './BaseManager';
 
-class SkipIntroManager extends BaseManager{
+class SkipIntroManager extends BaseManager {
   #videoElement;
+
   #videoData;
+
   #intervalIds = [];
 
   constructor(videoElement, videoData) {
@@ -16,11 +18,11 @@ class SkipIntroManager extends BaseManager{
     this.disable();
     const checkSkipIntroBtnVisible = setInterval(() => {
       if (
-        !skipIntroBtn.classList.contains("vjs-hidden") ||
+        !skipIntroBtn.classList.contains('vjs-hidden') ||
         (this.#videoElement.currentTime >
-          parseInt(this.#videoData.video_intro_start) &&
+          parseInt(this.#videoData.video_intro_start, 10) &&
           this.#videoElement.currentTime <
-            parseInt(this.#videoData.video_intro_end))
+            parseInt(this.#videoData.video_intro_end, 10))
       ) {
         skipIntroBtn.click();
       }
@@ -28,7 +30,7 @@ class SkipIntroManager extends BaseManager{
     this.#intervalIds.push(checkSkipIntroBtnVisible);
   }
 
-  update(){
+  update() {
     this.disable();
   }
 

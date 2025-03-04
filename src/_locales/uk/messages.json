@@ -1,6 +1,6 @@
 {
   "extensionDescription": {
-    "message": "Розширення для jut.su, яке дозволяє відео автоматично програватися, автоматично пропускати аніме-інтро та автоматично вмикати наступну серію."
+    "message": "Розширення для jut.su, яке дозволяє відео автоматично відтворюватися, пропускати аніме-інтро та автоматично запускати наступну серію."
   },
   "extension": {
     "message": "Розширення"
@@ -18,19 +18,19 @@
     "message": "Наступна серія після титрів"
   },
   "skip_intro": {
-    "message": "Пропускати заставку"
+    "message": "Пропустити інтро"
   },
   "video_from_start": {
-    "message": "Відео з початку"
+    "message": "Відтворити відео з початку"
   },
-  "click_to_FullScreen": {
-    "message": "На весь екран по кліку (Оверлей)"
+  "click_to_fullscreen": {
+    "message": "Натисніть для переходу в повний екран (Overlay)"
   },
   "add_speed_control": {
-    "message": "Додати контроль швидкості відео"
+    "message": "Додати керування швидкістю відео"
   },
   "mark_video_timeline": {
-    "message": "Позначити заставку та титри на таймлайні"
+    "message": "Позначити інтро та титри на тимчасовій шкалі"
   },
   "showMain": {
     "message": "Показати основні функції"
@@ -38,14 +38,94 @@
   "showAdditional": {
     "message": "Показати додаткові функції"
   },
-  "fullScreen":{
-    "message": "На весь екран"
+  "fullScreen": {
+    "message": "Повний екран"
   },
-  "exit":{
-    "message": "Вийти"
+  "exit": {
+    "message": "Вихід"
   },
-  "pseudo_Fullscreen": {
-    "message": "Псевдо-повноекранний режим"
+  "pseudo_fullscreen": {
+    "message": "Псевдоповний екран"
+  },
+  "extension_description": {
+    "message": "Розширення для jut.su, яке дозволяє відео автоматично відтворюватися, пропускати аніме-інтро та запускати наступну серію автоматично."
+  },
+  "next_series_before_end_description": {
+    "message": "Автоматично почати наступну серію до титрів."
+  },
+  "next_series_after_end_description": {
+    "message": "Автоматично почати наступну серію після титрів."
+  },
+  "skip_intro_description": {
+    "message": "Автоматично пропускати інтро аніме для економії часу."
+  },
+  "video_from_start_description": {
+    "message": "Завжди починати відео з самого початку, ігноруючи попередній прогрес."
+  },
+  "pseudo_fullscreen_description": {
+    "message": "Включити псевдоповний екран без переходу в справжній повний екран."
+  },
+  "mark_video_timeline_description": {
+    "message": "Показати мітки для інтро та титрів на тимчасовій шкалі."
+  },
+  "click_to_fullscreen_description": {
+    "message": "Натискайте на відео, щоб перейти в повний екран з оверлеєм."
+  },
+  "add_speed_control_description": {
+    "message": "Додати панель для регулювання швидкості відтворення відео."
+  },
+  "title": {
+    "message": "Jut.su Наступна серія"
+  },
+  "version": {
+    "message": "3.0.0"
+  },
+  "page_description": {
+    "message": "Ця сторінка надає інформацію про всі функції розширення з можливістю їх зміни, а також список доступних гарячих клавіш."
+  },
+  "settings_title": {
+    "message": "Налаштування"
+  },
+  "settings_description": {
+    "message": "Ось опис того, як працюють різні функції розширення."
+  },
+  "settings_note": {
+    "message": "*Всі зміни застосовуються негайно."
+  },
+  "shortcuts_title": {
+    "message": "Гарячі клавіші"
+  },
+  "shortcuts_description": {
+    "message": "Ось гарячі клавіші та їх функції."
+  },
+  "shortcut_numbers": {
+    "message": "Цифри 0-9"
+  },
+  "shortcut_numbers_desc": {
+    "message": "Перемотати відео на відповідний відсоток його тривалості."
+  },
+  "shortcut_f": {
+    "message": "F"
+  },
+  "shortcut_f_desc": {
+    "message": "Перемикати повний екран."
+  },
+  "shortcut_m": {
+    "message": "M"
+  },
+  "shortcut_m_desc": {
+    "message": "Перемикати беззвучний режим."
+  },
+  "shortcut_t": {
+    "message": "T"
+  },
+  "shortcut_t_desc": {
+    "message": "Перемикати псевдоповний екран."
+  },
+  "footer_text": {
+    "message": "Створено DenisGasilo"
+  },
+  "footer_link": {
+    "message": "Сторінка розширення"
   }
-  
 }

@@ -12,7 +12,11 @@
     "prepare": "husky",
     "lint": "eslint src --ext .js",
     "lint:fix": "eslint src --ext .js --fix",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "i18n:json-to-csv": "node localization-tools/convert.js json2csv",
+    "i18n:json-to-csv:log": "node localization-tools/convert.js json2csv --log",
+    "i18n:csv-to-json": "node localization-tools/convert.js csv2json && prettier --write ./src/_locales && prettier --write ./src/scripts/modules/common/localizationKeys.js",
+    "i18n:csv-to-json:log": "node localization-tools/convert.js csv2json --log && prettier --write ./src/_locales && prettier --write ./src/scripts/modules/common/localizationKeys.js"
   },
   "lint-staged": {
     "**/*.{js}": [
@@ -36,6 +40,8 @@
     "copy-webpack-plugin": "^12.0.2",
     "cross-env": "^7.0.3",
     "css-loader": "^7.1.1",
+    "csv-parser": "^3.2.0",
+    "csv-writer": "^1.6.0",
     "eslint": "^8.57.1",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^9.1.0",

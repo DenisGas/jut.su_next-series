@@ -1,0 +1,52 @@
+Key,EN,UK,RU
+extensionDescription,"An extension for jut.su that allows videos to play automatically, skip anime intros, and automatically start the next episode.","Розширення для jut.su, яке дозволяє відео автоматично відтворюватися, пропускати аніме-інтро та автоматично запускати наступну серію.","Расширение для jut.su, которое позволяет видео воспроизводиться автоматически, пропускать аниме-интро и автоматически запускать следующую серию."
+extension_description,"An extension for jut.su that enables video autoplay, skipping anime intros, and auto-starting the next episode.","Розширення для jut.su, яке дозволяє відео автоматично відтворюватися, пропускати аніме-інтро та запускати наступну серію автоматично.","Расширение для jut.su, которое позволяет видео воспроизводиться автоматически, пропускать аниме-интро и запускать следующую серию автоматически."
+extension,Extension,Розширення,Расширение
+,,,
+status_enabled,Enabled,Увімкнено,Включено
+status_disabled,Disabled,Вимкнено,Отключено
+,,,
+next_series_before_end,Next episode before credits,Наступна серія до титрів,Следующая серия до титров
+next_series_after_end,Next episode after credits,Наступна серія після титрів,Следующая серия после титров
+skip_intro,Skip intro,Пропустити інтро,Пропустить интро
+video_from_start,Play video from the start,Відтворити відео з початку,Воспроизвести видео с начала
+,,,
+click_to_fullscreen,Fullscreen on click (Overlay),На весь екран по кліку (Оверлей),Полноэкранный режим по клику (Оверлей)
+add_speed_control,Add video speed control,Додати керування швидкістю відео,Добавить управление скоростью видео
+mark_video_timeline,Mark intro and credits on timeline,Позначити інтро та титри на таймлайні,Отметить интро и титры на таймлайне
+pseudo_fullscreen,Pseudo-fullscreen mode,Псевдо-повноекранний режим,Псевдо-полноэкранный режим
+fullScreen,Fullscreen,Фулскрін,Полноэкранный режим
+exit,Exit,Вихід,Выход
+showMain,Show main features,Показати основні функції,Показать основные функции
+showAdditional,Show additional features,Показати додаткові функції,Показать дополнительные функции
+open_settings_and_help,Open settings and help,Відкрити налаштування та довідку,Открыть настройки и справку
+,,,
+next_series_before_end_description,Automatically start the next episode before credits begin.,Автоматично почати наступну серію до титрів.,Автоматически начать следующую серию до начала титров.
+next_series_after_end_description,Automatically start the next episode after credits end.,Автоматично почати наступну серію після титрів.,Автоматически начать следующую серию после окончания титров.
+skip_intro_description,Automatically skip anime intros to save time.,Автоматично пропускати інтро аніме для економії часу.,"Автоматически пропускать интро аниме, чтобы сэкономить время."
+video_from_start_description,"Always start the video from the beginning, ignoring previous progress.","Завжди починати відео з самого початку, ігноруючи попередній прогрес.","Всегда начинать видео с самого начала, игнорируя предыдущий прогресс."
+click_to_fullscreen_description,"An overlay with two zones is created: ""Fullscreen"" and ""Exit"". Click ""Fullscreen"" to enter fullscreen mode or ""Exit"" to close the overlay. This feature was primarily designed for mobile devices, where you first need to tap the player and then a button to activate fullscreen.","Створюється оверлей з двома зонами: ""Фулскрін"" та ""Вихід"". Натискайте на ""Фулскрін"", щоб перейти в повний екран, або на ""Вихід"", щоб закрити оверлей. Ця функція була розроблена переважно для мобільних пристроїв, де спочатку потрібно натискати на плеєр, а потім на кнопку для активації повного екрану.","Создается оверлей с двумя зонами: ""Полноэкранный режим"" и ""Выход"". Нажмите ""Полноэкранный режим"", чтобы войти в полноэкранный режим, или ""Выход"", чтобы закрыть оверлей. Эта функция разработана в основном для мобильных устройств, где сначала нужно нажать на плеер, а затем на кнопку для активации полноэкранного режима."
+add_speed_control_description,Add a panel to adjust video playback speed.,Додати панель для регулювання швидкості відтворення відео.,Добавить панель для регулировки скорости воспроизведения видео.
+mark_video_timeline_description,"Show markers for intro and credits on the timeline: Yellow marker — for the opening. Red marker — for the start of credits. This data is taken directly from the player, but sometimes markers may be missing.","Показати мітки для інтро та титрів на таймлайні: Жовта мітка — для опенінгу. Червона мітка — для початку титрів. Ці дані беруться прямо з плеєра, але буває, що мітки можуть бути відсутніми.","Показывать метки для интро и титров на временной шкале: Желтая метка — для опенинга. Красная метка — для начала титров. Эти данные берутся напрямую из плеера, но иногда метки могут отсутствовать."
+pseudo_fullscreen_description,"Enable Pseudo-fullscreen mode. In this mode, you retain access to the player, and in Chrome, the cursor automatically hides if the mouse isn’t moved for a while. A button to toggle this mode also appears in the player. This feature primarily creates this button, allowing you to switch modes. 💡 Quick toggle: press ""T"" on the keyboard. Toggling doesn’t fully disable the feature but changes its state — the button remains available even if pseudo-fullscreen is off. Additionally: If you activate the browser’s fullscreen mode (F11), pseudo-fullscreen acts as normal and stays enabled even after moving to the next episode.","Увімкніть Псевдо-повноекранний режим. У цьому режимі ви зберігаєте доступ до плеєра, а в Chrome курсор автоматично ховається, якщо довго не рухати мишку. Також у плеєрі з’явиться кнопка для перемикання цього режиму. Взагалі ця функція в основі саме створює цю кнопку і через неї ви вже перемикаєте режими. 💡 Швидке перемикання: натисніть ""T"" на клавіатурі. Перемикання не вимикає функцію повністю, а лише змінює її стан – кнопка в плеєрі залишається доступною, навіть якщо псевдо-фулскрін вимкнено. Додатково: Якщо активувати повноекранний режим браузера (F11), псевдо-фулскрін буде як звичайний і залишиться увімкненим навіть після переходу на наступну серію.","Включите псевдо-полноэкранный режим. В этом режиме вы сохраняете доступ к плееру, а в Chrome курсор автоматически скрывается, если долго не двигать мышью. В плеере также появится кнопка для переключения этого режима. Эта функция в основном создает эту кнопку, через которую вы переключаете режимы. 💡 Быстрое переключение: нажмите ""T"" на клавиатуре. Переключение не отключает функцию полностью, а лишь меняет ее состояние — кнопка в плеере остается доступной, даже если псевдо-полноэкранный режим выключен. Дополнительно: если активировать полноэкранный режим браузера (F11), псевдо-полноэкранный режим работает как обычный и остается включенным даже после перехода к следующей серии."
+,,,
+title,Jut.su Next-Series,Jut.su Next-Series,Jut.su Следующая серия
+version,3.0.0,3.0.0,3.0.0
+page_description,"This page provides information about all extension features, allowing you to modify them, along with a list of available shortcuts.","Ця сторінка надає інформацію про всі функції розширення з можливістю їх зміни, а також список доступних гарячих клавіш.","Эта страница предоставляет информацию обо всех функциях расширения с возможностью их изменения, а также список доступных горячих клавиш."
+settings_title,Settings,Налаштування,Настройки
+settings_description,"Here’s a description of how various extension features work.","Ось опис того, як працюють різні функції розширення.","Вот описание того, как работают различные функции расширения."
+settings_note,*All changes are applied immediately.,*Всі зміни застосовуються негайно.,*Все изменения применяются немедленно.
+,,,
+shortcuts_title,Shortcuts,Гарячі клавіші,Горячие клавиши
+shortcuts_description,Here are the shortcuts and their functions.,Ось гарячі клавіші та їх функції.,Здесь указаны горячие клавиши и их функции.
+shortcut_numbers,Numbers 0-9,Цифри 0-9,Цифры 0-9
+shortcut_numbers_desc,Rewind the video to the corresponding percentage of its duration.,Перемотати відео на відповідний відсоток його тривалості.,Перемотать видео на соответствующий процент его продолжительности.
+shortcut_f,F,F,F
+shortcut_f_desc,Toggle fullscreen mode.,Перемикати повний екран.,Переключить полноэкранный режим.
+shortcut_m,M,M,M
+shortcut_m_desc,Toggle mute.,Перемикати беззвучний режим.,Переключить беззвучный режим.
+shortcut_t,T,T,T
+shortcut_t_desc,"Toggle Pseudo-fullscreen mode. (Works only when the ""Pseudo-fullscreen mode"" feature is enabled.)","Перемикати Псевдо-повноекранний режим. (Працює тільки при ввімкнутій функції ""Псевдо-повноекранний режим"")","Переключить псевдо-полноэкранный режим. (Работает только при включенной функции ""Псевдо-полноэкранный режим"".)"
+,,,
+footer_text,Created by DenisGasilo,Створено DenisGasilo,Создано DenisGasilo
+footer_link,Extension page,Сторінка розширення,Страница расширения

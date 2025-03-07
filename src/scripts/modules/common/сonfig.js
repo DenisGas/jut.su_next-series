@@ -1,4 +1,5 @@
-import { getLocales, localizationKeys } from './locales';
+import { getLocales } from './locales';
+import localizationKeys from './localizationKeys';
 
 const locales = getLocales();
 

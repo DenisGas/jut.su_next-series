@@ -1,6 +1,9 @@
 {
   "extensionDescription": {
-    "message": "An extension for jut.su that allows videos to play automatically, automatically skip anime intros, and automatically start the next episode."
+    "message": "An extension for jut.su that allows videos to play automatically, skip anime intros, and automatically start the next episode."
+  },
+  "extension_description": {
+    "message": "An extension for jut.su that enables video autoplay, skipping anime intros, and auto-starting the next episode."
   },
   "extension": {
     "message": "Extension"
@@ -24,7 +27,7 @@
     "message": "Play video from the start"
   },
   "click_to_fullscreen": {
-    "message": "Click to fullscreen (Overlay)"
+    "message": "Fullscreen on click (Overlay)"
   },
   "add_speed_control": {
     "message": "Add video speed control"
@@ -32,11 +35,8 @@
   "mark_video_timeline": {
     "message": "Mark intro and credits on timeline"
   },
-  "showMain": {
-    "message": "Show main features"
-  },
-  "showAdditional": {
-    "message": "Show additional features"
+  "pseudo_fullscreen": {
+    "message": "Pseudo-fullscreen mode"
   },
   "fullScreen": {
     "message": "Fullscreen"
@@ -44,17 +44,20 @@
   "exit": {
     "message": "Exit"
   },
-  "pseudo_fullscreen": {
-    "message": "Pseudo-fullscreen mode"
+  "showMain": {
+    "message": "Show main features"
   },
-  "extension_description": {
-    "message": "An extension for jut.su that allows videos to autoplay, skip anime intros, and start the next episode automatically."
+  "showAdditional": {
+    "message": "Show additional features"
+  },
+  "open_settings_and_help": {
+    "message": "Open settings and help"
   },
   "next_series_before_end_description": {
-    "message": "Automatically start the next episode before the credits begin."
+    "message": "Automatically start the next episode before credits begin."
   },
   "next_series_after_end_description": {
-    "message": "Automatically start the next episode after the credits end."
+    "message": "Automatically start the next episode after credits end."
   },
   "skip_intro_description": {
     "message": "Automatically skip anime intros to save time."
@@ -62,17 +65,17 @@
   "video_from_start_description": {
     "message": "Always start the video from the beginning, ignoring previous progress."
   },
-  "pseudo_fullscreen_description": {
-    "message": "Enable pseudo-fullscreen mode without switching to fullscreen."
-  },
-  "mark_video_timeline_description": {
-    "message": "Show markers for intro and credits on the timeline."
-  },
   "click_to_fullscreen_description": {
-    "message": "Click on the video to enter fullscreen mode with overlay."
+    "message": "An overlay with two zones is created: \"Fullscreen\" and \"Exit\". Click \"Fullscreen\" to enter fullscreen mode or \"Exit\" to close the overlay. This feature was primarily designed for mobile devices, where you first need to tap the player and then a button to activate fullscreen."
   },
   "add_speed_control_description": {
-    "message": "Add a control panel to adjust video playback speed."
+    "message": "Add a panel to adjust video playback speed."
+  },
+  "mark_video_timeline_description": {
+    "message": "Show markers for intro and credits on the timeline: Yellow marker — for the opening. Red marker — for the start of credits. This data is taken directly from the player, but sometimes markers may be missing."
+  },
+  "pseudo_fullscreen_description": {
+    "message": "Enable Pseudo-fullscreen mode. In this mode, you retain access to the player, and in Chrome, the cursor automatically hides if the mouse isn’t moved for a while. A button to toggle this mode also appears in the player. This feature primarily creates this button, allowing you to switch modes. 💡 Quick toggle: press \"T\" on the keyboard. Toggling doesn’t fully disable the feature but changes its state — the button remains available even if pseudo-fullscreen is off. Additionally: If you activate the browser’s fullscreen mode (F11), pseudo-fullscreen acts as normal and stays enabled even after moving to the next episode."
   },
   "title": {
     "message": "Jut.su Next-Series"
@@ -81,13 +84,13 @@
     "message": "3.0.0"
   },
   "page_description": {
-    "message": "This page provides information about all extension features with the ability to modify them, as well as a list of available shortcuts."
+    "message": "This page provides information about all extension features, allowing you to modify them, along with a list of available shortcuts."
   },
   "settings_title": {
     "message": "Settings"
   },
   "settings_description": {
-    "message": "Here is a description of how various extension features work."
+    "message": "Here’s a description of how various extension features work."
   },
   "settings_note": {
     "message": "*All changes are applied immediately."
@@ -96,13 +99,13 @@
     "message": "Shortcuts"
   },
   "shortcuts_description": {
-    "message": "Here are the hotkeys and their functions."
+    "message": "Here are the shortcuts and their functions."
   },
   "shortcut_numbers": {
     "message": "Numbers 0-9"
   },
   "shortcut_numbers_desc": {
-    "message": "Rewind the video to the corresponding percentage of its length."
+    "message": "Rewind the video to the corresponding percentage of its duration."
   },
   "shortcut_f": {
     "message": "F"
@@ -120,7 +123,7 @@
     "message": "T"
   },
   "shortcut_t_desc": {
-    "message": "Toggle pseudo-fullscreen mode."
+    "message": "Toggle Pseudo-fullscreen mode. (Works only when the \"Pseudo-fullscreen mode\" feature is enabled.)"
   },
   "footer_text": {
     "message": "Created by DenisGasilo"

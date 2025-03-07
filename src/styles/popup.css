@@ -182,10 +182,14 @@ input:disabled {
   border-top: solid 2px var(--bnts-hover-color);
 }
 
-.button-container:nth-of-type(n + 2) {
-  margin-top: 20px;
+.button-container_second {
+  /* margin-top: 20px; */
   border-top: solid transparent 0px;
-  background-color: #272827;
+  /* background-color: #272827; */
+}
+
+.button-container_second button {
+  background: beige;
 }
 
 #toggle-settings,

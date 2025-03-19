@@ -30,7 +30,7 @@ const storage = {
       const data = {};
       data[key] = value;
       await Browser.storage.sync.set(data);
-      console.log(`Item with key "${key}" saved in sync storage:`, value);
+      // console.log(`Item with key "${key}" saved in sync storage:`, value);
     } catch (error) {
       console.error(
         `Error saving item with key "${key}" in sync storage:`,
@@ -47,7 +47,7 @@ const storage = {
   async removeItem(key) {
     try {
       await Browser.storage.sync.remove(key);
-      console.log(`Item with key "${key}" removed from sync storage.`);
+      // console.log(`Item with key "${key}" removed from sync storage.`);
     } catch (error) {
       console.error(
         `Error removing item with key "${key}" from sync storage:`,
@@ -64,7 +64,7 @@ const storage = {
   async getLocalItem(key) {
     try {
       const result = await Browser.storage.local.get(key);
-      console.log(`Loading from local storage: ${key} =`, result[key]);
+      // console.log(`Loading from local storage: ${key} =`, result[key]);
       return key in result ? result[key] : null;
     } catch (error) {
       console.error(`Error retrieving ${key} from local storage:`, error);
@@ -83,7 +83,7 @@ const storage = {
       const data = {};
       data[key] = value;
       await Browser.storage.local.set(data);
-      console.log(`Item with key "${key}" saved in local storage:`, value);
+      // console.log(`Item with key "${key}" saved in local storage:`, value);
     } catch (error) {
       console.error(
         `Error saving item with key "${key}" in local storage:`,
@@ -100,7 +100,7 @@ const storage = {
   async removeLocalItem(key) {
     try {
       await Browser.storage.local.remove(key);
-      console.log(`Item with key "${key}" removed from local storage.`);
+      // console.log(`Item with key "${key}" removed from local storage.`);
     } catch (error) {
       console.error(
         `Error removing item with key "${key}" from local storage:`,

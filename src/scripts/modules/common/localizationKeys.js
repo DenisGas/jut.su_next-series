@@ -43,5 +43,7 @@ const localizationKeys = {
   shortcut_t_desc: 'shortcut_t_desc',
   footer_text: 'footer_text',
   footer_link: 'footer_link',
+  cinema_mode_enabled_title: 'cinema_mode_enabled_title',
+  cinema_mode_disabled_title: 'cinema_mode_disabled_title',
 };
 export default localizationKeys;

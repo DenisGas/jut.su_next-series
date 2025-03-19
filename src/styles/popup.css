@@ -183,6 +183,7 @@ input:disabled {
 }
 
 .button-container_second {
+  padding-top: 0;
   /* margin-top: 20px; */
   border-top: solid transparent 0px;
   /* background-color: #272827; */

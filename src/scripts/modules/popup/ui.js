@@ -27,7 +27,7 @@ function toggleSections(locales, mainSection, additionalSection, toggleBtn) {
 // Главная функция инициализации UI
 export default function initializeUI() {
   const locales = getLocales();
-  console.log('Loaded locales:', locales);
+  // console.log('Loaded locales:', locales);
 
   const toggleBtn = document.getElementById('toggle-settings');
   const mainSection = document.getElementById('main-section');

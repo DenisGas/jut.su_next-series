@@ -34,9 +34,9 @@ const buttons = Object.entries(jutsuExtensionButtonsConfig).map(
 );
 
 /**
- * Создаёт элемент описания для кнопки.
+ * Создаёт элемент описания для кнопки с поддержкой HTML-разметки.
  *
- * @param {string} description - Текст описания.
+ * @param {string} description - Текст описания с возможной HTML-разметкой.
  * @param {string} [imageSrc] - Опциональный путь к изображению.
  * @returns {HTMLElement} - Контейнер с описанием и разделительной линией.
  */
@@ -44,15 +44,15 @@ function createButtonDescriptionElement(description, imageSrc = null) {
   const container = document.createElement('div');
   container.classList.add('button-description');
 
-  const descText = document.createElement('p');
-  descText.textContent = description;
+  const descText = document.createElement('div'); // Используем div вместо p для большей гибкости
+  descText.innerHTML = description; // Вставляем HTML напрямую
   container.appendChild(descText);
 
   if (imageSrc) {
     const img = document.createElement('img');
     img.src = imageSrc;
     img.alt = 'Описание';
-    img.classList.add('description-image'); // Можно стилизовать через CSS
+    img.classList.add('description-image');
     container.appendChild(img);
   }
 
@@ -132,7 +132,7 @@ buttons.forEach((button) => {
 function applyLocalization(locales) {
   document.querySelectorAll('[data-locale]').forEach((el) => {
     const key = el.getAttribute('data-locale');
-    el.textContent = locales[key] || `Missing: ${key}`;
+    el.innerHTML = locales[key] || `Missing: ${key}`;
   });
 }
 
@@ -140,6 +140,6 @@ function applyLocalization(locales) {
 const extension = new Extension(buttons, jutsuExtensionDefaultConfig);
 
 const locales = getLocales();
-console.log('Loaded locales:', locales);
+// console.log('Loaded locales:', locales);
 
 applyLocalization(locales);

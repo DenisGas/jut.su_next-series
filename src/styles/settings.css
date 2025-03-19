@@ -364,3 +364,48 @@ footer {
   box-shadow: none;
   background: none;
 }
+
+.button-description {
+  text-align: start;
+  color: white;
+}
+
+.button-description b {
+  font-weight: 700;
+}
+
+.button-description span {
+  color: #a9a9a9;
+}
+
+.button-description img {
+  max-width: 100%;
+  margin-top: 8px;
+}
+
+.button-description .note {
+  color: #666;
+}
+
+.button-description .benefit {
+  font-weight: bold;
+}
+
+.button-description .options {
+  font-weight: bold;
+}
+
+.button-description .tip {
+  font-style: italic;
+}
+
+.button-description .example {
+  font-style: italic;
+}
+
+.button-description .yellow {
+  color: yellow;
+}
+.button-description .red {
+  color: rgb(255, 63, 63);
+}

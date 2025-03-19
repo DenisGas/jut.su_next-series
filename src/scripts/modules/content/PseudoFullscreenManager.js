@@ -2,9 +2,13 @@ import storage from '../common/storage.js';
 import BaseManager from './BaseManager.js';
 import fullScreenObserver from './helpers/FullScreenObserver.js';
 import MouseManager from './helpers/mouseManager.js';
+import localizationKeys from '../common/localizationKeys.js';
+import { getI18nMessage } from '../common/locales.js';
 
 class PseudoFullscreenManager extends BaseManager {
   #videoElement;
+
+  #handleEscape = null;
 
   #mouseManager;
 
@@ -15,11 +19,11 @@ class PseudoFullscreenManager extends BaseManager {
   #btnStateObj = {
     enabled: {
       html: '<span class="kino-mode-icon kino"><svg height="100%" version="1.1" viewBox="0 0 36 36" width="100%"><use class="ytp-svg-shadow" xlink:href="#ytp-id-30"></use><path d="m 28,11 0,14 -20,0 0,-14 z m -18,2 16,0 0,10 -16,0 0,-10 z" fill="#fff" fill-rule="evenodd" id="ytp-id-30"></path></svg></span>',
-      title: `'Enable cinema mode' (T)`,
+      title: getI18nMessage(localizationKeys.cinema_mode_enabled_title),
     },
     disabled: {
       html: '<span class="kino-mode-icon kino"><svg height="100%" version="1.1" viewBox="0 0 36 36" width="100%"><use class="ytp-svg-shadow" xlink:href="#ytp-id-98"></use><path d="m 26,13 0,10 -16,0 0,-10 z m -14,2 12,0 0,6 -12,0 0,-6 z" fill="#fff" fill-rule="evenodd" id="ytp-id-98"></path></svg></span>',
-      title: `'Disable cinema mode' (T)`,
+      title: getI18nMessage(localizationKeys.cinema_mode_disabled_title),
     },
   };
 
@@ -113,7 +117,7 @@ class PseudoFullscreenManager extends BaseManager {
 
   async loadStatusPseudoFullscreen() {
     const data = await storage.getLocalItem('pseudoFullscreenIsActive');
-    console.log('data', data);
+    // console.log('data', data);
 
     return data !== undefined ? data : false;
   }
@@ -128,6 +132,13 @@ class PseudoFullscreenManager extends BaseManager {
     this.#applyStyles();
     this.elementsToHide.forEach((el) => el?.classList.add('hidden'));
     this.setBtnState(true);
+
+    this.#handleEscape = (event) => {
+      if (event.key === 'Escape' && this.#isActive) {
+        this.toggle();
+      }
+    };
+    document.addEventListener('keydown', this.#handleEscape);
   }
 
   #deactivate() {
@@ -136,6 +147,11 @@ class PseudoFullscreenManager extends BaseManager {
     this.setBtnState(false);
     this.#scrollToPlayer();
     this.#mouseManager.disable();
+
+    if (this.#handleEscape) {
+      document.removeEventListener('keydown', this.#handleEscape);
+      this.#handleEscape = null;
+    }
   }
 
   disable() {

@@ -3,7 +3,7 @@
     "message": "An extension for jut.su that allows videos to play automatically, skip anime intros, and automatically start the next episode."
   },
   "extension_description": {
-    "message": "An extension for jut.su that enables video autoplay, skipping anime intros, and auto-starting the next episode."
+    "message": "Turns the extension on or off.<br><span class='note'>When off, all features stop working. In Firefox (and some browsers), allow autoplay in the tab for episode auto-start.</span>"
   },
   "extension": {
     "message": "Extension"
@@ -54,28 +54,28 @@
     "message": "Open settings and help"
   },
   "next_series_before_end_description": {
-    "message": "Automatically start the next episode before credits begin."
+    "message": "Switches to the next episode as soon as credits start.<br><span class='note'>Triggers when the credits begin rolling.</span>"
   },
   "next_series_after_end_description": {
-    "message": "Automatically start the next episode after credits end."
+    "message": "Switches to the next episode after credits end.<br><span class='note'>Waits until the video is fully done.</span>"
   },
   "skip_intro_description": {
-    "message": "Automatically skip anime intros to save time."
+    "message": "Skips anime intros automatically.<br><span class='benefit'>Saves time for faster watching.</span>"
   },
   "video_from_start_description": {
-    "message": "Always start the video from the beginning, ignoring previous progress."
+    "message": "Starts videos from the beginning, ignoring past progress.<br><span class='benefit'>Perfect for rewatching.</span>"
   },
   "click_to_fullscreen_description": {
-    "message": "An overlay with two zones is created: \"Fullscreen\" and \"Exit\". Click \"Fullscreen\" to enter fullscreen mode or \"Exit\" to close the overlay. This feature was primarily designed for mobile devices, where you first need to tap the player and then a button to activate fullscreen."
+    "message": "Adds an overlay for quick fullscreen access.<br><span class='option'>Fullscreen:</span> Go fullscreen<br><span class='option'>Exit:</span> Close the overlay<br><span class='note'>Designed for phones to replace two taps with one click.</span>"
   },
   "add_speed_control_description": {
-    "message": "Add a panel to adjust video playback speed."
+    "message": "Adds a speed control panel to the player.<br>A button appears, and on hover, a slider pops up.<br><span class='options'>Speeds: 0.5x to 2x, adjustable in 0.1 steps.</span>"
   },
   "mark_video_timeline_description": {
-    "message": "Show markers for intro and credits on the timeline: Yellow marker — for the opening. Red marker — for the start of credits. This data is taken directly from the player, but sometimes markers may be missing."
+    "message": "Shows markers on the timeline:<br>- <span class='option yellow'>Yellow:</span> Opening<br>- <span class='option red'>Red:</span> Credits start<br><span class='note'>Uses player data; markers might sometimes be missing.</span>"
   },
   "pseudo_fullscreen_description": {
-    "message": "Enable Pseudo-fullscreen mode. In this mode, you retain access to the player, and in Chrome, the cursor automatically hides if the mouse isn’t moved for a while. A button to toggle this mode also appears in the player. This feature primarily creates this button, allowing you to switch modes. 💡 Quick toggle: press \"T\" on the keyboard. Toggling doesn’t fully disable the feature but changes its state — the button remains available even if pseudo-fullscreen is off. Additionally: If you activate the browser’s fullscreen mode (F11), pseudo-fullscreen acts as normal and stays enabled even after moving to the next episode."
+    "message": "Turns on Pseudo-fullscreen mode.<br>You can still use the player controls.<br>In Chrome, the cursor hides if you don’t move the mouse.<br>A button appears in the player to turn it on or off.<br><span class='tip'>Press 'T' for a quick switch.</span><br><span class='note'>The button stays even when the mode is off. In browser fullscreen (F11), it acts like true fullscreen—only the video player is visible—and works across episodes.</span>"
   },
   "title": {
     "message": "Jut.su Next-Series"
@@ -93,7 +93,7 @@
     "message": "Here’s a description of how various extension features work."
   },
   "settings_note": {
-    "message": "*All changes are applied immediately."
+    "message": "<span class='note'>All changes are applied immediately.</span>"
   },
   "shortcuts_title": {
     "message": "Shortcuts"
@@ -105,30 +105,36 @@
     "message": "Numbers 0-9"
   },
   "shortcut_numbers_desc": {
-    "message": "Rewind the video to the corresponding percentage of its duration."
+    "message": "Jump to a percentage of the video.<br><span class='example'>'0' starts from the beginning, '5' jumps to the middle.</span>"
   },
   "shortcut_f": {
     "message": "F"
   },
   "shortcut_f_desc": {
-    "message": "Toggle fullscreen mode."
+    "message": "Switches to fullscreen mode.<br><span class='benefit'>Quickly changes the viewing size.</span>"
   },
   "shortcut_m": {
     "message": "M"
   },
   "shortcut_m_desc": {
-    "message": "Toggle mute."
+    "message": "Turns sound on or off.<br><span class='tip'>Mute without pausing.</span>"
   },
   "shortcut_t": {
     "message": "T"
   },
   "shortcut_t_desc": {
-    "message": "Toggle Pseudo-fullscreen mode. (Works only when the \"Pseudo-fullscreen mode\" feature is enabled.)"
+    "message": "Switches Pseudo-fullscreen mode.<br><span class='note'>Works only if 'Pseudo-fullscreen mode' is on.</span>"
   },
   "footer_text": {
     "message": "Created by DenisGasilo"
   },
   "footer_link": {
     "message": "Extension page"
+  },
+  "cinema_mode_enabled_title": {
+    "message": "Enable cinema mode (T)"
+  },
+  "cinema_mode_disabled_title": {
+    "message": "Disable cinema mode (T)"
   }
 }

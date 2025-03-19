@@ -12,13 +12,13 @@ class VideoSpeedManager extends BaseManager {
   async updatePlaybackRate(rate) {
     if (this.#videoElement) {
       this.#videoElement.playbackRate = rate;
-      console.log('Updated playback rate:', rate);
+      // console.log('Updated playback rate:', rate);
     }
   }
 
   async savePlaybackRate(rate) {
     await storage.setLocalItem('videoPlaybackRate', rate);
-    console.log('Saved playback rate:', rate);
+    // console.log('Saved playback rate:', rate);
   }
 
   async loadPlaybackRate() {
@@ -63,7 +63,7 @@ class VideoSpeedManager extends BaseManager {
 
   disable() {
     this.updatePlaybackRate(1.0);
-    console.log('Playback rate reset to default (1.0)');
+    // console.log('Playback rate reset to default (1.0)');
     this.removeSpeedControl();
   }
 

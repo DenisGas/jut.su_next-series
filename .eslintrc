@@ -1,0 +1,25 @@
+{
+    "env": {
+      "webextensions": true,
+      "browser": true,
+      "es2022": true,
+      "node": true
+    },
+    "extends": [
+      "eslint:recommended",
+      "airbnb-base",
+      "prettier"
+    ],
+    "parserOptions": {
+      "ecmaVersion": 2022,
+      "sourceType": "module"
+    },
+    "plugins": ["prettier"],
+    "rules": {
+      "prettier/prettier": ["error"],
+      "no-console": ["off"],
+      "class-methods-use-this":["off"],
+      "import/extensions":["off"]
+    }
+  }
+  

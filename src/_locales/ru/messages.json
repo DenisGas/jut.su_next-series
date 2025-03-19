@@ -1,0 +1,140 @@
+{
+  "extensionDescription": {
+    "message": "Расширение для jut.su, которое позволяет видео воспроизводиться автоматически, пропускать аниме-интро и автоматически запускать следующую серию."
+  },
+  "extension_description": {
+    "message": "Включает или отключает расширение.<br><span class='note'>Если отключено, все функции перестают работать. В Firefox (и некоторых браузерах) разрешите автозапуск во вкладке для автозапуска серий.</span>"
+  },
+  "extension": {
+    "message": "Расширение"
+  },
+  "status_enabled": {
+    "message": "Включено"
+  },
+  "status_disabled": {
+    "message": "Отключено"
+  },
+  "next_series_before_end": {
+    "message": "Следующая серия до титров"
+  },
+  "next_series_after_end": {
+    "message": "Следующая серия после титров"
+  },
+  "skip_intro": {
+    "message": "Пропустить интро"
+  },
+  "video_from_start": {
+    "message": "Воспроизвести видео с начала"
+  },
+  "click_to_fullscreen": {
+    "message": "Полноэкранный режим по клику (Оверлей)"
+  },
+  "add_speed_control": {
+    "message": "Добавить управление скоростью видео"
+  },
+  "mark_video_timeline": {
+    "message": "Отметить интро и титры на таймлайне"
+  },
+  "pseudo_fullscreen": {
+    "message": "Псевдо-полноэкранный режим"
+  },
+  "fullScreen": {
+    "message": "Полноэкранный режим"
+  },
+  "exit": {
+    "message": "Выход"
+  },
+  "showMain": {
+    "message": "Показать основные функции"
+  },
+  "showAdditional": {
+    "message": "Показать дополнительные функции"
+  },
+  "open_settings_and_help": {
+    "message": "Открыть настройки и справку"
+  },
+  "next_series_before_end_description": {
+    "message": "Переключает на следующую серию, как только начинаются титры.<br><span class='note'>Срабатывает, когда титры появляются.</span>"
+  },
+  "next_series_after_end_description": {
+    "message": "Переключает на следующую серию после титров.<br><span class='note'>Ждёт, пока видео полностью закончится.</span>"
+  },
+  "skip_intro_description": {
+    "message": "Пропускает интро аниме автоматически.<br><span class='benefit'>Экономит время для быстрого просмотра.</span>"
+  },
+  "video_from_start_description": {
+    "message": "Начинает видео с начала, игнорируя прошлый прогресс.<br><span class='benefit'>Отлично для повторного просмотра.</span>"
+  },
+  "click_to_fullscreen_description": {
+    "message": "Добавляет оверлей для быстрого входа в полноэкранный режим.<br><span class='option'>Полноэкранный режим:</span> Войти в полноэкранный режим<br><span class='option'>Выход:</span> Закрыть оверлей<br><span class='note'>Создано для телефонов, чтобы заменить два нажатия одним кликом.</span>"
+  },
+  "add_speed_control_description": {
+    "message": "Добавляет панель управления скоростью в плеер.<br>Появляется кнопка, а при наведении — ползунок.<br><span class='options'>Скорости: от 0.5x до 2x, шаг 0.1.</span>"
+  },
+  "mark_video_timeline_description": {
+    "message": "Показывает метки на временной шкале:<br>- <span class='option yellow'>Желтая:</span> Опенинг<br>- <span class='option red'>Красная:</span> Начало титров<br><span class='note'>Использует данные плеера; метки могут иногда отсутствовать.</span>"
+  },
+  "pseudo_fullscreen_description": {
+    "message": "Включите псевдо-полноэкранный режим.<br>Вы можете управлять плеером.<br>В Chrome курсор исчезает, если не двигать мышью.<br>В плеере появляется кнопка для включения или выключения.<br><span class='tip'>Нажмите 'T' для быстрого переключения.</span><br><span class='note'>Кнопка остаётся, даже если режим выключен. В полноэкранном режиме браузера (F11) выглядит как настоящий полноэкранный — виден только плеер с видео — и работает для следующих серий.</span>"
+  },
+  "title": {
+    "message": "Jut.su Next-Series"
+  },
+  "version": {
+    "message": "3.0.0"
+  },
+  "page_description": {
+    "message": "Эта страница предоставляет информацию обо всех функциях расширения с возможностью их изменения, а также список доступных горячих клавиш."
+  },
+  "settings_title": {
+    "message": "Настройки"
+  },
+  "settings_description": {
+    "message": "Вот описание того, как работают различные функции расширения."
+  },
+  "settings_note": {
+    "message": "<span class='note'>Все изменения применяются немедленно.</span>"
+  },
+  "shortcuts_title": {
+    "message": "Горячие клавиши"
+  },
+  "shortcuts_description": {
+    "message": "Здесь указаны горячие клавиши и их функции."
+  },
+  "shortcut_numbers": {
+    "message": "Цифры 0-9"
+  },
+  "shortcut_numbers_desc": {
+    "message": "Перейти к проценту видео.<br><span class='example'>'0' — начало, '5' — середина.</span>"
+  },
+  "shortcut_f": {
+    "message": "F"
+  },
+  "shortcut_f_desc": {
+    "message": "Переключает на полноэкранный режим.<br><span class='benefit'>Быстро меняет размер просмотра.</span>"
+  },
+  "shortcut_m": {
+    "message": "M"
+  },
+  "shortcut_m_desc": {
+    "message": "Включает или выключает звук.<br><span class='tip'>Тишина без паузы.</span>"
+  },
+  "shortcut_t": {
+    "message": "T"
+  },
+  "shortcut_t_desc": {
+    "message": "Переключает псевдо-полноэкранный режим.<br><span class='note'>Работает, только если включён 'Псевдо-полноэкранный режим'.</span>"
+  },
+  "footer_text": {
+    "message": "Created by DenisGasilo"
+  },
+  "footer_link": {
+    "message": "Extension page"
+  },
+  "cinema_mode_enabled_title": {
+    "message": "Включить режим кино (T)"
+  },
+  "cinema_mode_disabled_title": {
+    "message": "Выключить режим кино (T)"
+  }
+}

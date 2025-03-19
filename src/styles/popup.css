@@ -1,0 +1,238 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@500;700&display=swap');
+
+:root {
+  --main-color: #363a37;
+  --second-color: #9aa777;
+  --bnts-hover-color: #687157;
+  --content-gap: 10px;
+  --black: #272827;
+  --accent: #bc40ea;
+  --link-hover: #ffe600;
+  --red: #d8215e;
+  --gray: #3d3d3d;
+  --font-size: 16px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: 'Open Sans', sans-serif;
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Open Sans', sans-serif;
+  /* font-weight: 500; */
+  font-size: var(--font-size);
+  text-align: center;
+  background-color: var(--black);
+  color: var(--second-color);
+  min-width: 440px;
+  max-width: 500px;
+}
+
+header,
+footer {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  /* padding: var(--content-gap); */
+  background: var(--black);
+}
+
+footer p,
+header {
+  font-weight: bold;
+}
+
+main {
+  background-color: var(--main-color);
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--link-hover);
+}
+
+label {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: var(--content-gap);
+  cursor: pointer;
+  transition:
+    background-color 0.3s,
+    transform 0.3s;
+}
+
+label:hover {
+  background-color: var(--bnts-hover-color);
+  color: var(--main-color);
+  transform: scale(1.02);
+}
+
+label:hover > input {
+  box-shadow: 0 0 0 2px white;
+}
+
+input {
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+input:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.checkbox,
+.radio {
+  position: relative;
+  width: 40px;
+  height: 20px;
+  appearance: none;
+  background: var(--black);
+  border-radius: 20px;
+  transition: background 0.3s ease-in-out;
+}
+
+.checkbox:checked,
+.radio:checked {
+  background: var(--second-color);
+}
+
+.checkbox::before,
+.radio::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  background: white;
+  border-radius: 50%;
+  transition: transform 0.3s ease-in-out;
+}
+
+/* .radio:checked::before, */
+.checkbox:checked::before {
+  transform: translateX(20px);
+}
+
+.radio {
+  margin-left: 14px;
+  margin-right: 20px;
+  width: 20px;
+}
+
+.radio:checked {
+  border-color: var(--second-color);
+}
+
+.radio::before {
+  top: 50%;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+}
+
+.radio:checked::before {
+  opacity: 1;
+}
+
+.extension_toggle {
+  border-bottom: solid 2px var(--bnts-hover-color);
+  /* border-bottom: solid 2px rgba(var(--rgb-hover-color), 0.5) */
+}
+
+/* .extension_toggle input {
+  height: 30px;
+}
+
+.extension_toggle input::before {
+  height: 20px;
+  width: 20px;
+  top: 5px;
+}
+
+.extension_toggle input:checked::before {
+  transform: translateX(16px);
+} */
+
+.button-container {
+  padding: calc(var(--content-gap) * 1.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  background: var(--main-color);
+  border-top: solid 2px var(--bnts-hover-color);
+}
+
+.button-container_second {
+  padding-top: 0;
+  /* margin-top: 20px; */
+  border-top: solid transparent 0px;
+  /* background-color: #272827; */
+}
+
+.button-container_second button {
+  background: beige;
+}
+
+#toggle-settings,
+button {
+  color: var(--main-color);
+  background: var(--second-color);
+  border: transparent;
+  min-width: 80%;
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-size: 1em;
+  font-weight: bold;
+  cursor: pointer;
+  outline: transparent;
+  transition: all 0.3s ease-in-out;
+}
+
+#toggle-settings:hover,
+button:hover {
+  background-color: var(--link-hover);
+  transform: scale(1.05);
+}
+
+#toggle-settings:active,
+button:active {
+  transform: scale(0.95);
+}
+
+#toggle-settings:focus,
+button:focus {
+  box-shadow: 0 0 0 2px white;
+}
+
+span {
+  font-weight: bold;
+}
+
+span.disabled {
+  margin-left: 10px;
+  color: var(--red);
+}
+
+span.enabled {
+  color: var(--link-hover);
+}

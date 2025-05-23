@@ -14,6 +14,10 @@ import ClickToFullScreenManager from './modules/content/ClickToFullScreenManager
 class JutsuExtension {
   #config = {};
 
+  #skipIntervalId = null;
+
+  #nextIntervalId = null;
+
   #videoElement = null;
 
   #videoData = {};
@@ -171,6 +175,7 @@ class JutsuExtension {
     this.#allManager.forEach((m) => {
       m.disable();
     });
+    this.#clearIntervals();
   }
 
   #updateManager() {
@@ -179,28 +184,54 @@ class JutsuExtension {
     });
   }
 
+  #clearIntervals() {
+    if (this.#skipIntervalId) {
+      clearInterval(this.#skipIntervalId);
+      this.#skipIntervalId = null;
+    }
+    if (this.#nextIntervalId) {
+      clearInterval(this.#nextIntervalId);
+      this.#nextIntervalId = null;
+    }
+  }
+
   #workOnThisPage(websitePage) {
     return websitePage.includes('episode-') || websitePage.includes('film-');
   }
 
   #enableExtension() {
     this.#updateManager();
-
-    const nextSerBtn = document.querySelector('.vjs-overlay-bottom-right');
-    const skipIntroBtn = document.querySelector('.vjs-overlay-bottom-left');
-
+    this.#clearIntervals();
     this.#initializeShortcuts();
 
-    if (nextSerBtn) {
-      if (this.#config.nextSeriesBeforeEnd) {
-        this.#NextSeriesManager.nextSeriesBeforeEnd(nextSerBtn);
-      } else if (this.#config.nextSeriesAfterEnd) {
-        this.#NextSeriesManager.nextSeriesAfterEnd(nextSerBtn);
-      }
+    // Skip intro
+    if (this.#config.skipIntro) {
+      this.#skipIntervalId = setInterval(() => {
+        const skipIntroBtn = document.querySelector('.vjs-overlay-bottom-left');
+        if (skipIntroBtn) {
+          console.log("Кнопка 'Skip Intro' знайдена");
+          this.#SkipIntroManager.skipIntro(skipIntroBtn);
+          clearInterval(this.#skipIntervalId);
+          this.#skipIntervalId = null;
+        }
+      }, 500);
     }
 
-    if (skipIntroBtn && this.#config.skipIntro) {
-      this.#SkipIntroManager.skipIntro(skipIntroBtn);
+    // Next series
+    if (this.#config.nextSeriesBeforeEnd || this.#config.nextSeriesAfterEnd) {
+      this.#nextIntervalId = setInterval(() => {
+        const nextSerBtn = document.querySelector('.vjs-overlay-bottom-right');
+        if (nextSerBtn) {
+          console.log("Кнопка 'Next Series' знайдена");
+          if (this.#config.nextSeriesBeforeEnd) {
+            this.#NextSeriesManager.nextSeriesBeforeEnd(nextSerBtn);
+          } else if (this.#config.nextSeriesAfterEnd) {
+            this.#NextSeriesManager.nextSeriesAfterEnd(nextSerBtn);
+          }
+          clearInterval(this.#nextIntervalId);
+          this.#nextIntervalId = null;
+        }
+      }, 500);
     }
 
     if (this.#config.markVideoTimeLine) {

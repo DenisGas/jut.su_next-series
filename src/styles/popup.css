@@ -24,8 +24,6 @@ body {
   user-select: none;
   display: flex;
   flex-direction: column;
-  font-family: 'Open Sans', sans-serif;
-  /* font-weight: 500; */
   font-size: var(--font-size);
   text-align: center;
   background-color: var(--black);
@@ -53,6 +51,9 @@ main {
   flex-direction: column;
   align-items: center;
   width: 100%;
+  max-width: 500px; /* Ограничиваем ширину */
+  margin: 0 auto; /* Центрируем внутри body */
+  box-sizing: border-box;
 }
 
 a {
@@ -235,4 +236,40 @@ span.disabled {
 
 span.enabled {
   color: var(--link-hover);
+}
+
+/* Для больших экранов (больше 500px) */
+@media (min-width: 501px) {
+  body {
+    min-width: 440px; /* Сохраняем минимальную ширину */
+    max-width: 500px; /* Ограничиваем максимальную ширину */
+    margin: 0 auto; /* Центрируем по горизонтали */
+  }
+
+  main {
+    max-width: 500px; /* Фиксируем ширину */
+    margin: 0 auto; /* Центрируем */
+  }
+
+  /* Если есть обертка для попапа */
+  .popup-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Полупрозрачный фон */
+    display: flex;
+    justify-content: center; /* Центрируем по горизонтали */
+    align-items: center; /* Центрируем по вертикали */
+    z-index: 1000;
+  }
+
+  .popup-wrapper main {
+    position: relative;
+    margin: 0;
+    max-width: 500px; /* Ограничиваем ширину попапа */
+    width: 100%; /* Учитываем адаптивность */
+    box-sizing: border-box;
+  }
 }

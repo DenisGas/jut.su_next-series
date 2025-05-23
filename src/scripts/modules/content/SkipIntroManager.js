@@ -14,6 +14,15 @@ class SkipIntroManager extends BaseManager {
     this.#videoData = videoData;
   }
 
+  checkVideoElement() {
+    if (this.#videoElement) {
+      console.log('ok');
+    } else {
+      console.log('no ok');
+      this.#videoElement = document.querySelector('video');
+    }
+  }
+
   skipIntro(skipIntroBtn) {
     this.disable();
     const checkSkipIntroBtnVisible = setInterval(() => {
@@ -24,6 +33,8 @@ class SkipIntroManager extends BaseManager {
           this.#videoElement.currentTime <
             parseInt(this.#videoData.video_intro_end, 10))
       ) {
+        this.checkVideoElement();
+        console.log('skip');
         skipIntroBtn.click();
       }
     }, 1000);

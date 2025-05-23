@@ -197,6 +197,26 @@ input:disabled {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.24);
 }
 
+.button-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.button-wrapper > label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: nowrap;
+}
+
+.button-wrapper input.checkbox {
+  flex-shrink: 0; /* Запрещаем сжиматься чекбоксу */
+}
+.button-wrapper input.radio {
+  flex-shrink: 0; /* Запрещаем сжиматься чекбоксу */
+}
+
 .extension_toggle p {
   text-align: start;
   color: white;
@@ -408,4 +428,27 @@ footer {
 }
 .button-description .red {
   color: rgb(255, 63, 63);
+}
+
+@media (max-width: 500px) {
+  #extensionEnabledLabel {
+    flex-wrap: wrap;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  h2 {
+    font-size: 1.4rem;
+  }
+
+  .after-header {
+    font-size: 1rem;
+    margin-bottom: 10px;
+  }
+
+  .container {
+    padding: 0 10px;
+  }
 }

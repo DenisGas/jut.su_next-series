@@ -19,6 +19,21 @@ module.exports = (env = {}) => {
   }
 
   const manifest = modifyManifest(process.env.BROWSER || 'chrome');
+
+  let manifestObj;
+  try {
+    manifestObj = JSON.parse(manifest);
+  } catch (err) {
+    console.error('Error parsing manifest JSON:', err);
+    manifestObj = {};
+  }
+
+  // тепер можемо отримати версію
+  const manifestVersion = manifestObj.version || 'unknown';
+
+  console.log(
+    `Building for ${process.env.BROWSER || 'chrome'} - version ${manifestVersion}`
+  );
   const manifestPath = path.resolve(browserDir, 'manifest.json');
   fs.writeFileSync(manifestPath, manifest);
 
@@ -57,7 +72,7 @@ module.exports = (env = {}) => {
       new MiniCssExtractPlugin({
         filename: '../styles/[name].css',
       }),
-      new ArchivePlugin(),
+      new ArchivePlugin(manifest.version),
     ],
     devtool: 'source-map',
   };

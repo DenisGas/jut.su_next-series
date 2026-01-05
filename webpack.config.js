@@ -72,7 +72,7 @@ module.exports = (env = {}) => {
       new MiniCssExtractPlugin({
         filename: '../styles/[name].css',
       }),
-      new ArchivePlugin(manifest.version),
+      new ArchivePlugin(manifestVersion),
     ],
     devtool: 'source-map',
   };

@@ -210,7 +210,10 @@ class JutsuExtension {
         const skipIntroBtn = document.querySelector('.vjs-overlay-bottom-left');
         if (skipIntroBtn) {
           console.log("Кнопка 'Skip Intro' знайдена");
-          this.#SkipIntroManager.skipIntro(skipIntroBtn);
+          this.#SkipIntroManager.skipIntro(
+            skipIntroBtn,
+            this.#config.skipIntroFix
+          );
           clearInterval(this.#skipIntervalId);
           this.#skipIntervalId = null;
         }

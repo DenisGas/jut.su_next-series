@@ -20,8 +20,14 @@
   "next_series_after_end": {
     "message": "Next episode after credits"
   },
+  "next_series_off": {
+    "message": "Next episode off"
+  },
   "skip_intro": {
     "message": "Skip intro"
+  },
+  "skip_intro_fix": {
+    "message": "Fix skip intro"
   },
   "video_from_start": {
     "message": "Play video from the start"
@@ -59,8 +65,14 @@
   "next_series_after_end_description": {
     "message": "Switches to the next episode after credits end.<br><span class='note'>Waits until the video is fully done.</span>"
   },
+  "next_series_off_description": {
+    "message": "Disables automatic switching to the next episode.<br><span class='note'>The current video will not advance further.</span>"
+  },
   "skip_intro_description": {
     "message": "Skips anime intros automatically.<br><span class='benefit'>Saves time for faster watching.</span>"
+  },
+  "skip_intro_fix_description": {
+    "message": "Fixes issues with skipping anime intros.<br><span class='benefit'>Ensures smooth transitions.</span>"
   },
   "video_from_start_description": {
     "message": "Starts videos from the beginning, ignoring past progress.<br><span class='benefit'>Perfect for rewatching.</span>"

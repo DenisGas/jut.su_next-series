@@ -7,7 +7,7 @@ export const jutsuExtensionButtonsConfig = {
   extensionEnabled: {
     type: 'extensionSwitch',
     labelText: `${locales[localizationKeys.extension]}: `,
-    description: locales[localizationKeys.extension_description], // Исправлено
+    description: locales[localizationKeys.extension_description],
     statusClass: 'switcher disabled',
     statusTextEnabled: locales[localizationKeys.status_enabled],
     statusTextDisabled: locales[localizationKeys.status_disabled],
@@ -18,7 +18,7 @@ export const jutsuExtensionButtonsConfig = {
   nextSeriesBeforeEnd: {
     type: 'radio',
     labelText: locales[localizationKeys.next_series_before_end],
-    description: locales[localizationKeys.next_series_before_end_description], // Исправлено
+    description: locales[localizationKeys.next_series_before_end_description],
     group: 'seriesOptions',
     defaultSettings: true,
     section: 'main',
@@ -26,7 +26,15 @@ export const jutsuExtensionButtonsConfig = {
   nextSeriesAfterEnd: {
     type: 'radio',
     labelText: locales[localizationKeys.next_series_after_end],
-    description: locales[localizationKeys.next_series_after_end_description], // Исправлено
+    description: locales[localizationKeys.next_series_after_end_description],
+    group: 'seriesOptions',
+    defaultSettings: false,
+    section: 'main',
+  },
+  nextSeriesOff: {
+    type: 'radio',
+    labelText: locales[localizationKeys.next_series_off],
+    description: locales[localizationKeys.next_series_off_description],
     group: 'seriesOptions',
     defaultSettings: false,
     section: 'main',
@@ -34,15 +42,23 @@ export const jutsuExtensionButtonsConfig = {
   skipIntro: {
     type: 'checkbox',
     labelText: locales[localizationKeys.skip_intro],
-    description: locales[localizationKeys.skip_intro_description], // Исправлено
+    description: locales[localizationKeys.skip_intro_description],
     group: null,
     defaultSettings: true,
     section: 'main',
   },
+  skipIntroFix: {
+    type: 'checkbox',
+    labelText: locales[localizationKeys.skip_intro_fix],
+    description: locales[localizationKeys.skip_intro_fix_description],
+    group: null,
+    defaultSettings: false,
+    section: 'additional',
+  },
   videoFromStart: {
     type: 'checkbox',
     labelText: locales[localizationKeys.video_from_start],
-    description: locales[localizationKeys.video_from_start_description], // Исправлено
+    description: locales[localizationKeys.video_from_start_description],
     group: null,
     defaultSettings: false,
     section: 'additional',
@@ -50,7 +66,7 @@ export const jutsuExtensionButtonsConfig = {
   pseudoFullscreen: {
     type: 'checkbox',
     labelText: locales[localizationKeys.pseudo_fullscreen],
-    description: locales[localizationKeys.pseudo_fullscreen_description], // Исправлено
+    description: locales[localizationKeys.pseudo_fullscreen_description],
     group: null,
     defaultSettings: false,
     section: 'main',
@@ -58,7 +74,7 @@ export const jutsuExtensionButtonsConfig = {
   markVideoTimeLine: {
     type: 'checkbox',
     labelText: locales[localizationKeys.mark_video_timeline],
-    description: locales[localizationKeys.mark_video_timeline_description], // Исправлено
+    description: locales[localizationKeys.mark_video_timeline_description],
     group: null,
     defaultSettings: true,
     section: 'additional',
@@ -66,7 +82,7 @@ export const jutsuExtensionButtonsConfig = {
   clickToFullScreen: {
     type: 'checkbox',
     labelText: locales[localizationKeys.click_to_fullscreen],
-    description: locales[localizationKeys.click_to_fullscreen_description], // Исправлено
+    description: locales[localizationKeys.click_to_fullscreen_description],
     group: null,
     defaultSettings: false,
     section: 'additional',
@@ -74,7 +90,7 @@ export const jutsuExtensionButtonsConfig = {
   addSpeedControl: {
     type: 'checkbox',
     labelText: locales[localizationKeys.add_speed_control],
-    description: locales[localizationKeys.add_speed_control_description], // Исправлено
+    description: locales[localizationKeys.add_speed_control_description],
     group: null,
     defaultSettings: false,
     section: 'additional',

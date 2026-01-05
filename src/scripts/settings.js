@@ -139,6 +139,12 @@ function applyLocalization(locales) {
 // eslint-disable-next-line no-unused-vars
 const extension = new Extension(buttons, jutsuExtensionDefaultConfig);
 
+document
+  .querySelector('#toggle-toDefaultSetingsBtn')
+  .addEventListener('click', () => {
+    extension.resetSettings();
+  });
+
 const locales = getLocales();
 // console.log('Loaded locales:', locales);
 

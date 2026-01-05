@@ -452,3 +452,33 @@ footer {
     padding: 0 10px;
   }
 }
+
+#toggle-toDefaultSetingsBtn {
+  color: var(--main-color);
+  background: var(--second-color);
+  border: transparent;
+  min-width: 30%;
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-size: 1em;
+  font-weight: bold;
+  cursor: pointer;
+  outline: transparent;
+  transition: all 0.3s ease-in-out;
+  margin-bottom: 30px;
+}
+
+#toggle-toDefaultSetingsBtn:hover {
+  background-color: var(--link-hover);
+  transform: scale(1.05);
+}
+
+#toggle-toDefaultSetingsBtn:active,
+button:active {
+  transform: scale(0.95);
+}
+
+#toggle-toDefaultSetingsBtn:focus,
+button:focus {
+  box-shadow: 0 0 0 2px white;
+}

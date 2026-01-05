@@ -36,6 +36,12 @@ export default class Extension {
     }
   }
 
+  async resetSettings() {
+    this.saveInStorage(this.defaultSettings).then(() => {
+      console.log('settings reset');
+    });
+  }
+
   getLocalData() {
     const configObject = {};
     this.buttons.forEach((button) => {

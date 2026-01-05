@@ -20,8 +20,14 @@
   "next_series_after_end": {
     "message": "Следующая серия после титров"
   },
+  "next_series_off": {
+    "message": "Следующая серия выключена"
+  },
   "skip_intro": {
     "message": "Пропустить интро"
+  },
+  "skip_intro_fix": {
+    "message": "Исправить пропуск интро"
   },
   "video_from_start": {
     "message": "Воспроизвести видео с начала"
@@ -59,8 +65,14 @@
   "next_series_after_end_description": {
     "message": "Переключает на следующую серию после титров.<br><span class='note'>Ждёт, пока видео полностью закончится.</span>"
   },
+  "next_series_off_description": {
+    "message": "Отключает автоматический переход к следующей серии.<br><span class='note'>Текущее видео не будет продолжаться.</span>"
+  },
   "skip_intro_description": {
     "message": "Пропускает интро аниме автоматически.<br><span class='benefit'>Экономит время для быстрого просмотра.</span>"
+  },
+  "skip_intro_fix_description": {
+    "message": "Исправляет проблемы с пропуском интро аниме.<br><span class='benefit'>Обеспечивает плавные переходы.</span>"
   },
   "video_from_start_description": {
     "message": "Начинает видео с начала, игнорируя прошлый прогресс.<br><span class='benefit'>Отлично для повторного просмотра.</span>"

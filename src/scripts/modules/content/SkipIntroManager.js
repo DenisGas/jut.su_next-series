@@ -4,6 +4,8 @@ import BaseManager from './BaseManager';
 class SkipIntroManager extends BaseManager {
   #videoElement;
 
+  #fixInfinityLoadFlag = false;
+
   #videoData;
 
   #intervalIds = [];
@@ -23,7 +25,7 @@ class SkipIntroManager extends BaseManager {
     }
   }
 
-  skipIntro(skipIntroBtn) {
+  skipIntro(skipIntroBtn, fixInfinityLoad = false) {
     this.disable();
     const checkSkipIntroBtnVisible = setInterval(() => {
       if (
@@ -36,6 +38,19 @@ class SkipIntroManager extends BaseManager {
         this.checkVideoElement();
         console.log('skip');
         skipIntroBtn.click();
+        if (fixInfinityLoad) {
+          if (
+            this.#videoElement.paused === false &&
+            this.#fixInfinityLoadFlag === false
+          ) {
+            this.#videoElement.pause();
+            setTimeout(() => {
+              this.#videoElement.play();
+              this.#fixInfinityLoadFlag = true;
+              console.log('fix infinity load applied');
+            }, 500);
+          }
+        }
       }
     }, 1000);
     this.#intervalIds.push(checkSkipIntroBtnVisible);

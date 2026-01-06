@@ -51,6 +51,8 @@ shortcut_m,M,M,M
 shortcut_m_desc,"Turns sound on or off.<br><span class='tip'>Mute without pausing.</span>","Вмикає або вимикає звук.<br><span class='tip'>Тиша без паузи.</span>","Включает или выключает звук.<br><span class='tip'>Тишина без паузы.</span>"
 shortcut_t,T,T,T
 shortcut_t_desc,"Switches Pseudo-fullscreen mode.<br><span class='note'>Works only if 'Pseudo-fullscreen mode' is on.</span>","Перемикає Псевдо-повноекранний режим.<br><span class='note'>Працює, тільки якщо увімкнено 'Псевдо-повноекранний режим'.</span>","Переключает псевдо-полноэкранный режим.<br><span class='note'>Работает, только если включён 'Псевдо-полноэкранный режим'.</span>"
+shortcut_p,P,P,P
+shortcut_p_desc,"Play/Pause the video.","Відтворити/Пауза відео.","Воспроизвести/Пауза видео."   
 ,,,
 footer_text,Created by DenisGasilo,Created by DenisGasilo,Created by DenisGasilo
 footer_link,Extension page,Extension page,Extension page

@@ -137,6 +137,12 @@
   "shortcut_t_desc": {
     "message": "Switches Pseudo-fullscreen mode.<br><span class='note'>Works only if 'Pseudo-fullscreen mode' is on.</span>"
   },
+  "shortcut_p": {
+    "message": "P"
+  },
+  "shortcut_p_desc": {
+    "message": "Play/Pause the video."
+  },
   "footer_text": {
     "message": "Created by DenisGasilo"
   },

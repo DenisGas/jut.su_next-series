@@ -10,6 +10,7 @@ import { defaultShortcuts } from './modules/content/helpers/shortcuts';
 import ShortCutsManager from './modules/content/ShortCutsManager';
 import VideoSpeedManager from './modules/content/VideoSpeedManager';
 import ClickToFullScreenManager from './modules/content/ClickToFullScreenManager';
+import JutsuExtensionUIManager from './modules/content/JutsuExtensionUIManager';
 
 class JutsuExtension {
   #config = {};
@@ -79,6 +80,9 @@ class JutsuExtension {
           this.#VideoSpeedManager,
           this.#ClickToFullScreenManager,
         ];
+
+        const jutsuExtensionUI = new JutsuExtensionUIManager();
+        jutsuExtensionUI.render();
 
         if (this.#config.extensionEnabled) {
           this.#enableExtension();

@@ -95,3 +95,151 @@
     pointer-events: none;
   }
 }
+
+.jutsu-extension-settings {
+  --main-color: #363a37;
+  --second-color: #9aa777;
+  --bnts-hover-color: #687157;
+  --black: #272827;
+  --accent: #bc40ea;
+  --link-hover: #ffe600;
+  --red: #d8215e;
+  --font-size: 14px;
+
+  font-family: 'Open Sans', sans-serif;
+  color: var(--second-color);
+  margin-top: 15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  height: auto;
+  width: calc(100% + 30px);
+  color: white;
+}
+
+/* TITLE */
+.jutsu-extension-settings h3 {
+  margin: 10px 0;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* LABEL */
+.jutsu-extension-settings label {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 8px;
+  gap: 10px;
+  cursor: pointer;
+  transition:
+    background 0.3s,
+    transform 0.2s;
+}
+
+.jutsu-extension-settings label:hover {
+  background: var(--bnts-hover-color);
+  color: var(--main-color);
+  transform: scale(1.02);
+}
+
+/* INPUT RESET */
+.jutsu-extension-settings input {
+  margin: 0;
+}
+
+/* CHECKBOX / TOGGLE */
+.jutsu-extension-settings .checkbox {
+  position: relative;
+  width: 40px;
+  height: 20px;
+  appearance: none;
+  background: var(--black);
+  border-radius: 20px;
+  transition: background 0.3s;
+}
+
+.jutsu-extension-settings .checkbox:checked {
+  background: var(--second-color);
+}
+
+.jutsu-extension-settings .checkbox::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.3s;
+}
+
+.jutsu-extension-settings .checkbox:checked::before {
+  transform: translateX(20px);
+}
+
+/* RADIO */
+.jutsu-extension-settings .radio {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--black);
+  position: relative;
+}
+
+.jutsu-extension-settings .radio:checked {
+  background: var(--second-color);
+}
+
+.jutsu-extension-settings .radio::before {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  background: #fff;
+  border-radius: 50%;
+  opacity: 0;
+}
+
+.jutsu-extension-settings .radio:checked::before {
+  opacity: 1;
+}
+
+.jutsu-extension-settings span {
+  font-weight: bold;
+}
+
+.jutsu-extension-settings span.disabled {
+  margin-left: 10px;
+  color: var(--red);
+}
+
+.jutsu-extension-settings span.enabled {
+  color: var(--link-hover);
+}
+
+.jutsu-extension-settings label:hover {
+  background-color: var(--bnts-hover-color);
+  color: var(--main-color);
+  transform: scale(1.02);
+}
+
+.jutsu-extension-settings label:hover > input {
+  box-shadow: 0 0 0 2px white;
+}
+
+.jutsu-extension-settings input {
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.jutsu-extension-settings input:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.plus_settings_info {
+  /* color: yellow !important; */
+  overflow-y: scroll;
+  height: 300px !important;
+  overflow-x: hidden;
+}

@@ -45,6 +45,8 @@ const localizationKeys = {
   shortcut_m_desc: 'shortcut_m_desc',
   shortcut_t: 'shortcut_t',
   shortcut_t_desc: 'shortcut_t_desc',
+  shortcut_p: 'shortcut_p',
+  shortcut_p_desc: 'shortcut_p_desc',
   footer_text: 'footer_text',
   footer_link: 'footer_link',
   cinema_mode_enabled_title: 'cinema_mode_enabled_title',

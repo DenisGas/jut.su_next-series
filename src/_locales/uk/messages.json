@@ -137,6 +137,12 @@
   "shortcut_t_desc": {
     "message": "Перемикає Псевдо-повноекранний режим.<br><span class='note'>Працює, тільки якщо увімкнено 'Псевдо-повноекранний режим'.</span>"
   },
+  "shortcut_p": {
+    "message": "P"
+  },
+  "shortcut_p_desc": {
+    "message": "Відтворити/Пауза відео."
+  },
   "footer_text": {
     "message": "Created by DenisGasilo"
   },

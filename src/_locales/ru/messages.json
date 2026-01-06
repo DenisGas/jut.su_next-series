@@ -137,6 +137,12 @@
   "shortcut_t_desc": {
     "message": "Переключает псевдо-полноэкранный режим.<br><span class='note'>Работает, только если включён 'Псевдо-полноэкранный режим'.</span>"
   },
+  "shortcut_p": {
+    "message": "P"
+  },
+  "shortcut_p_desc": {
+    "message": "\"Воспроизвести/Пауза видео.\"   "
+  },
   "footer_text": {
     "message": "Created by DenisGasilo"
   },
